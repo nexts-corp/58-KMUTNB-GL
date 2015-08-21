@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script src="js/jquery-1.9.0.js"></script>
+        <script>
+
+            $(document).ready(function () {
+
+                function eror_401(xrs) {
+                    if (xrs.status == 401) {
+                        var data = $.parseJSON(xrs.responseText);
+                        window.location.href = data.redirectPage;
+                    }
+                };
+                
+                $.post("/api/gl/report/checkSingIn", {}, function () {
+                    window.location.href = "main.html";
+                }).fail(eror_401);
+            });
+        </script>
+    </body>
+</html>
