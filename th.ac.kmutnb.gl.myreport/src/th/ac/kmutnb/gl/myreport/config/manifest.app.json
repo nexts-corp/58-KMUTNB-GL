@@ -1,0 +1,17 @@
+{
+    "id": "gl",
+    "version": "1.0",
+    "packages":"th.ac.kmutnb.gl.myreport.*",
+    "i18n":"th.ac.kmutnb.gl.myreport.resources",
+    "widget":"th.ac.kmutnb.gl.myreport.*",
+    "title": "test plugin",
+    "authors": "panya",
+    "owners": "BAAN PROGRAM CO.,LTD.",
+    "description": "test plugin for test",
+    "mainUrl": "/inv/page/index",
+    "iconUrl": "/inv/images/icon.png",
+    "sitemapUrl": "/inv/page/sitemap",
+    "aboutUrl": "test.html",
+    "copyright": "test"
+    
+}
