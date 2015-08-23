@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT02" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
 	<property name="ireport.zoom" value="0.9575681974767555"/>
-	<property name="ireport.x" value="5"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="FBold" fill="Solid" hAlign="Left" vAlign="Top" fontName="TH SarabunPSK" fontSize="14" isBold="true" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H"/>
 	<style name="Rpt" fontName="TH SarabunPSK" fontSize="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
@@ -170,9 +170,9 @@
 		<variableExpression><![CDATA[$V{SUM_TOTAL_G1}]]></variableExpression>
 		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
 	</variable>
-	<variable name="Started_Acc" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[($V{REPORT_COUNT}==1&&($F{ACCOUNT_ID}!=null&&$F{ACCOUNT_ID}!=" "))?Integer.parseInt($F{ACCOUNT_ID}):0]]></variableExpression>
-		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	<variable name="Started_Acc" class="java.lang.String" calculation="First">
+		<variableExpression><![CDATA[$F{ACCOUNT_ID}]]></variableExpression>
+		<initialValueExpression><![CDATA["0"]]></initialValueExpression>
 	</variable>
 	<variable name="End_Acc" class="java.lang.String" incrementType="Report">
 		<variableExpression><![CDATA[$F{ACCOUNT_ID}]]></variableExpression>
