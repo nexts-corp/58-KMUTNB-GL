@@ -1958,13 +1958,6 @@
 	<detail>
 		<band height="20" splitType="Stretch">
 			<printWhenExpression><![CDATA[$F{PLANID}==null]]></printWhenExpression>
-			<textField isStretchWithOverflow="true">
-				<reportElement style="Default" stretchType="RelativeToBandHeight" x="10" y="0" width="118" height="20" uuid="16c3b4b2-c520-4026-b29b-729703c00865"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Detail Band"]]></textFieldExpression>
-			</textField>
 		</band>
 	</detail>
 	<columnFooter>
