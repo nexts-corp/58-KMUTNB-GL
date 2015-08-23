@@ -20,6 +20,10 @@ public class RPT08_model extends BaseReport {
     @Column
     String PLANNAME="";
     @Column
+    String M_DEPARTMENTID=" ";
+    @Column
+    String M_DEPARTMENTNAME=" ";
+    @Column
     String DEPARTMENTID= "";
     @Column
     String DEPARTMENTNAME= "";
@@ -27,8 +31,23 @@ public class RPT08_model extends BaseReport {
     String ACCOUNTID= "";
     @Column
     String ACCOUNTNAME= "";
+
+    public String getM_DEPARTMENTID() {
+        return M_DEPARTMENTID;
+    }
+
+    public void setM_DEPARTMENTID(String M_DEPARTMENTID) {
+        this.M_DEPARTMENTID = M_DEPARTMENTID;
+    }
+
+    public String getM_DEPARTMENTNAME() {
+        return M_DEPARTMENTNAME;
+    }
+
+    public void setM_DEPARTMENTNAME(String M_DEPARTMENTNAME) {
+        this.M_DEPARTMENTNAME = M_DEPARTMENTNAME;
+    }
    
-    
 
     public String getPLANID() {
         return PLANID;
