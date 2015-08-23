@@ -461,10 +461,125 @@ AND (gl.BUDGETGROUPID BETWEEN {{BUDGET_SORCE_START}} AND {{BUDGET_SORCE_END}} )
 		)ASSET
 	)
 UNION ALL
+	( /*NEW ADD TOPIC */
+		/* Equity to Total Asset */
+		SELECT
+			'5'                                       AS id,
+     		'2'                                       AS IDG,
+			  'ความสามารถในการชำระหนี้ระยะยาว'                             AS NAMEG,
+     'อัตราส่วนของทุน / สินทรัพย์รวม (Equity to Total Asset)' AS NAME,
+			(LIABILITY_NET / ASSET_NET)AS RESULT
+		FROM
+			(
+				SELECT
+					SUM(CR - DR)AS LIABILITY_NET
+				FROM
+					MASTER3D.GL
+				INNER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+				INNER JOIN MASTER3D. ACCOUNT ON ACCOUNT .ACCOUNTID = GL.ACCOUNTID
+				INNER JOIN(
+					SELECT
+						REGEXP_SUBSTR(M_ACCOUNT_ID, '[^|]+', 1, 1)M_ACCOUNT_ID_1,
+						REGEXP_SUBSTR(M_ACCOUNT_NAME, '[^|]+', 1, 1)M_ACCOUNT_NAME_1,
+						REGEXP_SUBSTR(M_ACCOUNT_ID, '[^|]+', 1, 2)M_ACCOUNT_ID_2,
+						REGEXP_SUBSTR(M_ACCOUNT_NAME, '[^|]+', 1, 2)M_ACCOUNT_NAME_2,
+						REGEXP_SUBSTR(M_ACCOUNT_ID, '[^|]+', 1, 3)M_ACCOUNT_ID_3,
+						REGEXP_SUBSTR(M_ACCOUNT_NAME, '[^|]+', 1, 3)M_ACCOUNT_NAME_3,
+						REGEXP_SUBSTR(M_ACCOUNT_ID, '[^|]+', 1, 4)M_ACCOUNT_ID_4,
+						REGEXP_SUBSTR(M_ACCOUNT_NAME, '[^|]+', 1, 4)M_ACCOUNT_NAME_4,
+						REGEXP_SUBSTR(M_ACCOUNT_ID, '[^|]+', 1, 5)M_ACCOUNT_ID_5,
+						REGEXP_SUBSTR(M_ACCOUNT_NAME, '[^|]+', 1, 5)M_ACCOUNT_NAME_5,
+						REGEXP_SUBSTR(M_ACCOUNT_ID, '[^|]+', 1, 6)M_ACCOUNT_ID_6,
+						REGEXP_SUBSTR(M_ACCOUNT_NAME, '[^|]+', 1, 6)M_ACCOUNT_NAME_6,
+						ACCOUNTID AS ACCOUNT_ID,
+						ACCOUNTNAME AS ACCOUNT_NAME,
+						ACCOUNT_LEVEL,
+						NATURETYPE
+					FROM
+						(
+							SELECT
+								ACCOUNTID,
+								ACCOUNTNAME,
+								LEVEL AS ACCOUNT_LEVEL,
+								SYS_CONNECT_BY_PATH(ACCOUNTID, '|')AS M_ACCOUNT_ID,
+								SYS_CONNECT_BY_PATH(ACCOUNTNAME, '|')AS M_ACCOUNT_NAME,
+								NATURETYPE
+							FROM
+								MASTER3D. ACCOUNT START WITH MASTERID = '0'
+							AND ACCOUNTSTATUS = 'Y'
+							AND CUTOFFTYPE IS NOT NULL CONNECT BY PRIOR ACCOUNTID = MASTERID ORDER SIBLINGS BY ACCOUNTID
+						)
+					WHERE
+						REGEXP_SUBSTR(M_ACCOUNT_ID, '[^|]+', 1, 1)= 2000000000
+				)TMP ON TMP.ACCOUNT_ID = GL.ACCOUNTID
+				WHERE
+					GL.GLHEADSTATUS != 'V'
+				AND GLHEAD.GLHEADDATE <= TO_DATE('{{DATE_END}}', 'DD/MM/YYYY')
+AND (gl.BUDGETGROUPID BETWEEN {{BUDGET_SORCE_START}} AND {{BUDGET_SORCE_END}} )
+     AND (gl.PLANID BETWEEN {{PLAN_SORCE_START}} AND {{PLAN_SORCE_END}} )
+     AND (gl.PROJECTID BETWEEN {{PROJECT_SORCE_START}} AND {{PROJECT_SORCE_END}} )
+     AND (gl.ACTIVITYID BETWEEN {{ACTIVITY_SORCE_START}} AND {{ACTIVITY_SORCE_END}} )
+     AND (gl.FUNDGROUPID BETWEEN {{FUND_SORCE_START}} AND {{FUND_SORCE_END}} )
+     {{BUDGET_SQL}}
+			)LIABILITY
+		CROSS JOIN(
+			SELECT
+				SUM(DR - CR)AS ASSET_NET
+			FROM
+				MASTER3D.GL
+			INNER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+			INNER JOIN MASTER3D. ACCOUNT ON ACCOUNT .ACCOUNTID = GL.ACCOUNTID
+			INNER JOIN(
+				SELECT
+					REGEXP_SUBSTR(M_ACCOUNT_ID, '[^|]+', 1, 1)M_ACCOUNT_ID_1,
+					REGEXP_SUBSTR(M_ACCOUNT_NAME, '[^|]+', 1, 1)M_ACCOUNT_NAME_1,
+					REGEXP_SUBSTR(M_ACCOUNT_ID, '[^|]+', 1, 2)M_ACCOUNT_ID_2,
+					REGEXP_SUBSTR(M_ACCOUNT_NAME, '[^|]+', 1, 2)M_ACCOUNT_NAME_2,
+					REGEXP_SUBSTR(M_ACCOUNT_ID, '[^|]+', 1, 3)M_ACCOUNT_ID_3,
+					REGEXP_SUBSTR(M_ACCOUNT_NAME, '[^|]+', 1, 3)M_ACCOUNT_NAME_3,
+					REGEXP_SUBSTR(M_ACCOUNT_ID, '[^|]+', 1, 4)M_ACCOUNT_ID_4,
+					REGEXP_SUBSTR(M_ACCOUNT_NAME, '[^|]+', 1, 4)M_ACCOUNT_NAME_4,
+					REGEXP_SUBSTR(M_ACCOUNT_ID, '[^|]+', 1, 5)M_ACCOUNT_ID_5,
+					REGEXP_SUBSTR(M_ACCOUNT_NAME, '[^|]+', 1, 5)M_ACCOUNT_NAME_5,
+					REGEXP_SUBSTR(M_ACCOUNT_ID, '[^|]+', 1, 6)M_ACCOUNT_ID_6,
+					REGEXP_SUBSTR(M_ACCOUNT_NAME, '[^|]+', 1, 6)M_ACCOUNT_NAME_6,
+					ACCOUNTID AS ACCOUNT_ID,
+					ACCOUNTNAME AS ACCOUNT_NAME,
+					ACCOUNT_LEVEL,
+					NATURETYPE
+				FROM
+					(
+						SELECT
+							ACCOUNTID,
+							ACCOUNTNAME,
+							LEVEL AS ACCOUNT_LEVEL,
+							SYS_CONNECT_BY_PATH(ACCOUNTID, '|')AS M_ACCOUNT_ID,
+							SYS_CONNECT_BY_PATH(ACCOUNTNAME, '|')AS M_ACCOUNT_NAME,
+							NATURETYPE
+						FROM
+							MASTER3D. ACCOUNT START WITH MASTERID = '0'
+						AND ACCOUNTSTATUS = 'Y'
+						AND CUTOFFTYPE IS NOT NULL CONNECT BY PRIOR ACCOUNTID = MASTERID ORDER SIBLINGS BY ACCOUNTID
+					)
+				WHERE
+					REGEXP_SUBSTR(M_ACCOUNT_ID, '[^|]+', 1, 1)= 1000000000
+			)TMP ON TMP.ACCOUNT_ID = GL.ACCOUNTID
+			WHERE
+				GL.GLHEADSTATUS != 'V'
+			AND GLHEAD.GLHEADDATE <= TO_DATE('{{DATE_END}}', 'DD/MM/YYYY')
+AND (gl.BUDGETGROUPID BETWEEN {{BUDGET_SORCE_START}} AND {{BUDGET_SORCE_END}} )
+     AND (gl.PLANID BETWEEN {{PLAN_SORCE_START}} AND {{PLAN_SORCE_END}} )
+     AND (gl.PROJECTID BETWEEN {{PROJECT_SORCE_START}} AND {{PROJECT_SORCE_END}} )
+     AND (gl.ACTIVITYID BETWEEN {{ACTIVITY_SORCE_START}} AND {{ACTIVITY_SORCE_END}} )
+     AND (gl.FUNDGROUPID BETWEEN {{FUND_SORCE_START}} AND {{FUND_SORCE_END}} )
+     {{BUDGET_SQL}}
+		)ASSET
+	)
+UNION ALL
 	(
 		/* Debt to Total Asset */
 		SELECT
-			'5'                                       AS id,
+			'6'                                       AS id,
      		'2'                                       AS IDG,
 			  'ความสามารถในการชำระหนี้ระยะยาว'                             AS NAMEG,
      'อัตราส่วนหนี้สินรวม ต่อ สินทรัพย์รวม (Debt to Total Asset)' AS NAME,
@@ -579,7 +694,7 @@ UNION ALL
 	(
 		/* Net Profit Margin */
 		SELECT
-			'6'                                       AS id,
+			'7'                                       AS id,
      		'3'                                       AS IDG,
 			'ความสามารถในการทำกำไร'                                        AS NAMEG,
      'อัตราส่วนกำไรสุทธิ ต่อ รายรับ (Net Profit Margin)'            AS NAME,
@@ -694,7 +809,7 @@ UNION ALL
 	(
 		/* Return on Owner's Investment: ROI */
 		SELECT
-			'7'                                       AS id,
+			'8'                                       AS id,
      		'3'                                       AS IDG,
 			    'ความสามารถในการทำกำไร'                                                   AS NAMEG,
      'อัตราผลตอบแทนจากการลงทุนของส่วนของเจ้าของ (Return on Owners Investment)' AS NAME,
@@ -861,7 +976,7 @@ UNION ALL
 	(
 		/* Return on Total Asset: ROA */
 		SELECT
-			'8'                                       AS id,
+			'9'                                       AS id,
      		'3'                                       AS IDG,
 			 'ความสามารถในการทำกำไร'                                      AS NAMEG,
      'อัตราผลตอบแทนจากสินทรัพย์รวม (Return on Total Asset)'       AS NAME,
@@ -1016,7 +1131,7 @@ AND (gl.BUDGETGROUPID BETWEEN {{BUDGET_SORCE_START}} AND {{BUDGET_SORCE_END}} )
 			WHERE
 				GL.GLHEADSTATUS != 'V'
 			AND GLHEAD.GLHEADDATE <= TO_DATE('{{DATE_END}}', 'DD/MM/YYYY')
-AND (gl.BUDGETGROUPID BETWEEN {{BUDGET_SORCE_START}} AND {{BUDGET_SORCE_END}} )
+		AND (gl.BUDGETGROUPID BETWEEN {{BUDGET_SORCE_START}} AND {{BUDGET_SORCE_END}} )
      AND (gl.PLANID BETWEEN {{PLAN_SORCE_START}} AND {{PLAN_SORCE_END}} )
      AND (gl.PROJECTID BETWEEN {{PROJECT_SORCE_START}} AND {{PROJECT_SORCE_END}} )
      AND (gl.ACTIVITYID BETWEEN {{ACTIVITY_SORCE_START}} AND {{ACTIVITY_SORCE_END}} )
