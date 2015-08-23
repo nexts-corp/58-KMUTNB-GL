@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Template" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
 	<property name="ireport.zoom" value="1.2100000000000335"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="19"/>
+	<property name="ireport.y" value="0"/>
 	<style name="FBold" fill="Solid" hAlign="Left" vAlign="Top" fontName="TH SarabunPSK" fontSize="14" isBold="true" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H"/>
 	<style name="Rpt" fontName="TH SarabunPSK" fontSize="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
 	<style name="Default" isDefault="true" fontName="TH SarabunPSK" fontSize="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
@@ -1703,12 +1703,12 @@ FROM
 			<textField pattern="">
 				<reportElement style="FBold" x="295" y="0" width="90" height="20" uuid="1cfcef44-2b8f-406d-84b0-ade687151b2c"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$V{DateThai}.get(Integer.parseInt($P{DATE_END}.substring(3,5))-1)+" "+$P{DATE_END}.substring(6)]]></textFieldExpression>
+				<textFieldExpression><![CDATA["เดือน "+$V{DateThai}.get(Integer.parseInt($P{DATE_END}.substring(3,5))-1)+" "+$P{DATE_END}.substring(6)]]></textFieldExpression>
 			</textField>
 			<textField pattern="">
 				<reportElement style="FBold" x="385" y="0" width="90" height="20" uuid="4405b950-d2bf-46ad-8a89-2ca755703f63"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[(Integer.parseInt($P{DATE_END}.substring(3,5))-2==-1)?$V{DateThai}.get(11)+" "+(Integer.parseInt($P{DATE_END}.substring(6))-1):($V{DateThai}.get(Integer.parseInt($P{DATE_END}.substring(3,5))-2)+" "+$P{DATE_END}.substring(6))]]></textFieldExpression>
+				<textFieldExpression><![CDATA[(Integer.parseInt($P{DATE_END}.substring(3,5))-2==-1)?"เดือน "+$V{DateThai}.get(11)+" "+(Integer.parseInt($P{DATE_END}.substring(6))-1):("เดือน "+$V{DateThai}.get(Integer.parseInt($P{DATE_END}.substring(3,5))-2)+" "+$P{DATE_END}.substring(6))]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>
