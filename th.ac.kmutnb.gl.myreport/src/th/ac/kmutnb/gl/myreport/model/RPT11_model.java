@@ -130,5 +130,4 @@ public class RPT11_model extends BaseReport {
     public void setAMOUNT(BigDecimal AMOUNT) {
         this.AMOUNT = AMOUNT;
     }
-
 }
