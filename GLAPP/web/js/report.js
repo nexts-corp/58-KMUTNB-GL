@@ -1,7 +1,7 @@
 $(document).ready(function () {
-    
-    
-    
+
+
+
     $(".cDate").datepicker({language: 'th-th', format: 'dd/mm/yyyy', autoclose: true});
 
     var chAjaxLoad = [];
@@ -44,7 +44,7 @@ $(document).ready(function () {
     $("select").chosen({width: "100%"});
 
 
-    
+
 
     function eror_401(xrs) {
         if (xrs.status == 401) {
@@ -72,11 +72,11 @@ $(document).ready(function () {
         //alert($(name).find("option").first().val());
         //alert($(name).find('option[style*="display: block"]').last().val());
         $(name).trigger("chosen:updated");
-        
+
     }
-    
-    
-    
+
+
+
     $(document).on("change", "#report_type", function () {
         if($("#report_type").val()==="RPT02" || $("#report_type").val()==="RPT02_2"){
             $(".cAccount").prop("disabled", false).trigger("chosen:updated");
@@ -85,8 +85,8 @@ $(document).ready(function () {
             $(".cAccount").prop("disabled", true).trigger("chosen:updated");
         }
     });
-    
-    
+
+
 
     $.post("./api/gl/form/department", {}, function (data) {
         ksCallBack(function () {
@@ -103,7 +103,7 @@ $(document).ready(function () {
             $('#department').html(req);
             UCheckAjaxLoad("department");
             $('#department').trigger("chosen:updated");
-            
+
         });
     }).fail(eror_401);
 
@@ -123,7 +123,7 @@ $(document).ready(function () {
         }, function (name) {
             selectFristLast(name);
             UCheckAjaxLoad("departmentDetail");
-            
+
         });
     }).fail(eror_401);
 
@@ -143,7 +143,7 @@ $(document).ready(function () {
             $(optionName).find('option[value="' + $("#department").val() + '"]').first().attr("selected", true);
             $(optionName).find('option[master-id="' + $("#department").val() + '"]').last().attr("selected", true);
         }
-        
+
         selectFristLast(optionName);
 
 
@@ -301,7 +301,7 @@ $(document).ready(function () {
     }
 
     $(document).on("change", "#budgetType", function () {
-        
+
     var optionName = ".cSource";
     var getBudgetType = $("#budgetType").val();
 
@@ -329,7 +329,7 @@ $(document).ready(function () {
 
 $(document).on("click", ".bExport", function () {
 
-        $.post("/api/gl/report/checkSingIn", {}, function () {
+
 
             var sendData = {
                 BUDGET_SORCE_START: '',
@@ -399,17 +399,16 @@ $(document).on("click", ".bExport", function () {
             var start_fdepid = $("#source_start").val().substring(0,1);
             var end_fdepid = $("#source_end").val().substring(0,1);
             var bType = $("#budgetType").val();
-            //alert(start_fdepid+'-'+end_fdepid);
             if(start_fdepid === '1' && end_fdepid === '1'){
                 nameDepartmentAll += "  (เงินงบประมาณแผ่นดิน)";
-            }else if(start_fdepid === '2' && end_fdepid === '9' && bType!=='3'){
+            }else if(((start_fdepid === '2' && end_fdepid === '9')||(start_fdepid === '2' && end_fdepid === '3')||(start_fdepid === '3' && end_fdepid === '9'))&& bType!=='3'){
                 nameDepartmentAll += "  (เงินรายได้รวม)";
             }else if(start_fdepid === '2' && end_fdepid === '9' && bType==='3'){
                 nameDepartmentAll += "  (เงินรายได้ศูนย์รวม)";
             }else if(start_fdepid === '3' && end_fdepid === '3'){
                 nameDepartmentAll += "  (เงินทุนคณะ)";
             }else{
-                //nameDepartmentAll = "(xxx)";
+               
             }
             sendData.DEPARTMENT = nameDepartmentAll;
 
@@ -420,16 +419,21 @@ $(document).on("click", ".bExport", function () {
                 "param": encodeURIComponent(JSON.stringify(sendData))
             };
 
-            var url = "/api/gl/report/export?reportcode=" + data.reportcode + "&export=" + data.export + "&param=" + data.param;
-            if (data.export == "pdfview") {
-                var win = window.open();
-                win.document.write('<title>เรียกดูรายงาน : ระบบบัญชีแยกประเภทสามมิติ</title><link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"><style type="text/css"> .loading {text-align: center; position: fixed; width: 100%; height: 100%; left: 0; top: 0; background: #f1f1f1; z-index: 1000; } </style><script>function fn(){document.getElementById("loading").remove();}</script><div id="loading" class="loading"><br><br><br><br><i class="fa fa-cog fa-spin fa-2x"></i><br>กรุณารอสักครู่</div><iframe src="'+url+'" onload="fn()" name="theFrame" frameborder="0" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="100%" width="100%"></iframe><script>location.hash = "viewReport"</script>');
-            } else {
-                var win = window.open();
-                win.document.write('<title>ดาวน์โหลดไฟล์ : ระบบบัญชีแยกประเภทสามมิติ</title><link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"><style type="text/css"> .loading {text-align: center; position: fixed; width: 100%; height: 100%; left: 0; top: 0; background: #f1f1f1; z-index: 1000; } </style><script> function fn(){document.getElementById("loading").remove();}</script><div id="loading" class="loading"><br><br><br><br><i class="fa fa-download fa-2x"></i><br>ทำการดาวน์โหลดไฟล์</div><iframe src="'+url+'" onload="fn()" name="theFrame" frameborder="0" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="100%" width="100%"></iframe><script>location.hash = "viewReport"</script>');
-            }
+            $.post("/api/gl/report/checkSingIn", {}, function () {
 
-        }).fail(eror_401);
+                var url = "/api/gl/report/export?reportcode=" + data.reportcode + "&export=" + data.export + "&param=" + data.param;
+                if (data.export == "pdfview") {
+                    var win = window.open();
+                    win.document.write('<title>เรียกดูรายงาน : ระบบบัญชีแยกประเภทสามมิติ</title><link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"><style type="text/css"> .loading {text-align: center; position: fixed; width: 100%; height: 100%; left: 0; top: 0; background: #f1f1f1; z-index: 1000; } </style><script>function fn(){document.getElementById("loading").remove();}</script><div id="loading" class="loading"><br><br><br><br><i class="fa fa-cog fa-spin fa-2x"></i><br>กรุณารอสักครู่</div><iframe src="'+url+'" onload="fn()" name="theFrame" frameborder="0" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="100%" width="100%"></iframe><script>location.hash = "viewReport"</script>');
+                } else {
+                    var win = window.open();
+                    win.document.write('<title>ดาวน์โหลดไฟล์ : ระบบบัญชีแยกประเภทสามมิติ</title><link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"><style type="text/css"> .loading {text-align: center; position: fixed; width: 100%; height: 100%; left: 0; top: 0; background: #f1f1f1; z-index: 1000; } </style><script> function fn(){document.getElementById("loading").remove();}</script><div id="loading" class="loading"><br><br><br><br><i class="fa fa-download fa-2x"></i><br>ทำการดาวน์โหลดไฟล์</div><iframe src="'+url+'" onload="fn()" name="theFrame" frameborder="0" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="100%" width="100%"></iframe><script>location.hash = "viewReport"</script>');
+                }
+
+            }).fail(eror_401);
+
+
+
     });
 
 });
