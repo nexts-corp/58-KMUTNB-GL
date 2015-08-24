@@ -21,25 +21,20 @@ public class RPT12_model extends BaseReport{
     @Temporal(javax.persistence.TemporalType.DATE)
     Date GLHEADDATE;
     @Column
-    @Temporal(javax.persistence.TemporalType.DATE)
-    Date RECEIVEDATE;
+    String RECEIVEFROM=" ";
     @Column
-    String DESCRIPTION= "";
+    String DESCRIPTION=" ";
     @Column
-    String CHEQUEID= "";
+    String CHEQUEID=" ";
     @Column
     @Temporal(javax.persistence.TemporalType.DATE)
     Date CHEQUEDATE;
     @Column
-    String CHEQBRANCHBANK= "";
+    String CHEQBRANCHBANK=" ";
     @Column
-    String REFID1= "";
+    String REFID1=" ";
     @Column
-    String RECEIVEFEENAME= "";
-    @Column
-    String RECEIPT_NO= "";
-    @Column
-    String RECEIPT_BOOKNO = "";
+    String RECEIVEITEM=" ";
     @Column
     BigDecimal AMOUNT = BigDecimal.ZERO;
 
@@ -51,12 +46,12 @@ public class RPT12_model extends BaseReport{
         this.GLHEADDATE = GLHEADDATE;
     }
 
-    public Date getRECEIVEDATE() {
-        return RECEIVEDATE;
+    public String getRECEIVEFROM() {
+        return RECEIVEFROM;
     }
 
-    public void setRECEIVEDATE(Date RECEIVEDATE) {
-        this.RECEIVEDATE = RECEIVEDATE;
+    public void setRECEIVEFROM(String RECEIVEFROM) {
+        this.RECEIVEFROM = RECEIVEFROM;
     }
 
     public String getDESCRIPTION() {
@@ -67,11 +62,11 @@ public class RPT12_model extends BaseReport{
         this.DESCRIPTION = DESCRIPTION;
     }
 
-    public String getCHEQUEID() {
+    public String getCHEQUEI() {
         return CHEQUEID;
     }
 
-    public void setCHEQUEID(String CHEQUEID) {
+    public void setCHEQUEI(String CHEQUEID) {
         this.CHEQUEID = CHEQUEID;
     }
 
@@ -99,28 +94,12 @@ public class RPT12_model extends BaseReport{
         this.REFID1 = REFID1;
     }
 
-    public String getRECEIVEFEENAME() {
-        return RECEIVEFEENAME;
+    public String getRECEIVEITEM() {
+        return RECEIVEITEM;
     }
 
-    public void setRECEIVEFEENAME(String RECEIVEFEENAME) {
-        this.RECEIVEFEENAME = RECEIVEFEENAME;
-    }
-
-    public String getRECEIPT_NO() {
-        return RECEIPT_NO;
-    }
-
-    public void setRECEIPT_NO(String RECEIPT_NO) {
-        this.RECEIPT_NO = RECEIPT_NO;
-    }
-
-    public String getRECEIPT_BOOKNO() {
-        return RECEIPT_BOOKNO;
-    }
-
-    public void setRECEIPT_BOOKNO(String RECEIPT_BOOKNO) {
-        this.RECEIPT_BOOKNO = RECEIPT_BOOKNO;
+    public void setRECEIVEITEM(String RECEIVEITEM) {
+        this.RECEIVEITEM = RECEIVEITEM;
     }
 
     public BigDecimal getAMOUNT() {
@@ -130,4 +109,5 @@ public class RPT12_model extends BaseReport{
     public void setAMOUNT(BigDecimal AMOUNT) {
         this.AMOUNT = AMOUNT;
     }
+
 }
