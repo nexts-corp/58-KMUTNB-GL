@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Template" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
-	<property name="ireport.zoom" value="1.2745232708414913"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="1.1586575189468127"/>
+	<property name="ireport.x" value="28"/>
 	<property name="ireport.y" value="0"/>
 	<style name="FBold" fill="Solid" hAlign="Left" vAlign="Top" fontName="TH SarabunPSK" fontSize="14" isBold="true" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H"/>
 	<style name="Rpt" fontName="TH SarabunPSK" fontSize="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
@@ -63,9 +63,9 @@
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT
-	 ROW_NUMBER() OVER (ORDER BY NULL) AS ID,
+	ROW_NUMBER()OVER(ORDER BY RC.RECEIVEID)AS ID,
 	GLH.GLHEADDATE,
-	RC.RECEIVEFROM,
+	RC.RECEIVEDATE,
 	CASE
 WHEN RC.DESCRIPTION IS NULL THEN
 	GLH.DESCRIPTION1
@@ -76,30 +76,45 @@ END AS DESCRIPTION,
  GL.CHEQUEDATE,
  RI.CHEQBRANCHBANK,
  GLH.REFID1,
- RI.RECEIVEITEM,
+ RF.RECEIVEFEENAME,
+ CONCAT(
+	RC.DEPARTMENTBOOK,
+	CONCAT(
+		'-',
+		CONCAT(
+			RC.RECEIVEBOOKCODE,
+			CONCAT('-', RC.BUDGETPERIODID)
+		)
+	)
+)AS RECEIPT_NO,
+ RC.BOOKNUMBER AS RECEIPT_BOOKNO,
 (GL.CR - GL.DR)AS AMOUNT
 FROM
 	MASTER3D.GL
 INNER JOIN MASTER3D.GLHEAD GLH ON GLH.GLHEADID = GL.GLHEADID
-LEFT OUTER JOIN MASTER3D.RECEIVE RC ON RC.RECEIVEID = GL.LOTID
-LEFT OUTER JOIN MASTER3D.RECEIVEITEM RI ON RI.RECEIVEID = RC.RECEIVEID
+INNER JOIN MASTER3D.RECEIVE RC ON RC.RECEIVEID = GL.LOTID
+INNER JOIN MASTER3D.RECEIVEITEM RI ON RI.RECEIVEID = RC.RECEIVEID
+INNER JOIN MASTER3D.RECEIVEFEE RF ON RF.RECEIVEFEEID = RI.RECEIVEFEEID
 WHERE
 	GL.LOTCODE = 'RC'
-AND RC.RECEIVESTATUS != 'V'
+AND RI.ACTIVITYID = RF.DEFAULTACTIVITY
 AND GL.ACCOUNTID = 2160001001
 AND GLH.GLHEADDATE >= TO_DATE('01/10/2014', 'DD/MM/YYYY')
 AND GLH.GLHEADDATE <= TO_DATE('30/06/2015', 'DD/MM/YYYY')
+AND RC.RECEIVESTATUS != 'V'
 AND GLH.GLHEADSTATUS != 'V']]>
 	</queryString>
 	<field name="ID" class="java.lang.String"/>
 	<field name="GLHEADDATE" class="java.util.Date"/>
-	<field name="RECEIVEFROM" class="java.lang.String"/>
+	<field name="RECEIVEDATE" class="java.util.Date"/>
 	<field name="DESCRIPTION" class="java.lang.String"/>
 	<field name="CHEQUEID" class="java.lang.String"/>
 	<field name="CHEQUEDATE" class="java.util.Date"/>
 	<field name="CHEQBRANCHBANK" class="java.lang.String"/>
 	<field name="REFID1" class="java.lang.String"/>
-	<field name="RECEIVEITEM" class="java.lang.String"/>
+	<field name="RECEIVEFEENAME" class="java.lang.String"/>
+	<field name="RECEIPT_NO" class="java.lang.String"/>
+	<field name="RECEIPT_BOOKNO" class="java.lang.String"/>
 	<field name="AMOUNT" class="java.math.BigDecimal"/>
 	<variable name="CURRENT_PAGE" class="java.lang.Integer" resetType="None" calculation="DistinctCount">
 		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
@@ -191,7 +206,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 		<band height="60" splitType="Stretch">
 			<printWhenExpression><![CDATA[($P{REPORT_TYPE}=="EXCEL")?($V{PAGE_NUMBER}==1):true]]></printWhenExpression>
 			<staticText>
-				<reportElement x="0" y="0" width="25" height="60" uuid="0c039ccd-89f0-41e8-b547-fc10fe065da3"/>
+				<reportElement x="0" y="0" width="20" height="60" uuid="0c039ccd-89f0-41e8-b547-fc10fe065da3"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -204,20 +219,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<text><![CDATA[ลำดับที่]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="61" y="0" width="36" height="60" uuid="63dbe47e-9f3c-47bf-b904-8c6981bb28db"/>
-				<box>
-					<topPen lineWidth="0.75"/>
-					<leftPen lineWidth="0.75"/>
-					<bottomPen lineWidth="0.75"/>
-					<rightPen lineWidth="0.75"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[ลงวันที่]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="97" y="0" width="170" height="20" uuid="5a66aae3-b1e6-4e80-b6e4-04718c3ca216"/>
+				<reportElement x="104" y="0" width="173" height="20" uuid="5a66aae3-b1e6-4e80-b6e4-04718c3ca216"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -230,7 +232,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<text><![CDATA[รายละเอียดสัญญา]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="312" y="20" width="40" height="40" uuid="dab72645-2abf-46a8-9b5a-25c3d0d0967d"/>
+				<reportElement x="324" y="20" width="40" height="40" uuid="dab72645-2abf-46a8-9b5a-25c3d0d0967d"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -243,7 +245,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<text><![CDATA[เงินสด/เช็ค]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="188" y="20" width="79" height="40" uuid="bd56b1a6-a3e4-4202-9ded-3dd58d3ba0fc"/>
+				<reportElement x="195" y="20" width="82" height="40" uuid="bd56b1a6-a3e4-4202-9ded-3dd58d3ba0fc"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -256,7 +258,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<text><![CDATA[ชื่อบริษัท/ห้างร้าน]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="97" y="20" width="91" height="40" uuid="c3fa8ab8-d8c9-41b4-bdc8-03e511cc534d"/>
+				<reportElement x="104" y="20" width="91" height="40" uuid="c3fa8ab8-d8c9-41b4-bdc8-03e511cc534d"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -269,7 +271,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<text><![CDATA[รายการ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="267" y="20" width="45" height="40" uuid="b8279034-9427-443d-9dec-4b523569d038"/>
+				<reportElement x="277" y="20" width="47" height="40" uuid="b8279034-9427-443d-9dec-4b523569d038"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -280,10 +282,10 @@ AND GLH.GLHEADSTATUS != 'V']]>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[ว.ด.ป.
-ที่คำประกัน(รับเงิน)]]></text>
+ที่ค้ำประกัน(รับเงิน)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="267" y="0" width="311" height="20" uuid="63b132fd-7939-48f0-b09a-1f5725590b6e"/>
+				<reportElement x="277" y="0" width="301" height="20" uuid="63b132fd-7939-48f0-b09a-1f5725590b6e"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -296,7 +298,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<text><![CDATA[รายละเอียดครบกำหนดประกันสัญญา]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="352" y="20" width="54" height="40" uuid="afe166d0-09db-4d0d-9c87-09219d47ba33"/>
+				<reportElement x="364" y="20" width="54" height="40" uuid="afe166d0-09db-4d0d-9c87-09219d47ba33"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -310,7 +312,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 จากธนาคาร]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="406" y="20" width="54" height="40" uuid="3ff92e8e-c144-4586-a0f7-0ed4fe86888f"/>
+				<reportElement x="418" y="20" width="54" height="40" uuid="3ff92e8e-c144-4586-a0f7-0ed4fe86888f"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -324,7 +326,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 ใบเสร็จรับเงิน]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="460" y="20" width="54" height="40" uuid="3afbea4e-4829-4aa9-ae8b-efee14b9b1e1"/>
+				<reportElement x="472" y="20" width="52" height="40" uuid="3afbea4e-4829-4aa9-ae8b-efee14b9b1e1"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -418,7 +420,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<text><![CDATA[รายการส่งคืน]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="25" y="0" width="36" height="60" uuid="11d17758-6312-4367-9515-69710a68d3c7"/>
+				<reportElement x="20" y="0" width="36" height="60" uuid="11d17758-6312-4367-9515-69710a68d3c7"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -432,7 +434,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 สัญญา]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="514" y="20" width="64" height="40" uuid="c1e8b65f-3ad3-4c71-98b7-87ef18ec1c07"/>
+				<reportElement x="524" y="20" width="54" height="40" uuid="c1e8b65f-3ad3-4c71-98b7-87ef18ec1c07"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -444,13 +446,26 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				</textElement>
 				<text><![CDATA[จำนวนเงิน]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="56" y="0" width="48" height="60" uuid="63dbe47e-9f3c-47bf-b904-8c6981bb28db"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ลงวันที่]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Prevent">
 			<printWhenExpression><![CDATA[($P{REPORT_MAX_COUNT}>0)]]></printWhenExpression>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="267" y="0" width="45" height="20" uuid="a10bad5b-02d6-4d36-9c04-fabd680295c9"/>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy h.mm a" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="277" y="0" width="47" height="20" uuid="a10bad5b-02d6-4d36-9c04-fabd680295c9"/>
 				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.75"/>
@@ -460,36 +475,36 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{GLHEADDATE}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{CHEQUEDATE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="97" y="0" width="91" height="20" uuid="06756caf-852c-4976-b646-c42d65828540"/>
+				<reportElement stretchType="RelativeToBandHeight" x="104" y="0" width="91" height="20" uuid="06756caf-852c-4976-b646-c42d65828540"/>
 				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.75"/>
 					<bottomPen lineWidth="0.75"/>
 					<rightPen lineWidth="0.75"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font size="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" markup="html">
+					<font size="12" pdfFontName="THSarabunNew.ttf"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{DESCRIPTION}.trim()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="188" y="0" width="79" height="20" uuid="7fd8ef5d-8f0a-4aa3-97cd-d52c6ceb9697"/>
+				<reportElement stretchType="RelativeToBandHeight" x="195" y="0" width="82" height="20" uuid="7fd8ef5d-8f0a-4aa3-97cd-d52c6ceb9697"/>
 				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.75"/>
 					<bottomPen lineWidth="0.75"/>
 					<rightPen lineWidth="0.75"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font size="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" markup="none">
+					<font size="12" pdfFontName="THSarabunNew.ttf"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{RECEIVEFROM}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{RECEIVEFEENAME}.trim()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="352" y="0" width="54" height="20" uuid="3a50aeef-106a-45ba-85c9-53154a36c9b0"/>
+				<reportElement stretchType="RelativeToBandHeight" x="364" y="0" width="54" height="20" uuid="3a50aeef-106a-45ba-85c9-53154a36c9b0"/>
 				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.75"/>
@@ -528,7 +543,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="25" height="20" uuid="a0b21fe0-25d5-4b0f-bd59-b035bf4e6b1e"/>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="20" height="20" uuid="a0b21fe0-25d5-4b0f-bd59-b035bf4e6b1e"/>
 				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.75"/>
@@ -567,19 +582,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="61" y="0" width="36" height="20" uuid="f451b6bb-5eac-4be2-9ae2-60f4274c1a2c"/>
-				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.75"/>
-					<bottomPen lineWidth="0.75"/>
-					<rightPen lineWidth="0.75"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font size="12"/>
-				</textElement>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="312" y="0" width="40" height="20" uuid="97556bdb-e3bc-42af-9f2c-8ca36f2b4354"/>
+				<reportElement stretchType="RelativeToBandHeight" x="324" y="0" width="40" height="20" uuid="97556bdb-e3bc-42af-9f2c-8ca36f2b4354"/>
 				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.75"/>
@@ -592,7 +595,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<textFieldExpression><![CDATA[$F{CHEQUEID}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="406" y="0" width="54" height="20" uuid="8031b321-d2e0-4cad-9d34-63ee941da1ad"/>
+				<reportElement stretchType="RelativeToBandHeight" x="418" y="0" width="54" height="20" uuid="8031b321-d2e0-4cad-9d34-63ee941da1ad"/>
 				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.75"/>
@@ -602,7 +605,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{CHEQBRANCHBANK}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{RECEIPT_NO}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="758" y="0" width="44" height="20" uuid="bfa8e293-cbb4-45fc-ad43-87ae6718223f"/>
@@ -618,7 +621,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="25" y="0" width="36" height="20" uuid="338f607b-cff9-4a88-83bb-94f2c0f38fcf"/>
+				<reportElement stretchType="RelativeToBandHeight" x="20" y="0" width="36" height="20" uuid="338f607b-cff9-4a88-83bb-94f2c0f38fcf"/>
 				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.75"/>
@@ -628,10 +631,10 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{RECEIVEITEM}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{RECEIPT_BOOKNO}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="460" y="0" width="54" height="20" uuid="2a25e783-f6ac-47e2-a072-ee4c4683cb7d"/>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy h.mm a" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="472" y="0" width="52" height="20" uuid="2a25e783-f6ac-47e2-a072-ee4c4683cb7d"/>
 				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.75"/>
@@ -641,10 +644,10 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{CHEQUEDATE}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{GLHEADDATE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="514" y="0" width="64" height="20" uuid="3be2e3d0-d3c7-4097-86be-f0eb1971022e"/>
+				<reportElement stretchType="RelativeToBandHeight" x="524" y="0" width="54" height="20" uuid="3be2e3d0-d3c7-4097-86be-f0eb1971022e"/>
 				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.75"/>
@@ -655,6 +658,19 @@ AND GLH.GLHEADSTATUS != 'V']]>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{AMOUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy h.mm a" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="56" y="0" width="48" height="20" uuid="f451b6bb-5eac-4be2-9ae2-60f4274c1a2c"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RECEIVEDATE}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
