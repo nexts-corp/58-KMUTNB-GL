@@ -295,7 +295,7 @@ $(document).ready(function () {
 
     $(optionName).find("option").hide();
     if (getBudgetType === "1") {
-        $(optionName).find("option").hide();
+        $(optionName).find("option").show();
     } else if (getBudgetType === "2") {
         selectBudgetGroup(optionName, 1, true, 1, 1);
     } else if (getBudgetType === "3") {
