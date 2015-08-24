@@ -152,7 +152,8 @@ public class ReportService extends CServiceBase implements IReportService {
         paramJson.setDATE_START(DateUtil.Date2Eng(paramJson.getDATE_START()));
         paramJson.setDATE_END(DateUtil.Date2Eng(paramJson.getDATE_END()));
         paramJson.setDATE_FRIST(DateUtil.FirstPeriod(paramJson.getDATE_START()));
-        
+        String DATE_Previous = DateUtil.DATE_Previous(paramJson.getDATE_END());
+        paramJson.setDATE_PREVIOUS(DATE_Previous);
         if(paramJson.getBUDGET_TYPE().equals("3")){
             paramJson.setBUDGET_SQL("AND (gl.BUDGETGROUPID != 301010)");
         }

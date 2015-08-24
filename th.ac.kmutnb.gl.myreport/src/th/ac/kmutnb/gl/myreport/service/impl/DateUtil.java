@@ -5,10 +5,14 @@
  */
 package th.ac.kmutnb.gl.myreport.service.impl;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,27 +30,29 @@ public class DateUtil {
         // System.out.println("01/11/2014=>" + LastPeriod("01/11/2014"));
         //System.out.println("01/07/2015=>" + LastPeriod("01/07/2015"));
 
-        for (int i = 1; i < 13; i++) {
-            if (i < 10) {
-                String[] out = Period2Date("25580" + i);
-                System.out.println("Period2Date 25580" + i + "=>" + out[0] + " to " + out[1]);
-                System.out.println("FirstPeriod 25580" + i + "=>" + FirstPeriod("25580" + i));
-                System.out.println("LastPeriod 25580" + i + "=>" + LastPeriod("25580" + i));
-                System.out.println("Date2Period " + out[1] + "=>" + Date2Period(out[1]));
-                System.out.println("FirstPeriod " + out[1] + "=>" + FirstPeriod(out[1]));
-                System.out.println("LastPeriod " + out[1] + "=>" + LastPeriod(out[1]));
-                 System.out.println("Date2Thai " + out[1] + "=>" + Date2Thai(out[1]));
-            } else {
-                String[] out = Period2Date("2558" + i);
-                System.out.println("Period2Date 2558" + i + "=>" + out[0] + " to " + out[1]);
-                System.out.println("FirstPeriod 2558" + i + "=>" + FirstPeriod("2558" + i));
-                System.out.println("LastPeriod 2558" + i + "=>" + LastPeriod("2558" + i));
-                System.out.println("Date2Period " + out[1] + "=>" + Date2Period(out[1]));
-                System.out.println("FirstPeriod " + out[1] + "=>" + FirstPeriod(out[1]));
-                System.out.println("LastPeriod " + out[1] + "=>" + LastPeriod(out[1]));
-                System.out.println("Date2Thai " + out[1] + "=>" + Date2Thai(out[1]));
-            }
-        }
+//        System.err.println(DATE_Previous("31/07/2015"));
+
+//        for (int i = 1; i < 13; i++) {
+//            if (i < 10) {
+//                String[] out = Period2Date("25580" + i);
+//                System.out.println("Period2Date 25580" + i + "=>" + out[0] + " to " + out[1]);
+//                System.out.println("FirstPeriod 25580" + i + "=>" + FirstPeriod("25580" + i));
+//                System.out.println("LastPeriod 25580" + i + "=>" + LastPeriod("25580" + i));
+//                System.out.println("Date2Period " + out[1] + "=>" + Date2Period(out[1]));
+//                System.out.println("FirstPeriod " + out[1] + "=>" + FirstPeriod(out[1]));
+//                System.out.println("LastPeriod " + out[1] + "=>" + LastPeriod(out[1]));
+//                 System.out.println("Date2Thai " + out[1] + "=>" + Date2Thai(out[1]));
+//            } else {
+//                String[] out = Period2Date("2558" + i);
+//                System.out.println("Period2Date 2558" + i + "=>" + out[0] + " to " + out[1]);
+//                System.out.println("FirstPeriod 2558" + i + "=>" + FirstPeriod("2558" + i));
+//                System.out.println("LastPeriod 2558" + i + "=>" + LastPeriod("2558" + i));
+//                System.out.println("Date2Period " + out[1] + "=>" + Date2Period(out[1]));
+//                System.out.println("FirstPeriod " + out[1] + "=>" + FirstPeriod(out[1]));
+//                System.out.println("LastPeriod " + out[1] + "=>" + LastPeriod(out[1]));
+//                System.out.println("Date2Thai " + out[1] + "=>" + Date2Thai(out[1]));
+//            }
+//        }
         //System.out.println("255802=>" + Period2Date("255802"));
     }
 
@@ -134,7 +140,7 @@ public class DateUtil {
         return (scalendar.get(Calendar.YEAR) + 543) + ""
                 + sdf.format(scalendar.getTime());
     }
-    
+
     public static String Date2Thai(String date) {
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Bangkok"));
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/");
@@ -147,10 +153,10 @@ public class DateUtil {
         int sd = Integer.parseInt(aStartDate[0]);
         scalendar.set(sy, sm - 1, sd);
 
-        return sdf.format(scalendar.getTime())+(scalendar.get(Calendar.YEAR) + 543);
-               
+        return sdf.format(scalendar.getTime()) + (scalendar.get(Calendar.YEAR) + 543);
+
     }
-    
+
     public static String Date2Eng(String date) {
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Bangkok"));
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/");
@@ -163,19 +169,36 @@ public class DateUtil {
         int sd = Integer.parseInt(aStartDate[0]);
         scalendar.set(sy, sm - 1, sd);
 
-        return sdf.format(scalendar.getTime())+(scalendar.get(Calendar.YEAR) - 543);
-               
+        return sdf.format(scalendar.getTime()) + (scalendar.get(Calendar.YEAR) - 543);
+
     }
-    
-    
-    public static String currentDate(){
-          SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-          Date  now=new Date();
-          
-          return sdf.format(now);
+
+    public static String currentDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Date now = new Date();
+
+        return sdf.format(now);
     }
-    
-    
-    
+
+    public static String DATE_Previous(String date) {
+
+        DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date today = null;
+        try {
+            today = sdf.parse(date);
+        } catch (ParseException ex) {
+            Logger.getLogger(DateUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(today);
+        calendar.add(Calendar.MONTH, -1);
+        calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
+        Date lastDayOfMonth = calendar.getTime();
+         
+//        System.out.println("Last Day of Month: " + sdf.format(lastDayOfMonth));
+        return sdf.format(lastDayOfMonth);
+    }
+
+   
 
 }

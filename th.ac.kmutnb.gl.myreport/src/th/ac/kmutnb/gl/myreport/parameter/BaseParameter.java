@@ -22,7 +22,7 @@ public class BaseParameter {
     Locale REPORT_LOCALE;
     int REPORT_MAX_COUNT;
     String REPORT_TYPE;
-    
+    String DATE_PREVIOUS;
     String DATE_FRIST;
     String DATE_START;
     String DATE_END;
@@ -44,6 +44,14 @@ public class BaseParameter {
     String ACTIVITY_SORCE_END;
     String ACCOUNT_START;
     String ACCOUNT_END;
+
+    public String getDATE_PREVIOUS() {
+        return DATE_PREVIOUS;
+    }
+
+    public void setDATE_PREVIOUS(String DATE_PREVIOUS) {
+        this.DATE_PREVIOUS = DATE_PREVIOUS;
+    }
 
     public String getACCOUNT_START() {
         return ACCOUNT_START;
