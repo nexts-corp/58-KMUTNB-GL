@@ -75,6 +75,18 @@ $(document).ready(function () {
         
     }
     
+    
+    
+    $(document).on("change", "#report_type", function () {
+        if($("#report_type").val()==="RPT02" || $("#report_type").val()==="RPT02_2"){
+            $(".cAccount").prop("disabled", false).trigger("chosen:updated");
+        }else{
+            selectFristLast(".cAccount");
+            $(".cAccount").prop("disabled", true).trigger("chosen:updated");
+        }
+    });
+    
+    
 
     $.post("./api/gl/form/department", {}, function (data) {
         ksCallBack(function () {
