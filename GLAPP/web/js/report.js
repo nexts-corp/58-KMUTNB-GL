@@ -419,7 +419,7 @@ $(document).on("click", ".bExport", function () {
                 "param": encodeURIComponent(JSON.stringify(sendData))
             };
 
-            $.post("/api/gl/report/checkSingIn", {}, function () {}).fail(eror_401);
+            
             
                 var url = "/api/gl/report/export?reportcode=" + data.reportcode + "&export=" + data.export + "&param=" + data.param;
                 if (data.export == "pdfview") {
@@ -435,5 +435,7 @@ $(document).on("click", ".bExport", function () {
 
 
     });
-
+    
+    
+    
 });
