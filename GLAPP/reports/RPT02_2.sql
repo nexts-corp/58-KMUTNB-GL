@@ -15,7 +15,6 @@ SELECT ROW_NUMBER() OVER (ORDER BY ACCOUNTID,tx.DEPARTMENTID,GLHEADID) AS id,
   DR
 FROM
   (
-    /*SELECT * FROM(*/
       SELECT
         acco.ACCOUNTID,
         acco.ACCOUNTNAME ,
@@ -25,16 +24,18 @@ FROM
         glall.DESCRIPTION1,
         glall.DEPARTMENTID,
         CONCAT(CONCAT(glall.LOTCODE,'-'),glall.REFID1) AS REFDOC,
-        glall.CHEQUEID,
+        TO_CHAR(glall.CHEQUEID) AS CHEQUEID,
         glall.REFDATE2,
         glall.CR,
         glall.DR
       FROM MASTER3D.ACCOUNT acco
       INNER JOIN
         (
-            SELECT
+
+
+            SELECT 
               gl.ACCOUNTID,
-              glh.GLHEADID,
+              gl.GLHEADID,
               glh.GLHEADDATE,
               glh.PERIODID,
               glh.BOOKCODE,
@@ -43,18 +44,74 @@ FROM
               gl.DEPARTMENTID,
               gl.LOTCODE,
               glh.REFID1,
-              gl.CHEQUEID,
-              glh.REFDATE2,
-              SUM(gl.CR) AS CR,
-              SUM(gl.DR) AS DR
+            CASE
+              WHEN gl.LOTCODE='DN'
+              THEN dnche.CHEQUEID
+              WHEN gl.LOTCODE='PP'
+              THEN ppche.CHEQUEID
+              WHEN gl.LOTCODE='PM'
+              THEN pmche.CHEQUEID
+            END AS CHEQUEID,
+            CASE
+              WHEN gl.LOTCODE='DN'
+              THEN pmdn.PAIDDATETIME
+              WHEN gl.LOTCODE='PP'
+              THEN pmpp.PAIDDATETIME
+              WHEN gl.LOTCODE='PM'
+              THEN pm.PAIDDATETIME
+            END AS REFDATE2,
+            gl.CR,
+            gl.DR
+
             FROM MASTER3D.GL gl
-            LEFT JOIN MASTER3D.GLHEAD glh
+            INNER JOIN MASTER3D.GLHEAD glh
             ON gl.GLHEADID = glh.GLHEADID
+
+
+            LEFT JOIN MASTER3D.PAYMENT pm
+            ON gl.GLHEADID = pm.GLHEADID
+            LEFT JOIN (
+              SELECT PAYMENTID,WM_CONCAT(DISTINCT CHEQUEID) AS CHEQUEID FROM MASTER3D.PAYMENTITEM
+              WHERE CHEQUEID IS NOT NULL
+              GROUP BY PAYMENTID
+            )pmche
+            ON pm.PAYMENTID = pmche.PAYMENTID
+
+
+            LEFT JOIN MASTER3D.GL glpp
+            ON gl.GLHEADID = glpp.REFGLHEADID
+            AND glpp.LOTCODE = 'PM'
+            LEFT JOIN MASTER3D.PAYMENT pmpp
+            ON glpp.GLHEADID = pmpp.GLHEADID
+            LEFT JOIN (
+              SELECT PAYMENTID,WM_CONCAT(DISTINCT CHEQUEID) AS CHEQUEID FROM MASTER3D.PAYMENTITEM
+              WHERE CHEQUEID IS NOT NULL
+              GROUP BY PAYMENTID
+            )ppche
+            ON pmpp.PAYMENTID = ppche.PAYMENTID
+
+
+
+            LEFT JOIN MASTER3D.GL glppdn
+            ON gl.GLHEADID = glppdn.REFGLHEADID
+            AND gl.LOTCODE = 'DN'
+            LEFT JOIN MASTER3D.GL gldn
+            ON glppdn.GLHEADID = gldn.REFGLHEADID
+            AND gldn.LOTCODE = 'PM'
+            LEFT JOIN MASTER3D.PAYMENT pmdn
+            ON gldn.GLHEADID = pmdn.GLHEADID
+            LEFT JOIN (
+              SELECT PAYMENTID,WM_CONCAT(DISTINCT CHEQUEID) AS CHEQUEID FROM MASTER3D.PAYMENTITEM
+              WHERE CHEQUEID IS NOT NULL
+              GROUP BY PAYMENTID
+            )dnche
+            ON pmdn.PAYMENTID = dnche.PAYMENTID
+
+
             WHERE glh.GLHEADSTATUS != 'V'
             AND glh.GLHEADDATE >= TO_DATE('{{DATE_START}}', 'DD/MM/YYYY')
             AND glh.GLHEADDATE <= TO_DATE('{{DATE_END}}', 'DD/MM/YYYY')
-
-
+            
             AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
             AND (gl.BUDGETGROUPID BETWEEN {{BUDGET_SORCE_START}} AND {{BUDGET_SORCE_END}} )
             AND (gl.PLANID BETWEEN {{PLAN_SORCE_START}} AND {{PLAN_SORCE_END}} )
@@ -63,21 +120,6 @@ FROM
             AND (gl.FUNDGROUPID BETWEEN {{FUND_SORCE_START}} AND {{FUND_SORCE_END}} )
             AND ( gl.ACCOUNTID BETWEEN {{ACCOUNT_START}} AND {{ACCOUNT_END}} )
             {{BUDGET_SQL}}
-
-            GROUP BY
-              glh.GLHEADDATE,
-              glh.PERIODID,
-              glh.BOOKCODE,
-              glh.SEQUENCE,
-              glh.DESCRIPTION1,
-              gl.LOTCODE,
-              glh.REFID1,
-              gl.CHEQUEID,
-              glh.REFDATE2,
-              glh.GLHEADID,
-              gl.ACCOUNTID,
-              gl.DEPARTMENTID
-
 
         )glall ON acco.ACCOUNTID = glall.ACCOUNTID
 
@@ -212,7 +254,7 @@ FROM
         )tb
        INNER JOIN MASTER3D.ACCOUNT aid
        ON aid.ACCOUNTID = tb.ACCOUNTID
-    /*)*/
+
   )tx
   INNER JOIN MASTER3D.DEPARTMENT dep
   ON tx.DEPARTMENTID = dep.DEPARTMENTID
