@@ -5,6 +5,7 @@
  */
 package th.ac.kmutnb.gl.myreport.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,49 +16,28 @@ import javax.persistence.Temporal;
  * @author Panya
  */
 @Entity
-public class RPT11_model extends BaseReport{
-    @Column
-    String RUNNINGNUMBER="";
-    @Column
-    String SEQUENCE="";
+public class RPT11_model extends BaseReport {
+
     @Column
     @Temporal(javax.persistence.TemporalType.DATE)
     Date GLHEADDATE;
     @Column
-    String REFID1="";
+    String RECEIVEFROM=" ";
     @Column
-    String DESCRIPTION1="";
+    String DESCRIPTION=" ";
     @Column
-    String RECEIVEFROM="";
-    @Column
-    @Temporal(javax.persistence.TemporalType.DATE)
-    Date RECEIVEDATE;
-    // new  
-    @Column
-    String TRADINGNO;
-    @Column
-    String CHEQUEID;
+    String CHEQUEID=" ";
     @Column
     @Temporal(javax.persistence.TemporalType.DATE)
     Date CHEQUEDATE;
     @Column
-    String RECEIPT_NO;
-
-    public String getRUNNINGNUMBER() {
-        return RUNNINGNUMBER;
-    }
-
-    public void setRUNNINGNUMBER(String RUNNINGNUMBER) {
-        this.RUNNINGNUMBER = RUNNINGNUMBER;
-    }
-
-    public String getSEQUENCE() {
-        return SEQUENCE;
-    }
-
-    public void setSEQUENCE(String SEQUENCE) {
-        this.SEQUENCE = SEQUENCE;
-    }
+    String CHEQBRANCHBANK=" ";
+    @Column
+    String REFID1=" ";
+    @Column
+    String RECEIVEITEM=" ";
+    @Column
+    BigDecimal AMOUNT = BigDecimal.ZERO;
 
     public Date getGLHEADDATE() {
         return GLHEADDATE;
@@ -65,22 +45,6 @@ public class RPT11_model extends BaseReport{
 
     public void setGLHEADDATE(Date GLHEADDATE) {
         this.GLHEADDATE = GLHEADDATE;
-    }
-
-    public String getREFID1() {
-        return REFID1;
-    }
-
-    public void setREFID1(String REFID1) {
-        this.REFID1 = REFID1;
-    }
-
-    public String getDESCRIPTION1() {
-        return DESCRIPTION1;
-    }
-
-    public void setDESCRIPTION1(String DESCRIPTION1) {
-        this.DESCRIPTION1 = DESCRIPTION1;
     }
 
     public String getRECEIVEFROM() {
@@ -91,27 +55,19 @@ public class RPT11_model extends BaseReport{
         this.RECEIVEFROM = RECEIVEFROM;
     }
 
-    public Date getRECEIVEDATE() {
-        return RECEIVEDATE;
+    public String getDESCRIPTION() {
+        return DESCRIPTION;
     }
 
-    public void setRECEIVEDATE(Date RECEIVEDATE) {
-        this.RECEIVEDATE = RECEIVEDATE;
+    public void setDESCRIPTION(String DESCRIPTION) {
+        this.DESCRIPTION = DESCRIPTION;
     }
 
-    public String getTRADINGNO() {
-        return TRADINGNO;
-    }
-
-    public void setTRADINGNO(String TRADINGNO) {
-        this.TRADINGNO = TRADINGNO;
-    }
-
-    public String getCHEQUEID() {
+    public String getCHEQUEI() {
         return CHEQUEID;
     }
 
-    public void setCHEQUEID(String CHEQUEID) {
+    public void setCHEQUEI(String CHEQUEID) {
         this.CHEQUEID = CHEQUEID;
     }
 
@@ -123,13 +79,37 @@ public class RPT11_model extends BaseReport{
         this.CHEQUEDATE = CHEQUEDATE;
     }
 
-    public String getRECEIPT_NO() {
-        return RECEIPT_NO;
+    public String getCHEQBRANCHBANK() {
+        return CHEQBRANCHBANK;
     }
 
-    public void setRECEIPT_NO(String RECEIPT_NO) {
-        this.RECEIPT_NO = RECEIPT_NO;
+    public void setCHEQBRANCHBANK(String CHEQBRANCHBANK) {
+        this.CHEQBRANCHBANK = CHEQBRANCHBANK;
     }
-    
-    
+
+    public String getREFID1() {
+        return REFID1;
+    }
+
+    public void setREFID1(String REFID1) {
+        this.REFID1 = REFID1;
+    }
+
+    public String getRECEIVEITEM() {
+        return RECEIVEITEM;
+    }
+
+    public void setRECEIVEITEM(String RECEIVEITEM) {
+        this.RECEIVEITEM = RECEIVEITEM;
+    }
+
+    public BigDecimal getAMOUNT() {
+        return AMOUNT;
+    }
+
+    public void setAMOUNT(BigDecimal AMOUNT) {
+        this.AMOUNT = AMOUNT;
+    }
+
+   
 }

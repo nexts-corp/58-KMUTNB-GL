@@ -5,6 +5,7 @@
  */
 package th.ac.kmutnb.gl.myreport.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,37 +18,25 @@ import javax.persistence.Temporal;
 @Entity
 public class RPT13_model extends BaseReport{
     @Column
-    String RUNNINGNUMBER="";
-    @Column
-    String SEQUENCE="";
-    @Column
     @Temporal(javax.persistence.TemporalType.DATE)
     Date GLHEADDATE;
     @Column
-    String REFID1="";
+    String RECEIVEFROM=" ";
     @Column
-    String DESCRIPTION1="";
+    String DESCRIPTION=" ";
     @Column
-    String RECEIVEFROM="";
+    String CHEQUEID=" ";
     @Column
     @Temporal(javax.persistence.TemporalType.DATE)
-    Date RECEIVEDATE;
-
-    public String getRUNNINGNUMBER() {
-        return RUNNINGNUMBER;
-    }
-
-    public void setRUNNINGNUMBER(String RUNNINGNUMBER) {
-        this.RUNNINGNUMBER = RUNNINGNUMBER;
-    }
-
-    public String getSEQUENCE() {
-        return SEQUENCE;
-    }
-
-    public void setSEQUENCE(String SEQUENCE) {
-        this.SEQUENCE = SEQUENCE;
-    }
+    Date CHEQUEDATE;
+    @Column
+    String CHEQBRANCHBANK=" ";
+    @Column
+    String REFID1=" ";
+    @Column
+    String RECEIVEITEM=" ";
+    @Column
+    BigDecimal AMOUNT = BigDecimal.ZERO;
 
     public Date getGLHEADDATE() {
         return GLHEADDATE;
@@ -55,22 +44,6 @@ public class RPT13_model extends BaseReport{
 
     public void setGLHEADDATE(Date GLHEADDATE) {
         this.GLHEADDATE = GLHEADDATE;
-    }
-
-    public String getREFID1() {
-        return REFID1;
-    }
-
-    public void setREFID1(String REFID1) {
-        this.REFID1 = REFID1;
-    }
-
-    public String getDESCRIPTION1() {
-        return DESCRIPTION1;
-    }
-
-    public void setDESCRIPTION1(String DESCRIPTION1) {
-        this.DESCRIPTION1 = DESCRIPTION1;
     }
 
     public String getRECEIVEFROM() {
@@ -81,13 +54,62 @@ public class RPT13_model extends BaseReport{
         this.RECEIVEFROM = RECEIVEFROM;
     }
 
-    public Date getRECEIVEDATE() {
-        return RECEIVEDATE;
+    public String getDESCRIPTION() {
+        return DESCRIPTION;
     }
 
-    public void setRECEIVEDATE(Date RECEIVEDATE) {
-        this.RECEIVEDATE = RECEIVEDATE;
+    public void setDESCRIPTION(String DESCRIPTION) {
+        this.DESCRIPTION = DESCRIPTION;
     }
+
+    public String getCHEQUEI() {
+        return CHEQUEID;
+    }
+
+    public void setCHEQUEI(String CHEQUEID) {
+        this.CHEQUEID = CHEQUEID;
+    }
+
+    public Date getCHEQUEDATE() {
+        return CHEQUEDATE;
+    }
+
+    public void setCHEQUEDATE(Date CHEQUEDATE) {
+        this.CHEQUEDATE = CHEQUEDATE;
+    }
+
+    public String getCHEQBRANCHBANK() {
+        return CHEQBRANCHBANK;
+    }
+
+    public void setCHEQBRANCHBANK(String CHEQBRANCHBANK) {
+        this.CHEQBRANCHBANK = CHEQBRANCHBANK;
+    }
+
+    public String getREFID1() {
+        return REFID1;
+    }
+
+    public void setREFID1(String REFID1) {
+        this.REFID1 = REFID1;
+    }
+
+    public String getRECEIVEITEM() {
+        return RECEIVEITEM;
+    }
+
+    public void setRECEIVEITEM(String RECEIVEITEM) {
+        this.RECEIVEITEM = RECEIVEITEM;
+    }
+
+    public BigDecimal getAMOUNT() {
+        return AMOUNT;
+    }
+
+    public void setAMOUNT(BigDecimal AMOUNT) {
+        this.AMOUNT = AMOUNT;
+    }
+
     
     
 }
