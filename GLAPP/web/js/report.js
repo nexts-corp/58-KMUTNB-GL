@@ -329,7 +329,7 @@ $(document).ready(function () {
 
 $(document).on("click", ".bExport", function () {
 
-        $.post("/api/gl/report/checkSingIn", {}, function () {
+        
 
             var sendData = {
                 BUDGET_SORCE_START: '',
@@ -405,17 +405,22 @@ $(document).on("click", ".bExport", function () {
                 "export": $(this).attr('exporttype'),
                 "param": encodeURIComponent(JSON.stringify(sendData))
             };
+            
+            $.post("/api/gl/report/checkSingIn", {}, function () {
+                
+                var url = "/api/gl/report/export?reportcode=" + data.reportcode + "&export=" + data.export + "&param=" + data.param;
+                if (data.export == "pdfview") {
+                    var win = window.open();
+                    win.document.write('<title>เรียกดูรายงาน : ระบบบัญชีแยกประเภทสามมิติ</title><link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"><style type="text/css"> .loading {text-align: center; position: fixed; width: 100%; height: 100%; left: 0; top: 0; background: #f1f1f1; z-index: 1000; } </style><script>function fn(){document.getElementById("loading").remove();}</script><div id="loading" class="loading"><br><br><br><br><i class="fa fa-cog fa-spin fa-2x"></i><br>กรุณารอสักครู่</div><iframe src="'+url+'" onload="fn()" name="theFrame" frameborder="0" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="100%" width="100%"></iframe><script>location.hash = "viewReport"</script>');
+                } else {
+                    var win = window.open();
+                    win.document.write('<title>ดาวน์โหลดไฟล์ : ระบบบัญชีแยกประเภทสามมิติ</title><link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"><style type="text/css"> .loading {text-align: center; position: fixed; width: 100%; height: 100%; left: 0; top: 0; background: #f1f1f1; z-index: 1000; } </style><script> function fn(){document.getElementById("loading").remove();}</script><div id="loading" class="loading"><br><br><br><br><i class="fa fa-download fa-2x"></i><br>ทำการดาวน์โหลดไฟล์</div><iframe src="'+url+'" onload="fn()" name="theFrame" frameborder="0" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="100%" width="100%"></iframe><script>location.hash = "viewReport"</script>');
+                }
+                
+            }).fail(eror_401);
+            
 
-            var url = "/api/gl/report/export?reportcode=" + data.reportcode + "&export=" + data.export + "&param=" + data.param;
-            if (data.export == "pdfview") {
-                var win = window.open();
-                win.document.write('<title>เรียกดูรายงาน : ระบบบัญชีแยกประเภทสามมิติ</title><link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"><style type="text/css"> .loading {text-align: center; position: fixed; width: 100%; height: 100%; left: 0; top: 0; background: #f1f1f1; z-index: 1000; } </style><script>function fn(){document.getElementById("loading").remove();}</script><div id="loading" class="loading"><br><br><br><br><i class="fa fa-cog fa-spin fa-2x"></i><br>กรุณารอสักครู่</div><iframe src="'+url+'" onload="fn()" name="theFrame" frameborder="0" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="100%" width="100%"></iframe><script>location.hash = "viewReport"</script>');
-            } else {
-                var win = window.open();
-                win.document.write('<title>ดาวน์โหลดไฟล์ : ระบบบัญชีแยกประเภทสามมิติ</title><link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"><style type="text/css"> .loading {text-align: center; position: fixed; width: 100%; height: 100%; left: 0; top: 0; background: #f1f1f1; z-index: 1000; } </style><script> function fn(){document.getElementById("loading").remove();}</script><div id="loading" class="loading"><br><br><br><br><i class="fa fa-download fa-2x"></i><br>ทำการดาวน์โหลดไฟล์</div><iframe src="'+url+'" onload="fn()" name="theFrame" frameborder="0" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="100%" width="100%"></iframe><script>location.hash = "viewReport"</script>');
-            }
-
-        }).fail(eror_401);
+        
     });
 
 });
