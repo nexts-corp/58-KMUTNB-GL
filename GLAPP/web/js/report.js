@@ -393,10 +393,24 @@ $(document).on("click", ".bExport", function () {
                 nameDepartmentAll += resDepartmentDetail[1];
             }
 
-            if ($("#budgetType").val() != "1") {
+            /*if ($("#budgetType").val() != "1") {
                 nameDepartmentAll += "  (" + $("#budgetType option:selected").text() + ")";
+            }*/
+            var start_fdepid = $("#source_start").val().substring(0,1);
+            var end_fdepid = $("#source_end").val().substring(0,1);
+            var bType = $("#budgetType").val();
+            //alert(start_fdepid+'-'+end_fdepid);
+            if(start_fdepid === '1' && end_fdepid === '1'){
+                nameDepartmentAll += "  (เงินงบประมาณแผ่นดิน)";
+            }else if(start_fdepid === '2' && end_fdepid === '9' && bType!=='3'){
+                nameDepartmentAll += "  (เงินรายได้รวม)";
+            }else if(start_fdepid === '2' && end_fdepid === '9' && bType==='3'){
+                nameDepartmentAll += "  (เงินรายได้ศูนย์รวม)";
+            }else if(start_fdepid === '3' && end_fdepid === '3'){
+                nameDepartmentAll += "  (เงินทุนคณะ)";
+            }else{
+                //nameDepartmentAll = "(xxx)";
             }
-
             sendData.DEPARTMENT = nameDepartmentAll;
 
 
