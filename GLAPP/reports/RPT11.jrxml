@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Template" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
 	<property name="ireport.zoom" value="1.2745232708414913"/>
-	<property name="ireport.x" value="5"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="FBold" fill="Solid" hAlign="Left" vAlign="Top" fontName="TH SarabunPSK" fontSize="14" isBold="true" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H"/>
 	<style name="Rpt" fontName="TH SarabunPSK" fontSize="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
@@ -63,34 +63,44 @@
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT
- ROW_NUMBER() OVER (ORDER BY GLHEAD.GLHEADID) AS ID,
- RC.TRADINGNO,
- GLHEAD.DESCRIPTION1,
- RC.RECEIVEFROM,
- RCITEM.DR, RCITEM.CR,
- RC.RECEIVEDATE,
- RCITEM.CHEQUEID, RCITEM.CHEQUEDATE,
- GLHEAD.REFID1 AS RECEIPT_NO
-FROM MASTER3D.RECEIVE RC
-INNER JOIN MASTER3D.RECEIVEITEM RCITEM ON RC.RECEIVEID = RCITEM.RECEIVEID
-INNER JOIN MASTER3D.RECEIVEFEE RCF ON RCF.RECEIVEFEEID = RCITEM.RECEIVEFEEID
-INNER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = RC.GLHEADID
-WHERE GLHEAD.GLHEADSTATUS != 'V'
+	 ROW_NUMBER() OVER (ORDER BY NULL) AS ID,
+	GLH.GLHEADDATE,
+	RC.RECEIVEFROM,
+	CASE
+WHEN RC.DESCRIPTION IS NULL THEN
+	GLH.DESCRIPTION1
+ELSE
+	RC.DESCRIPTION
+END AS DESCRIPTION,
+ GL.CHEQUEID,
+ GL.CHEQUEDATE,
+ RI.CHEQBRANCHBANK,
+ GLH.REFID1,
+ RI.RECEIVEITEM,
+(GL.CR - GL.DR)AS AMOUNT
+FROM
+	MASTER3D.GL
+INNER JOIN MASTER3D.GLHEAD GLH ON GLH.GLHEADID = GL.GLHEADID
+LEFT OUTER JOIN MASTER3D.RECEIVE RC ON RC.RECEIVEID = GL.LOTID
+LEFT OUTER JOIN MASTER3D.RECEIVEITEM RI ON RI.RECEIVEID = RC.RECEIVEID
+WHERE
+	GL.LOTCODE = 'RC'
 AND RC.RECEIVESTATUS != 'V'
-AND RCITEM.ACCOUNTID LIKE '2%'
-AND RC.RECEIVEID = 390016
-AND GLHEAD.GLHEADDATE >= TO_DATE('01/06/2015', 'DD/MM/YYYY') AND GLHEAD.GLHEADDATE <= TO_DATE('30/06/2015', 'DD/MM/YYYY')]]>
+AND GL.ACCOUNTID = 2160001001
+AND GLH.GLHEADDATE >= TO_DATE('01/10/2014', 'DD/MM/YYYY')
+AND GLH.GLHEADDATE <= TO_DATE('30/06/2015', 'DD/MM/YYYY')
+AND GLH.GLHEADSTATUS != 'V']]>
 	</queryString>
 	<field name="ID" class="java.lang.String"/>
-	<field name="TRADINGNO" class="java.lang.String"/>
-	<field name="DESCRIPTION1" class="java.lang.String"/>
+	<field name="GLHEADDATE" class="java.util.Date"/>
 	<field name="RECEIVEFROM" class="java.lang.String"/>
-	<field name="DR" class="java.math.BigDecimal"/>
-	<field name="CR" class="java.math.BigDecimal"/>
-	<field name="RECEIVEDATE" class="java.util.Date"/>
+	<field name="DESCRIPTION" class="java.lang.String"/>
 	<field name="CHEQUEID" class="java.lang.String"/>
 	<field name="CHEQUEDATE" class="java.util.Date"/>
-	<field name="RECEIPT_NO" class="java.lang.String"/>
+	<field name="CHEQBRANCHBANK" class="java.lang.String"/>
+	<field name="REFID1" class="java.lang.String"/>
+	<field name="RECEIVEITEM" class="java.lang.String"/>
+	<field name="AMOUNT" class="java.math.BigDecimal"/>
 	<variable name="CURRENT_PAGE" class="java.lang.Integer" resetType="None" calculation="DistinctCount">
 		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
 		<initialValueExpression><![CDATA[new Integer(1)]]></initialValueExpression>
@@ -98,10 +108,6 @@ AND GLHEAD.GLHEADDATE >= TO_DATE('01/06/2015', 'DD/MM/YYYY') AND GLHEAD.GLHEADDA
 	<variable name="CURRENT_DATE" class="java.util.Date">
 		<variableExpression><![CDATA[new Date()]]></variableExpression>
 		<initialValueExpression><![CDATA[new Date()]]></initialValueExpression>
-	</variable>
-	<variable name="CRDR" class="java.math.BigDecimal" resetType="None">
-		<variableExpression><![CDATA[$F{DR}+$F{CR}]]></variableExpression>
-		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -454,7 +460,7 @@ AND GLHEAD.GLHEADDATE >= TO_DATE('01/06/2015', 'DD/MM/YYYY') AND GLHEAD.GLHEADDA
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{RECEIVEDATE}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{GLHEADDATE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="97" y="0" width="91" height="20" uuid="06756caf-852c-4976-b646-c42d65828540"/>
@@ -467,7 +473,7 @@ AND GLHEAD.GLHEADDATE >= TO_DATE('01/06/2015', 'DD/MM/YYYY') AND GLHEAD.GLHEADDA
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{DESCRIPTION1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{DESCRIPTION}.trim()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="188" y="0" width="79" height="20" uuid="7fd8ef5d-8f0a-4aa3-97cd-d52c6ceb9697"/>
@@ -493,7 +499,7 @@ AND GLHEAD.GLHEADDATE >= TO_DATE('01/06/2015', 'DD/MM/YYYY') AND GLHEAD.GLHEADDA
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{REFID1}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="578" y="0" width="45" height="20" uuid="fc86b407-f742-4a27-899d-75cd46c6ec5e"/>
@@ -596,7 +602,7 @@ AND GLHEAD.GLHEADDATE >= TO_DATE('01/06/2015', 'DD/MM/YYYY') AND GLHEAD.GLHEADDA
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{RECEIPT_NO}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{CHEQBRANCHBANK}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="758" y="0" width="44" height="20" uuid="bfa8e293-cbb4-45fc-ad43-87ae6718223f"/>
@@ -622,7 +628,7 @@ AND GLHEAD.GLHEADDATE >= TO_DATE('01/06/2015', 'DD/MM/YYYY') AND GLHEAD.GLHEADDA
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TRADINGNO}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{RECEIVEITEM}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="460" y="0" width="54" height="20" uuid="2a25e783-f6ac-47e2-a072-ee4c4683cb7d"/>
@@ -648,7 +654,7 @@ AND GLHEAD.GLHEADDATE >= TO_DATE('01/06/2015', 'DD/MM/YYYY') AND GLHEAD.GLHEADDA
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{CRDR}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{AMOUNT}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
