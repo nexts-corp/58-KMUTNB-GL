@@ -352,7 +352,7 @@ UNION ALL
 			'4'                                       AS id,
      		'2'                                       AS IDG,
 			  'ความสามารถในการชำระหนี้ระยะยาว'                                    AS NAMEG,
-     'อัตราส่วนของเจ้าของ ต่อสินทรพย์รวม (Owners Equity to Total Asset)' AS NAME,
+     'อัตราส่วนของเจ้าของ ต่อสินทรัพย์รวม (Owners Equity to Total Asset)' AS NAME,
 			(CAPITAL_NET / ASSET_NET)AS RESULT_OEA
 		FROM
 			(

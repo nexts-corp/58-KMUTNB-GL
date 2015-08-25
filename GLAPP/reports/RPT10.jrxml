@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="3_4" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
-	<property name="ireport.zoom" value="1.7715610000000501"/>
-	<property name="ireport.x" value="172"/>
+	<property name="ireport.zoom" value="1.464100000000042"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="FBold" fill="Solid" hAlign="Left" vAlign="Top" fontName="TH SarabunPSK" fontSize="14" isBold="true" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H"/>
 	<style name="Rpt" fontName="TH SarabunPSK" fontSize="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
@@ -286,7 +286,7 @@ AND GLHEAD.GLHEADDATE >= TO_DATE('01/10/2014', 'DD/MM/YYYY') AND GLHEAD.GLHEADDA
 				<text><![CDATA[การวิเคราะห์]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="FBold" x="388" y="0" width="127" height="20" uuid="5c877273-b4a6-47b8-ba09-45e592e8c1bf"/>
+				<reportElement style="FBold" x="388" y="0" width="117" height="20" uuid="5c877273-b4a6-47b8-ba09-45e592e8c1bf"/>
 				<box rightPadding="0"/>
 				<textElement textAlignment="Right">
 					<font size="16"/>
@@ -298,7 +298,7 @@ AND GLHEAD.GLHEADDATE >= TO_DATE('01/10/2014', 'DD/MM/YYYY') AND GLHEAD.GLHEADDA
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
-				<reportElement stretchType="RelativeToBandHeight" x="388" y="0" width="127" height="20" uuid="3ce08fdf-01bd-4afb-a742-fa14946283cb"/>
+				<reportElement stretchType="RelativeToBandHeight" x="388" y="0" width="117" height="20" uuid="3ce08fdf-01bd-4afb-a742-fa14946283cb"/>
 				<box rightPadding="4"/>
 				<textElement textAlignment="Right">
 					<font size="16"/>
@@ -314,7 +314,7 @@ AND GLHEAD.GLHEADDATE >= TO_DATE('01/10/2014', 'DD/MM/YYYY') AND GLHEAD.GLHEADDA
 				<textFieldExpression><![CDATA[$V{GROUP_COUNT}+"."+$V{COUNT_CHILD_GROUP}+" "+$F{NAME}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="515" y="0" width="40" height="20" uuid="68b9f6b2-9add-4107-9b06-bc96c5b21531"/>
+				<reportElement x="505" y="0" width="50" height="20" uuid="68b9f6b2-9add-4107-9b06-bc96c5b21531"/>
 				<textElement>
 					<font size="16"/>
 				</textElement>
