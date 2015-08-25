@@ -510,7 +510,7 @@ ORDER BY M_ACCOUNT_ID_1,M_ACCOUNT_ID_2,M_ACCOUNT_ID_3,M_ACCOUNT_ID_4,M_ACCOUNT_I
 					<font size="16"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{DEPARTMENT}!="")?"งบแสดงฐานะการเงิน\n"+$P{DEPARTMENT}:"งบแสดงฐานะการเงิน"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{DEPARTMENT}!="")?"รายงานงบแสดงฐานะการเงิน\n"+$P{DEPARTMENT}:"รายงานงบแสดงฐานะการเงิน"]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement style="FBold" x="0" y="56" width="515" height="20" uuid="47eec812-75fb-442a-931b-5aa9ce7f1955"/>

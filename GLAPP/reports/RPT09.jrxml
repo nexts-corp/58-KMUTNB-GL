@@ -2258,7 +2258,7 @@ FROM
 					<font size="16"/>
 					<paragraph lineSpacing="AtLeast"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{DEPARTMENT}!="")?"งบกระแสเงินสดรวม\n"+$P{DEPARTMENT}:"งบกระแสเงินสดรวม"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{DEPARTMENT}!="")?"รายงานงบกระแสเงินสดรวม\n"+$P{DEPARTMENT}:"รายงานงบกระแสเงินสดรวม"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="276" y="136" width="279" height="20" uuid="80db5f2a-b2ff-4094-b1f9-7e4b545ca2a2"/>

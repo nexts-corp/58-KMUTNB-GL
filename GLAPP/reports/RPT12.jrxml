@@ -150,7 +150,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 					<font size="16"/>
 					<paragraph lineSpacing="AtLeast"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{DEPARTMENT}!="")?"ทะเบียนคุมเงินประกันซอง\n"+$P{DEPARTMENT}:"ทะเบียนคุมเงินประกันซอง"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{DEPARTMENT}!="")?"รายงานค้ำประกันซอง\n"+$P{DEPARTMENT}:"รายงานค้ำประกันซอง"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="0" y="116" width="401" height="20" uuid="e73c2c46-d872-461e-b529-aa43801974de"/>

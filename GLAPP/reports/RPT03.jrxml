@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT03" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
 	<property name="ireport.zoom" value="1.3310000000001165"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="157"/>
+	<property name="ireport.y" value="49"/>
 	<style name="FBold" fill="Solid" hAlign="Left" vAlign="Top" fontName="TH SarabunPSK" fontSize="14" isBold="true" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H"/>
 	<style name="Rpt" fontName="TH SarabunPSK" fontSize="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
 	<style name="Default" isDefault="true" fontName="TH SarabunPSK" fontSize="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
@@ -601,7 +601,7 @@ ORDER BY M_ACCOUNT_ID_1,M_ACCOUNT_ID_2,M_ACCOUNT_ID_3,M_ACCOUNT_ID_4,M_ACCOUNT_I
 					<font size="16"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{DEPARTMENT}!="")?"รายละเอียดประกอบงบแสดงฐานะการเงิน\n"+$P{DEPARTMENT}:"รายละเอียดประกอบงบแสดงฐานะการเงิน"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{DEPARTMENT}!="")?"รายงานรายละเอียดประกอบงบแสดงฐานะการเงิน\n"+$P{DEPARTMENT}:"รายงานรายละเอียดประกอบงบแสดงฐานะการเงิน"]]></textFieldExpression>
 			</textField>
 			<image hAlign="Center" vAlign="Middle">
 				<reportElement x="0" y="0" width="515" height="56" uuid="fd025f39-3310-4c17-bb45-2d02372385a2"/>

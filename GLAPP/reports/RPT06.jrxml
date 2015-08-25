@@ -466,7 +466,7 @@ ORDER BY M_ACCOUNT_ID_1,M_ACCOUNT_ID_2,M_ACCOUNT_ID_3,M_ACCOUNT_ID_4,M_ACCOUNT_I
 					<font size="16"/>
 					<paragraph lineSpacing="AtLeast"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{DEPARTMENT}!="")?"งบรายได้และค่าใช้จ่าย\n"+$P{DEPARTMENT}:"งบรายได้และค่าใช้จ่าย"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{DEPARTMENT}!="")?"รายงานงบรายได้และค่าใช้จ่าย\n"+$P{DEPARTMENT}:"รายงานงบรายได้และค่าใช้จ่าย"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement style="FBold" positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="0" y="96" width="515" height="20" uuid="69f0c016-3c59-4c55-9c5b-64d33278639b"/>
