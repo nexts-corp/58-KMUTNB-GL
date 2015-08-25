@@ -289,7 +289,7 @@ $(document).ready(function () {
         });
 
     }).fail(eror_401);
-    ;
+    
 
     function selectBudgetGroup(optionName, budgetSource, useSelectAuto, fristSelect, lastSelect) {
         $(optionName).find('option[budget-source="' + budgetSource + '"]').show();
@@ -299,6 +299,7 @@ $(document).ready(function () {
         } else {
         }
     }
+
 
     $(document).on("change", "#budgetType", function () {
 
@@ -325,6 +326,7 @@ $(document).ready(function () {
     selectFristLast(optionName);
 
 });
+
 
 
 $(document).on("click", ".bExport", function () {
@@ -378,34 +380,41 @@ $(document).on("click", ".bExport", function () {
 
 
 
-            var strDepartment = $("#department option:selected").text();
-            var resDepartment = strDepartment.split(":");
+
             var nameDepartmentAll = "";
-            if ($("#department").val() != "0") {
-                nameDepartmentAll = resDepartment[1] + "\n";
+            
+            var valMasterStart = $("#department_start option:selected").attr("master-id");
+            var valMasterEnd = $("#department_end option:selected").attr("master-id");
+            if(valMasterStart === "0"){ valMasterStart = $("#department_start option:selected").val(); }
+            if(valMasterEnd === "0"){ valMasterEnd = $("#department_end option:selected").val(); }
+
+            if (valMasterStart === valMasterEnd) {
+                var strDepartment =$("#department").find('option[value="'+valMasterStart+'"]').text();
+                var resDepartment = strDepartment.split("  :  ");
+                nameDepartmentAll += resDepartment[1]+"\n";
             }
-
-
-            if (($("#department").val() != sendData.DEPARTMENT_SORCE_START) && sendData.DEPARTMENT_SORCE_START == sendData.DEPARTMENT_SORCE_END) {
+            
+            var valMasterStart2 = $("#department_start option:selected").attr("master-id");
+            var valMasterEnd2 = $("#department_end option:selected").attr("master-id");
+            alert(valMasterStart2+'-'+valMasterEnd2);
+            if ((sendData.DEPARTMENT_SORCE_START === sendData.DEPARTMENT_SORCE_END)&&(valMasterStart2!=="0" && valMasterEnd2!=="0")) {
                 var strDepartmentDetail = $("#department_start option:selected").text();
-                var resDepartmentDetail = strDepartmentDetail.split(":");
+                var resDepartmentDetail = strDepartmentDetail.split("  :  ");
 
                 nameDepartmentAll += resDepartmentDetail[1];
             }
 
-            /*if ($("#budgetType").val() != "1") {
-                nameDepartmentAll += "  (" + $("#budgetType option:selected").text() + ")";
-            }*/
-            var start_fdepid = $("#source_start").val().substring(0,1);
-            var end_fdepid = $("#source_end").val().substring(0,1);
+            
+            var start_fsourceid = $("#source_start").val().substring(0,1);
+            var end_fsourceid = $("#source_end").val().substring(0,1);
             var bType = $("#budgetType").val();
-            if(start_fdepid === '1' && end_fdepid === '1'){
+            if(start_fsourceid === '1' && end_fsourceid === '1'){
                 nameDepartmentAll += "  (เงินงบประมาณแผ่นดิน)";
-            }else if(((start_fdepid === '2' && end_fdepid === '9')||(start_fdepid === '2' && end_fdepid === '3')||(start_fdepid === '3' && end_fdepid === '9'))&& bType!=='3'){
+            }else if(((start_fsourceid === '2' && end_fsourceid === '9')||(start_fsourceid === '2' && end_fsourceid === '3')||(start_fsourceid === '3' && end_fsourceid === '9'))&& bType!=='3'){
                 nameDepartmentAll += "  (เงินรายได้รวม)";
-            }else if(start_fdepid === '2' && end_fdepid === '9' && bType==='3'){
+            }else if(start_fsourceid === '2' && end_fsourceid === '9' && bType==='3'){
                 nameDepartmentAll += "  (เงินรายได้ศูนย์รวม)";
-            }else if(start_fdepid === '3' && end_fdepid === '3'){
+            }else if(start_fsourceid === '3' && end_fsourceid === '3'){
                 nameDepartmentAll += "  (เงินทุนคณะ)";
             }else{
                
@@ -419,8 +428,7 @@ $(document).on("click", ".bExport", function () {
                 "param": encodeURIComponent(JSON.stringify(sendData))
             };
 
-            
-            
+                
                 var url = "/api/gl/report/export?reportcode=" + data.reportcode + "&export=" + data.export + "&param=" + data.param;
                 if (data.export == "pdfview") {
                     var win = window.open();
@@ -430,8 +438,7 @@ $(document).on("click", ".bExport", function () {
                     win.document.write('<title>ดาวน์โหลดไฟล์ : ระบบบัญชีแยกประเภทสามมิติ</title><link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"><style type="text/css"> .loading {text-align: center; position: fixed; width: 100%; height: 100%; left: 0; top: 0; background: #f1f1f1; z-index: 1000; } </style><script> function fn(){document.getElementById("loading").remove();}</script><div id="loading" class="loading"><br><br><br><br><i class="fa fa-download fa-2x"></i><br>ทำการดาวน์โหลดไฟล์</div><iframe src="'+url+'" onload="fn()" name="theFrame" frameborder="0" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="100%" width="100%"></iframe><script>location.hash = "viewReport"</script>');
                 }
 
-            
-
+          
 
 
     });
