@@ -2113,11 +2113,11 @@ FROM
 		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
 	</variable>
 	<variable name="RESULT_ROW" class="java.math.BigDecimal" resetType="Group" resetGroup="G_LVL1" calculation="Sum">
-		<variableExpression><![CDATA[$F{BALANCE_PAST}-$F{BALANCE_CURRENT}]]></variableExpression>
+		<variableExpression><![CDATA[$F{BALANCE_CURRENT}-$F{BALANCE_PAST}]]></variableExpression>
 		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
 	</variable>
 	<variable name="SUM_CASH" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G_LVL1" calculation="Sum">
-		<variableExpression><![CDATA[($F{HEADER1}!="รวม")?$V{SUM_CURRENT}:0.0]]></variableExpression>
+		<variableExpression><![CDATA[($F{HEADER1}!="รวม")?$V{RESULT_ROW}:0.0]]></variableExpression>
 		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
 	</variable>
 	<variable name="CURRENT_DATE" class="java.util.Date">
@@ -2196,19 +2196,25 @@ FROM
 					<textFieldExpression><![CDATA[$F{HEADER2}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-					<reportElement x="385" y="0" width="90" height="20" uuid="388b5943-8d0e-44d2-ba74-4b5805fdaf27"/>
+					<reportElement x="385" y="0" width="90" height="20" uuid="388b5943-8d0e-44d2-ba74-4b5805fdaf27">
+						<printWhenExpression><![CDATA[$F{HEADER2}!="ปรับกระทบกำไรสุทธิ"]]></printWhenExpression>
+					</reportElement>
 					<textElement textAlignment="Right" verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA[$F{BALANCE_PAST}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-					<reportElement x="295" y="0" width="90" height="20" uuid="30156526-1d3f-41e2-adc5-d7ccc9daafa5"/>
+					<reportElement x="295" y="0" width="90" height="20" uuid="30156526-1d3f-41e2-adc5-d7ccc9daafa5">
+						<printWhenExpression><![CDATA[$F{HEADER2}!="ปรับกระทบกำไรสุทธิ"]]></printWhenExpression>
+					</reportElement>
 					<textElement textAlignment="Right" verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA[$F{BALANCE_CURRENT}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-					<reportElement x="475" y="0" width="80" height="20" uuid="eb82fce7-23bf-4650-aec9-ab29e7dcba0e"/>
+					<reportElement x="475" y="0" width="80" height="20" uuid="eb82fce7-23bf-4650-aec9-ab29e7dcba0e">
+						<printWhenExpression><![CDATA[$F{HEADER2}!="ปรับกระทบกำไรสุทธิ"]]></printWhenExpression>
+					</reportElement>
 					<textElement textAlignment="Right" verticalAlignment="Middle"/>
-					<textFieldExpression><![CDATA[$F{BALANCE_PAST}-$F{BALANCE_CURRENT}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{BALANCE_CURRENT}-$F{BALANCE_PAST}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -2345,7 +2351,7 @@ FROM
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 				<reportElement x="475" y="0" width="80" height="20" uuid="dbd1301d-f83d-4745-ac56-4b07de3b4cc6"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{BALANCE_PAST}-$F{BALANCE_CURRENT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{BALANCE_CURRENT}-$F{BALANCE_PAST}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
