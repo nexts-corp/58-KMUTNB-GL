@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Template" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
 	<property name="ireport.zoom" value="1.1586575189468118"/>
-	<property name="ireport.x" value="43"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="FBold" fill="Solid" hAlign="Left" vAlign="Top" fontName="TH SarabunPSK" fontSize="14" isBold="true" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H"/>
 	<style name="Rpt" fontName="TH SarabunPSK" fontSize="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
@@ -514,7 +514,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{REFID1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="578" y="0" width="45" height="20" uuid="d00d27b3-46c5-4846-83e6-d181e3b6e9d4"/>
@@ -631,7 +631,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{RECEIPT_BOOKNO}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="472" y="0" width="52" height="20" uuid="1b8c1faa-d387-4ce8-8a82-a3ebda47ccfb"/>
