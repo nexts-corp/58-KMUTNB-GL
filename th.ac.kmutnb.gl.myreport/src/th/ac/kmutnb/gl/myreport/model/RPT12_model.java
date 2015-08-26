@@ -34,6 +34,7 @@ public class RPT12_model extends BaseReport{
     String CHEQBRANCHBANK = "";
     @Column
     String REFID1 = "";
+    @Column
     String RECEIVEFEENAME = "";
     @Column
     String RECEIPT_NO = "";
