@@ -12,7 +12,7 @@ import th.co.bpg.cde.collection.CJFile;
 @CIService(Uri = "/report")
 public interface IReportService {
 
-    @CIOperation(Uri = "/export",Authentication = true,ResourceCode ="*")
+    @CIOperation(Uri = "/export")
     public CJFile export(@CIParam(Name="reportcode") String reportCode
             ,@CIParam(Name="export") String exportType
             ,@CIParam(Name="param")String param);
