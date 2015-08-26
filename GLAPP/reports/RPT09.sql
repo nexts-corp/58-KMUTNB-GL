@@ -2819,93 +2819,204 @@ FROM
 																														BALANCE_CURRENT,
 																														BALANCE_PAST
 																													FROM
-																														(
-																															SELECT
-																																BALANCE_CURRENT,
-																																BALANCE_PAST
-																															FROM
-																																(
-																																	SELECT
-																																		'1' AS MASK,
-																																		SUM (CR) - SUM (DR) AS BALANCE_CURRENT
-																																	FROM
-																																		MASTER3D.GL
-																																	LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
-																																	LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
-																																	WHERE
-																																		GL.ACCOUNTID IN (
-																																			SELECT
-																																				ACCOUNTID
-																																			FROM
-																																				MASTER3D. ACCOUNT START WITH (
-																																					MASTERID = 1250000000
-																																					OR MASTERID = 5210002000
-																																				) CONNECT BY PRIOR ACCOUNTID = MASTERID
-																																		)
-																																	AND GL.GLHEADSTATUS != 'V'
-																																	AND ACC.ACCOUNTSTATUS = 'Y'
-																																	AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
-																																	AND (
-																																		gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
-																																		AND {{ BUDGET_SORCE_END }}
-																																	)
-																																	AND (
-																																		gl.PLANID BETWEEN {{ PLAN_SORCE_START }}
-																																		AND {{ PLAN_SORCE_END }}
-																																	)
-																																	AND (
-																																		gl.PROJECTID BETWEEN {{ PROJECT_SORCE_START }}
-																																		AND {{ PROJECT_SORCE_END }}
-																																	)
-																																	AND (
-																																		gl.ACTIVITYID BETWEEN {{ ACTIVITY_SORCE_START }}
-																																		AND {{ ACTIVITY_SORCE_END }}
-																																	)
-																																	AND (
-																																		gl.FUNDGROUPID BETWEEN {{ FUND_SORCE_START }}
-																																		AND {{ FUND_SORCE_END }}
-																																	) {{ BUDGET_SQL }}
-																																) TMP_CURRENT
-																															FULL OUTER JOIN (
-																																SELECT
-																																	'1' AS MASK,
-																																	SUM (CR) - SUM (DR) AS BALANCE_PAST
-																																FROM
-																																	MASTER3D.GL
-																																LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
-																																LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
-																																WHERE
-																																	GL.ACCOUNTID IN (
-																																		SELECT
-																																			ACCOUNTID
-																																		FROM
-																																			MASTER3D. ACCOUNT START WITH MASTERID = 1250000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
-																																	)
-																																AND GL.GLHEADSTATUS != 'V'
-																																AND ACC.ACCOUNTSTATUS = 'Y'
-																																AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
-																																AND (
-																																	gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
-																																	AND {{ BUDGET_SORCE_END }}
-																																)
-																																AND (
-																																	gl.PLANID BETWEEN {{ PLAN_SORCE_START }}
-																																	AND {{ PLAN_SORCE_END }}
-																																)
-																																AND (
-																																	gl.PROJECTID BETWEEN {{ PROJECT_SORCE_START }}
-																																	AND {{ PROJECT_SORCE_END }}
-																																)
-																																AND (
-																																	gl.ACTIVITYID BETWEEN {{ ACTIVITY_SORCE_START }}
-																																	AND {{ ACTIVITY_SORCE_END }}
-																																)
-																																AND (
-																																	gl.FUNDGROUPID BETWEEN {{ FUND_SORCE_START }}
-																																	AND {{ FUND_SORCE_END }}
-																																) {{ BUDGET_SQL }}
-																															) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
-																														)
+																														(SELECT
+                                                                                                                                                                                                                                                    'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER1,
+                                                                                                                                                                                                                                                    'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER2,
+                                                                                                                                                                                                                                                    'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER3,
+                                                                                                                                                                                                                                                    'เพิ่มขึ้น/ลดลงในครุภัณฑ์' AS ACC_NAME,
+                                                                                                                                                                                                                                                    BALANCE_CURRENT,
+                                                                                                                                                                                                                                                    BALANCE_PAST
+                                                                                                                                                                                                                                            FROM
+                                                                                                                                                                                                                                                    (
+                                                                                                                                                                                                                                                            SELECT
+                                                                                                                                                                                                                                                                    BALANCE_CURRENT,
+                                                                                                                                                                                                                                                                    BALANCE_PAST
+                                                                                                                                                                                                                                                            FROM
+                                                                                                                                                                                                                                                                    (
+                                                                                                                                                                                                                                                                            SELECT
+                                                                                                                                                                                                                                                                                    '1' AS MASK,
+                                                                                                                                                                                                                                                                                    (
+                                                                                                                                                                                                                                                                                            BALANCE_CURRENT - TOTAL_DEPRECIATE
+                                                                                                                                                                                                                                                                                    ) AS BALANCE_CURRENT
+                                                                                                                                                                                                                                                                            FROM
+                                                                                                                                                                                                                                                                                    (
+                                                                                                                                                                                                                                                                                            SELECT
+                                                                                                                                                                                                                                                                                                    SUM (CR - DR) AS BALANCE_CURRENT
+                                                                                                                                                                                                                                                                                            FROM
+                                                                                                                                                                                                                                                                                                    MASTER3D.GL
+                                                                                                                                                                                                                                                                                            LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+                                                                                                                                                                                                                                                                                            LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+                                                                                                                                                                                                                                                                                            WHERE
+                                                                                                                                                                                                                                                                                                    GL.ACCOUNTID IN (
+                                                                                                                                                                                                                                                                                                            SELECT
+                                                                                                                                                                                                                                                                                                                    ACCOUNTID
+                                                                                                                                                                                                                                                                                                            FROM
+                                                                                                                                                                                                                                                                                                                    MASTER3D. ACCOUNT START WITH (
+                                                                                                                                                                                                                                                                                                                            MASTERID = 1250000000
+                                                                                                                                                                                                                                                                                                                            OR MASTERID = 5210002000
+                                                                                                                                                                                                                                                                                                                    ) CONNECT BY PRIOR ACCOUNTID = MASTERID
+                                                                                                                                                                                                                                                                                                    )
+                                                                                                                                                                                                                                                                                            AND GL.GLHEADSTATUS != 'V'
+                                                                                                                                                                                                                                                                                            AND ACC.ACCOUNTSTATUS = 'Y'
+                                                                                                                                                                                                                                                                                            AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                             AND (
+																																gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
+																																AND {{ BUDGET_SORCE_END }}
+																															)
+																															AND (
+																																gl.PLANID BETWEEN {{ PLAN_SORCE_START }}
+																																AND {{ PLAN_SORCE_END }}
+																															)
+																															AND (
+																																gl.PROJECTID BETWEEN {{ PROJECT_SORCE_START }}
+																																AND {{ PROJECT_SORCE_END }}
+																															)
+																															AND (
+																																gl.ACTIVITYID BETWEEN {{ ACTIVITY_SORCE_START }}
+																																AND {{ ACTIVITY_SORCE_END }}
+																															)
+																															AND (
+																																gl.FUNDGROUPID BETWEEN {{ FUND_SORCE_START }}
+																																AND {{ FUND_SORCE_END }}
+																															) {{ BUDGET_SQL }}
+                                                                                                                                                                                                                                                                                    )
+                                                                                                                                                                                                                                                                            CROSS JOIN (
+                                                                                                                                                                                                                                                                                    SELECT
+                                                                                                                                                                                                                                                                                            (
+                                                                                                                                                                                                                                                                                                    BALANCE_CURRENT - BALANCE_PAST
+                                                                                                                                                                                                                                                                                            ) AS TOTAL_DEPRECIATE
+                                                                                                                                                                                                                                                                                    FROM
+                                                                                                                                                                                                                                                                                            (
+                                                                                                                                                                                                                                                                                                    SELECT
+                                                                                                                                                                                                                                                                                                            BALANCE_CURRENT,
+                                                                                                                                                                                                                                                                                                            BALANCE_PAST
+                                                                                                                                                                                                                                                                                                    FROM
+                                                                                                                                                                                                                                                                                                            (
+                                                                                                                                                                                                                                                                                                                    SELECT
+                                                                                                                                                                                                                                                                                                                            '1' AS MASK,
+                                                                                                                                                                                                                                                                                                                            SUM (DR - CR) AS BALANCE_CURRENT
+                                                                                                                                                                                                                                                                                                                    FROM
+                                                                                                                                                                                                                                                                                                                            MASTER3D.GL
+                                                                                                                                                                                                                                                                                                                    LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+                                                                                                                                                                                                                                                                                                                    LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+                                                                                                                                                                                                                                                                                                                    WHERE
+                                                                                                                                                                                                                                                                                                                            GL.ACCOUNTID IN (
+                                                                                                                                                                                                                                                                                                                                    SELECT
+                                                                                                                                                                                                                                                                                                                                            ACCOUNTID
+                                                                                                                                                                                                                                                                                                                                    FROM
+                                                                                                                                                                                                                                                                                                                                            MASTER3D. ACCOUNT START WITH (MASTERID = 5150107000) CONNECT BY PRIOR ACCOUNTID = MASTERID
+                                                                                                                                                                                                                                                                                                                            )
+                                                                                                                                                                                                                                                                                                                    AND GL.GLHEADSTATUS != 'V'
+                                                                                                                                                                                                                                                                                                                    AND ACC.ACCOUNTSTATUS = 'Y'
+                                                                                                                                                                                                                                                                                                                    AND GLHEAD.GLHEADDATE >= TO_DATE ('{{DATE_FRIST}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                                                    AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                                                    AND (
+																																gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
+																																AND {{ BUDGET_SORCE_END }}
+																															)
+																															AND (
+																																gl.PLANID BETWEEN {{ PLAN_SORCE_START }}
+																																AND {{ PLAN_SORCE_END }}
+																															)
+																															AND (
+																																gl.PROJECTID BETWEEN {{ PROJECT_SORCE_START }}
+																																AND {{ PROJECT_SORCE_END }}
+																															)
+																															AND (
+																																gl.ACTIVITYID BETWEEN {{ ACTIVITY_SORCE_START }}
+																																AND {{ ACTIVITY_SORCE_END }}
+																															)
+																															AND (
+																																gl.FUNDGROUPID BETWEEN {{ FUND_SORCE_START }}
+																																AND {{ FUND_SORCE_END }}
+																															) {{ BUDGET_SQL }}
+                                                                                                                                                                                                                                                                                                            ) TMP_CURRENT
+                                                                                                                                                                                                                                                                                                    FULL OUTER JOIN (
+                                                                                                                                                                                                                                                                                                            SELECT
+                                                                                                                                                                                                                                                                                                                    '1' AS MASK,
+                                                                                                                                                                                                                                                                                                                    SUM (DR - CR) AS BALANCE_PAST
+                                                                                                                                                                                                                                                                                                            FROM
+                                                                                                                                                                                                                                                                                                                    MASTER3D.GL
+                                                                                                                                                                                                                                                                                                            LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+                                                                                                                                                                                                                                                                                                            LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+                                                                                                                                                                                                                                                                                                            WHERE
+                                                                                                                                                                                                                                                                                                                    GL.ACCOUNTID IN (
+                                                                                                                                                                                                                                                                                                                            SELECT
+                                                                                                                                                                                                                                                                                                                                    ACCOUNTID
+                                                                                                                                                                                                                                                                                                                            FROM
+                                                                                                                                                                                                                                                                                                                                    MASTER3D. ACCOUNT START WITH (MASTERID = 5150107000) CONNECT BY PRIOR ACCOUNTID = MASTERID
+                                                                                                                                                                                                                                                                                                                    )
+                                                                                                                                                                                                                                                                                                            AND GL.GLHEADSTATUS != 'V'
+                                                                                                                                                                                                                                                                                                            AND ACC.ACCOUNTSTATUS = 'Y'
+                                                                                                                                                                                                                                                                                                            AND GLHEAD.GLHEADDATE >= TO_DATE ('{{DATE_FRIST}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                                            AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                                            AND (
+																																gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
+																																AND {{ BUDGET_SORCE_END }}
+																															)
+																															AND (
+																																gl.PLANID BETWEEN {{ PLAN_SORCE_START }}
+																																AND {{ PLAN_SORCE_END }}
+																															)
+																															AND (
+																																gl.PROJECTID BETWEEN {{ PROJECT_SORCE_START }}
+																																AND {{ PROJECT_SORCE_END }}
+																															)
+																															AND (
+																																gl.ACTIVITYID BETWEEN {{ ACTIVITY_SORCE_START }}
+																																AND {{ ACTIVITY_SORCE_END }}
+																															)
+																															AND (
+																																gl.FUNDGROUPID BETWEEN {{ FUND_SORCE_START }}
+																																AND {{ FUND_SORCE_END }}
+																															) {{ BUDGET_SQL }}
+                                                                                                                                                                                                                                                                                                    ) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+                                                                                                                                                                                                                                                                                            )
+                                                                                                                                                                                                                                                                            )
+                                                                                                                                                                                                                                                                    ) TMP_CURRENT
+                                                                                                                                                                                                                                                            FULL OUTER JOIN (
+                                                                                                                                                                                                                                                                    SELECT
+                                                                                                                                                                                                                                                                            '1' AS MASK,
+                                                                                                                                                                                                                                                                            SUM (CR) - SUM (DR) AS BALANCE_PAST
+                                                                                                                                                                                                                                                                    FROM
+                                                                                                                                                                                                                                                                            MASTER3D.GL
+                                                                                                                                                                                                                                                                    LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+                                                                                                                                                                                                                                                                    LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+                                                                                                                                                                                                                                                                    WHERE
+                                                                                                                                                                                                                                                                            GL.ACCOUNTID IN (
+                                                                                                                                                                                                                                                                                    SELECT
+                                                                                                                                                                                                                                                                                            ACCOUNTID
+                                                                                                                                                                                                                                                                                    FROM
+                                                                                                                                                                                                                                                                                            MASTER3D. ACCOUNT START WITH MASTERID = 1250000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+                                                                                                                                                                                                                                                                            )
+                                                                                                                                                                                                                                                                    AND GL.GLHEADSTATUS != 'V'
+                                                                                                                                                                                                                                                                    AND ACC.ACCOUNTSTATUS = 'Y'
+                                                                                                                                                                                                                                                                    AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                        AND (
+																																gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
+																																AND {{ BUDGET_SORCE_END }}
+																															)
+																															AND (
+																																gl.PLANID BETWEEN {{ PLAN_SORCE_START }}
+																																AND {{ PLAN_SORCE_END }}
+																															)
+																															AND (
+																																gl.PROJECTID BETWEEN {{ PROJECT_SORCE_START }}
+																																AND {{ PROJECT_SORCE_END }}
+																															)
+																															AND (
+																																gl.ACTIVITYID BETWEEN {{ ACTIVITY_SORCE_START }}
+																																AND {{ ACTIVITY_SORCE_END }}
+																															)
+																															AND (
+																																gl.FUNDGROUPID BETWEEN {{ FUND_SORCE_START }}
+																																AND {{ FUND_SORCE_END }}
+																															) {{ BUDGET_SQL }}
+                                                                                                                                                                                                                                                            ) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+                                                                                                                                                                                                                                                    ))
+                                                                                                                                                                                                                                               
+                                                                                                                                                                                                                                                        
+																								/*------------------------------------------------------------------------------------------------------------*/						  
 																													UNION ALL
 																														SELECT
 																															'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER1,
