@@ -2130,9 +2130,11 @@ FROM
 	</variable>
 	<variable name="money_plai" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[($F{ACC_NAME}=="เงินสดและรายการเทียบเท่าเงินสดคงเหลือ ณ วันปลายงวด")?$F{BALANCE_CURRENT}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
 	</variable>
 	<variable name="money_ton" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[($F{ACC_NAME}=="เงินสดและรายการเทียบเท่าเงินสดคงเหลือ ณ วันต้นงวด")?$F{BALANCE_CURRENT}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
 	</variable>
 	<variable name="money_updown_suti" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[($F{ACC_NAME}=="เงินสดเพิ่มขึ้นลงสุทธิ")?$F{BALANCE_CURRENT}:0.0]]></variableExpression>
@@ -2450,7 +2452,7 @@ FROM
 					<bottomPen lineWidth="3.0" lineStyle="Double"/>
 				</box>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$V{money_plai}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUM_CASH}+$V{money_ton}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)">
 				<reportElement style="FBold" x="295" y="0" width="260" height="20" uuid="60a85dfe-a5d1-4253-a2c5-9d63c3059e5c"/>
