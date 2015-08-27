@@ -670,7 +670,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{RECEIVEDATE}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{GLHEADDATE}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
