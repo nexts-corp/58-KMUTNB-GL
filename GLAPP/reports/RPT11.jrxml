@@ -475,7 +475,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{CHEQUEDATE}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{RECEIVEDATE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="104" y="0" width="91" height="20" uuid="06756caf-852c-4976-b646-c42d65828540"/>
@@ -644,7 +644,7 @@ AND GLH.GLHEADSTATUS != 'V']]>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{GLHEADDATE}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="524" y="0" width="54" height="20" uuid="3be2e3d0-d3c7-4097-86be-f0eb1971022e"/>
