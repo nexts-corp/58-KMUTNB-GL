@@ -52,7 +52,7 @@ $(document).ready(function () {
             window.location.href = data.redirectPage;
         }
     }
-    
+
 
     $.post("/api/gl/form/user", {}, function (data) {
         $(".user_adminname").text(data.user);
@@ -63,12 +63,12 @@ $(document).ready(function () {
         var data = run();
         callback(data);
     }
-    
-    function ksCallBack2(vari,run, callback) {
+
+    function ksCallBack2(vari, run, callback) {
         var data = run(vari);
         callback(data);
     }
-    
+
 
     function selectFristLast(name) {
 
@@ -81,9 +81,9 @@ $(document).ready(function () {
 
 
     $(document).on("change", "#report_type", function () {
-        if($("#report_type").val()==="RPT02" || $("#report_type").val()==="RPT02_2"){
+        if ($("#report_type").val() === "RPT02" || $("#report_type").val() === "RPT02_2") {
             $(".cAccount").prop("disabled", false).trigger("chosen:updated");
-        }else{
+        } else {
             selectFristLast(".cAccount");
             $(".cAccount").prop("disabled", true).trigger("chosen:updated");
         }
@@ -292,7 +292,7 @@ $(document).ready(function () {
         });
 
     }).fail(eror_401);
-    
+
 
     function selectBudgetGroup(optionName, budgetSource, useSelectAuto, fristSelect, lastSelect) {
         $(optionName).find('option[budget-source="' + budgetSource + '"]').show();
@@ -332,11 +332,37 @@ $(document).ready(function () {
 
 
 
+    $(document).on("change",".cDate",function(){
+        var chtfdate = checkdate($("#date_start").val())*checkdate($("#date_end").val());
+        if(chtfdate){
+            $(this).parent("div").removeClass("has-error"); 
+        }else{
+            $(this).parent("div").addClass("has-error"); 
+        }
+    });
+    
+    function checkdate(valdate) {
+        var validformat = /^\d{2}\/\d{2}\/\d{4}$/;
+        var returnval = false;
+        if (validformat.test(valdate)){
+            var dayfield = valdate.split("/")[0];
+            var monthfield = valdate.split("/")[1];
+            var yearfield = valdate.split("/")[2];
+            var dayobj = new Date(yearfield, monthfield - 1, dayfield);
+            if ((dayobj.getMonth() + 1 !== parseInt(monthfield)) || (dayobj.getDate() !== parseInt(dayfield)) || (dayobj.getFullYear() !== parseInt(yearfield))){}else{
+                returnval = true;
+            }
+        }
+        return returnval;
+    }
+
+
+
     $(document).on("click", ".bExport", function () {
 
-        
 
-        
+
+
 
         var sendData = {
             BUDGET_SORCE_START: '',
@@ -390,18 +416,22 @@ $(document).ready(function () {
 
         var valMasterStart = $("#department_start option:selected").attr("master-id");
         var valMasterEnd = $("#department_end option:selected").attr("master-id");
-        if(valMasterStart === "0"){ valMasterStart = $("#department_start option:selected").val(); }
-        if(valMasterEnd === "0"){ valMasterEnd = $("#department_end option:selected").val(); }
+        if (valMasterStart === "0") {
+            valMasterStart = $("#department_start option:selected").val();
+        }
+        if (valMasterEnd === "0") {
+            valMasterEnd = $("#department_end option:selected").val();
+        }
 
         if (valMasterStart === valMasterEnd) {
-            var strDepartment =$("#department").find('option[value="'+valMasterStart+'"]').text();
+            var strDepartment = $("#department").find('option[value="' + valMasterStart + '"]').text();
             var resDepartment = strDepartment.split("  :  ");
-            nameDepartmentAll += resDepartment[1]+"\n";
+            nameDepartmentAll += resDepartment[1] + "\n";
         }
 
         var valMasterStart2 = $("#department_start option:selected").attr("master-id");
         var valMasterEnd2 = $("#department_end option:selected").attr("master-id");
-        if ((sendData.DEPARTMENT_SORCE_START === sendData.DEPARTMENT_SORCE_END)&&(valMasterStart2!=="0" && valMasterEnd2!=="0")) {
+        if ((sendData.DEPARTMENT_SORCE_START === sendData.DEPARTMENT_SORCE_END) && (valMasterStart2 !== "0" && valMasterEnd2 !== "0")) {
             var strDepartmentDetail = $("#department_start option:selected").text();
             var resDepartmentDetail = strDepartmentDetail.split("  :  ");
 
@@ -409,18 +439,18 @@ $(document).ready(function () {
         }
 
 
-        var start_fsourceid = $("#source_start").val().substring(0,1);
-        var end_fsourceid = $("#source_end").val().substring(0,1);
+        var start_fsourceid = $("#source_start").val().substring(0, 1);
+        var end_fsourceid = $("#source_end").val().substring(0, 1);
         var bType = $("#budgetType").val();
-        if(start_fsourceid === '1' && end_fsourceid === '1'){
+        if (start_fsourceid === '1' && end_fsourceid === '1') {
             nameDepartmentAll += "  (เงินงบประมาณแผ่นดิน)";
-        }else if(((start_fsourceid === '2' && end_fsourceid === '9')||(start_fsourceid === '2' && end_fsourceid === '3')||(start_fsourceid === '3' && end_fsourceid === '9'))&& bType!=='3'){
+        } else if (((start_fsourceid === '2' && end_fsourceid === '9') || (start_fsourceid === '2' && end_fsourceid === '3') || (start_fsourceid === '3' && end_fsourceid === '9')) && bType !== '3') {
             nameDepartmentAll += "  (เงินรายได้รวม)";
-        }else if(start_fsourceid === '2' && end_fsourceid === '9' && bType==='3'){
+        } else if (start_fsourceid === '2' && end_fsourceid === '9' && bType === '3') {
             nameDepartmentAll += "  (เงินรายได้ศูนย์รวม)";
-        }else if(start_fsourceid === '3' && end_fsourceid === '3'){
+        } else if (start_fsourceid === '3' && end_fsourceid === '3') {
             nameDepartmentAll += "  (เงินทุนคณะ)";
-        }else{
+        } else {
 
         }
         sendData.DEPARTMENT = nameDepartmentAll;
@@ -436,10 +466,10 @@ $(document).ready(function () {
         var url = "/api/gl/report/export?reportcode=" + data.reportcode + "&export=" + data.export + "&param=" + data.param;
         if (data.export == "pdfview") {
             var win = window.open();
-            win.document.write('<title>เรียกดูรายงาน : ระบบบัญชีแยกประเภทสามมิติ</title><link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"><style type="text/css"> .loading {text-align: center; position: fixed; width: 100%; height: 100%; left: 0; top: 0; background: #f1f1f1; z-index: 1000; } </style><script>function fn(){document.getElementById("loading").remove();}</script><div id="loading" class="loading"><br><br><br><br><i class="fa fa-cog fa-spin fa-2x"></i><br>กรุณารอสักครู่</div><iframe src="'+url+'" onload="fn()" name="theFrame" frameborder="0" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="100%" width="100%"></iframe><script>location.hash = "viewReport"</script>');
+            win.document.write('<title>เรียกดูรายงาน : ระบบบัญชีแยกประเภทสามมิติ</title><link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"><style type="text/css"> .loading {text-align: center; position: fixed; width: 100%; height: 100%; left: 0; top: 0; background: #f1f1f1; z-index: 1000; } </style><script>function fn(){document.getElementById("loading").remove();}</script><div id="loading" class="loading"><br><br><br><br><i class="fa fa-cog fa-spin fa-2x"></i><br>กรุณารอสักครู่</div><iframe src="' + url + '" onload="fn()" name="theFrame" frameborder="0" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="100%" width="100%"></iframe><script>location.hash = "viewReport"</script>');
         } else {
             var win = window.open();
-            win.document.write('<title>ดาวน์โหลดไฟล์ : ระบบบัญชีแยกประเภทสามมิติ</title><link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"><style type="text/css"> .loading {text-align: center; position: fixed; width: 100%; height: 100%; left: 0; top: 0; background: #f1f1f1; z-index: 1000; } </style><script> function fn(){document.getElementById("loading").remove();}</script><div id="loading" class="loading"><br><br><br><br><i class="fa fa-download fa-2x"></i><br>ทำการดาวน์โหลดไฟล์</div><iframe src="'+url+'" onload="fn()" name="theFrame" frameborder="0" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="100%" width="100%"></iframe><script>location.hash = "viewReport"</script>');
+            win.document.write('<title>ดาวน์โหลดไฟล์ : ระบบบัญชีแยกประเภทสามมิติ</title><link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"><style type="text/css"> .loading {text-align: center; position: fixed; width: 100%; height: 100%; left: 0; top: 0; background: #f1f1f1; z-index: 1000; } </style><script> function fn(){document.getElementById("loading").remove();}</script><div id="loading" class="loading"><br><br><br><br><i class="fa fa-download fa-2x"></i><br>ทำการดาวน์โหลดไฟล์</div><iframe src="' + url + '" onload="fn()" name="theFrame" frameborder="0" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="100%" width="100%"></iframe><script>location.hash = "viewReport"</script>');
         }
 
 
