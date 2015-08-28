@@ -24,8 +24,6 @@ $(document).ready(function () {
     checkLoading(chAjaxLoad);
     function checkLoading(check) {
         setTimeout(function () {
-
-            //console.log(chAjaxLoad.department);
             if (
                     chAjaxLoad["user"] == true && chAjaxLoad["department"] == true &&
                     chAjaxLoad["departmentDetail"] == true && chAjaxLoad["account"] == true &&
@@ -59,21 +57,17 @@ $(document).ready(function () {
         UCheckAjaxLoad("user");
     }).fail(eror_401);
 
+
     function ksCallBack(run, callback) {
         var data = run();
         callback(data);
     }
 
-    function ksCallBack2(vari, run, callback) {
-        var data = run(vari);
-        callback(data);
-    }
 
-
+    var inc = 0;
     function selectFristLast(name) {
-
-        $(name).eq(0).find('option[style*="display: block"]').first().attr("selected", true);
-        $(name).eq(1).find('option[style*="display: block"]').last().attr("selected", true);
+        $(name).eq(0).find('option[style*="display: block"]').first().prop("selected", true);
+        $(name).eq(1).find('option[style*="display: block"]').last().prop("selected", true);
         $(name).trigger("chosen:updated");
 
     }
@@ -339,6 +333,8 @@ $(document).ready(function () {
         }else{
             $(this).parent("div").addClass("has-error"); 
         }
+        
+        enableBtnExport();
     });
     
     function checkdate(valdate) {
@@ -355,13 +351,38 @@ $(document).ready(function () {
         }
         return returnval;
     }
+    
+    
 
+    $(document).on("change", "[check-hl]", function () {
+        var cHL = $("."+$(this).attr("check-hl"));
+        if(parseInt(cHL.eq(0).val())>parseInt(cHL.eq(1).val())){
+            cHL.parents(".panel").removeClass("panel-success"); 
+            cHL.parents(".panel").addClass("panel-danger"); 
+        }else{
+            cHL.parents(".panel").removeClass("panel-danger"); 
+            cHL.parents(".panel").addClass("panel-success"); 
+        }
+        enableBtnExport();
+        
+        
+    });
+    
+    function enableBtnExport(){
+        var checkError = false;
+        if($(".panel-danger").length!==0){ checkError = true; }
+        if($(".has-error").length!==0){ checkError = true; }
+        if(checkError){
+            $(".bExport").attr("disabled",true);
+        }else{
+            $(".bExport").attr("disabled",false);
+        }
 
+    }
+    
+    
 
     $(document).on("click", ".bExport", function () {
-
-
-
 
 
         var sendData = {
