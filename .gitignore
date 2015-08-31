@@ -1,5 +1,13 @@
 /GLAPP/nbproject/private/
 /th.ac.kmutnb.gl.myreport/nbproject/private/
+<<<<<<< Updated upstream
 /GLAPP/build/
 /th.ac.kmutnb.gl.myreport/build/
+=======
+th.ac.kmutnb.gl.myreport/nbproject/project.properties
+
+GLAPP/nbproject/project.properties
+/th.ac.kmutnb.gl.myreport/build/
+/GLAPP/build/
+>>>>>>> Stashed changes
 /th.ac.kmutnb.gl.myreport/dist/
