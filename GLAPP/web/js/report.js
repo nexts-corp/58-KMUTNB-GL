@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
 
-
+    $(".bExport").attr("disabled",true)
     $(".cDate").datepicker({language: 'th-th', format: 'dd/mm/yyyy', autoclose: true});
 
     var chAjaxLoad = [];
@@ -357,11 +357,11 @@ $(document).ready(function () {
     $(document).on("change", "[check-hl]", function () {
         var cHL = $("."+$(this).attr("check-hl"));
         if(parseInt(cHL.eq(0).val())>parseInt(cHL.eq(1).val())){
-            cHL.parents(".panel").removeClass("panel-success"); 
+            cHL.parents(".panel").removeClass("panel-primary"); 
             cHL.parents(".panel").addClass("panel-danger"); 
         }else{
             cHL.parents(".panel").removeClass("panel-danger"); 
-            cHL.parents(".panel").addClass("panel-success"); 
+            cHL.parents(".panel").addClass("panel-primary"); 
         }
         enableBtnExport();
         

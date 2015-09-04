@@ -52,6 +52,7 @@ FROM
 								)
 								AND GLHEAD.GLHEADDATE >= TO_DATE ('{{DATE_FRIST}}', 'DD/MM/YYYY')
 								AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 								AND (
 									gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 									AND {{ BUDGET_SORCE_END }}
@@ -91,6 +92,7 @@ FROM
 							AND ACC.ACCOUNTSTATUS = 'Y'
 							AND GLHEAD.GLHEADDATE >= TO_DATE ('{{DATE_FRIST}}', 'DD/MM/YYYY')
 							AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 							AND (
 								gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 								AND {{ BUDGET_SORCE_END }}
@@ -144,6 +146,7 @@ FROM
 							)
 							AND GLHEAD.GLHEADDATE >= TO_DATE ('{{DATE_FRIST}}', 'DD/MM/YYYY')
 							AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 							AND (
 								gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 								AND {{ BUDGET_SORCE_END }}
@@ -183,6 +186,7 @@ FROM
 						AND ACC.ACCOUNTSTATUS = 'Y'
 						AND GLHEAD.GLHEADDATE >= TO_DATE ('{{DATE_FRIST}}', 'DD/MM/YYYY')
 						AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 						AND (
 							gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 							AND {{ BUDGET_SORCE_END }}
@@ -244,6 +248,7 @@ FROM
 							AND ACC.ACCOUNTSTATUS = 'Y'
 							AND GLHEAD.GLHEADDATE >= TO_DATE ('{{DATE_FRIST}}', 'DD/MM/YYYY')
 							AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 							AND (
 								gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 								AND {{ BUDGET_SORCE_END }}
@@ -289,6 +294,7 @@ FROM
 						AND ACC.ACCOUNTSTATUS = 'Y'
 						AND GLHEAD.GLHEADDATE >= TO_DATE ('{{DATE_FRIST}}', 'DD/MM/YYYY')
 						AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 						AND (
 							gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 							AND {{ BUDGET_SORCE_END }}
@@ -344,6 +350,7 @@ FROM
 								AND ACC.ACCOUNTSTATUS = 'Y'
 								AND GLHEAD.GLHEADDATE >= TO_DATE ('{{DATE_FRIST}}', 'DD/MM/YYYY')
 								AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 								AND (
 									gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 									AND {{ BUDGET_SORCE_END }}
@@ -384,7 +391,8 @@ FROM
 							AND ACC.ACCOUNTSTATUS = 'Y'
 							AND GLHEAD.GLHEADDATE >= TO_DATE ('{{DATE_FRIST}}', 'DD/MM/YYYY')
 							AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
-							AND (
+							AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
+                                                        AND (
 								gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 								AND {{ BUDGET_SORCE_END }}
 							)
@@ -439,6 +447,7 @@ FROM
 									AND ACC.ACCOUNTSTATUS = 'Y'
 									AND GLHEAD.GLHEADDATE >= TO_DATE ('{{DATE_FRIST}}', 'DD/MM/YYYY')
 									AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 									AND (
 										gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 										AND {{ BUDGET_SORCE_END }}
@@ -479,6 +488,7 @@ FROM
 								AND ACC.ACCOUNTSTATUS = 'Y'
 								AND GLHEAD.GLHEADDATE >= TO_DATE ('{{DATE_FRIST}}', 'DD/MM/YYYY')
 								AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 								AND (
 									gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 									AND {{ BUDGET_SORCE_END }}
@@ -533,6 +543,7 @@ FROM
 										AND GL.GLHEADSTATUS != 'V'
 										AND ACC.ACCOUNTSTATUS = 'Y'
 										AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 										AND (
 											gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 											AND {{ BUDGET_SORCE_END }}
@@ -572,6 +583,7 @@ FROM
 									AND GL.GLHEADSTATUS != 'V'
 									AND ACC.ACCOUNTSTATUS = 'Y'
 									AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 									AND (
 										gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 										AND {{ BUDGET_SORCE_END }}
@@ -627,6 +639,7 @@ FROM
 													AND MASTERID = 1120400000
 												)
 											AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 											AND (
 												gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 												AND {{ BUDGET_SORCE_END }}
@@ -668,6 +681,7 @@ FROM
 												AND MASTERID = 1120400000
 											)
 										AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 										AND GL.GLHEADSTATUS != 'V'
 										AND (
 											gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
@@ -725,6 +739,7 @@ FROM
 													)
 												AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
 												AND GL.GLHEADSTATUS != 'V'
+                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 												AND (
 													gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 													AND {{ BUDGET_SORCE_END }}
@@ -766,6 +781,7 @@ FROM
 												)
 											AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
 											AND GL.GLHEADSTATUS != 'V'
+                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 											AND (
 												gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 												AND {{ BUDGET_SORCE_END }}
@@ -820,6 +836,7 @@ FROM
 													AND GL.GLHEADSTATUS != 'V'
 													AND ACC.ACCOUNTSTATUS = 'Y'
 													AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 													AND (
 														gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 														AND {{ BUDGET_SORCE_END }}
@@ -859,6 +876,7 @@ FROM
 												AND GL.GLHEADSTATUS != 'V'
 												AND ACC.ACCOUNTSTATUS = 'Y'
 												AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 												AND (
 													gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 													AND {{ BUDGET_SORCE_END }}
@@ -913,6 +931,7 @@ FROM
 														AND GL.GLHEADSTATUS != 'V'
 														AND ACC.ACCOUNTSTATUS = 'Y'
 														AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 														AND (
 															gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 															AND {{ BUDGET_SORCE_END }}
@@ -952,6 +971,7 @@ FROM
 													AND GL.GLHEADSTATUS != 'V'
 													AND ACC.ACCOUNTSTATUS = 'Y'
 													AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 													AND (
 														gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 														AND {{ BUDGET_SORCE_END }}
@@ -1007,6 +1027,7 @@ FROM
 																	AND MASTERID = 1180008000
 																)
 															AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 															AND (
 																gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																AND {{ BUDGET_SORCE_END }}
@@ -1103,6 +1124,7 @@ FROM
 																AND GL.GLHEADSTATUS != 'V'
 																AND ACC.ACCOUNTSTATUS = 'Y'
 																AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																AND (
 																	gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																	AND {{ BUDGET_SORCE_END }}
@@ -1142,6 +1164,7 @@ FROM
 															AND GL.GLHEADSTATUS != 'V'
 															AND ACC.ACCOUNTSTATUS = 'Y'
 															AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 															AND (
 																gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																AND {{ BUDGET_SORCE_END }}
@@ -1196,6 +1219,7 @@ FROM
 																	AND GL.GLHEADSTATUS != 'V'
 																	AND ACC.ACCOUNTSTATUS = 'Y'
 																	AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																	AND (
 																		gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																		AND {{ BUDGET_SORCE_END }}
@@ -1235,6 +1259,7 @@ FROM
 																AND GL.GLHEADSTATUS != 'V'
 																AND ACC.ACCOUNTSTATUS = 'Y'
 																AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																AND (
 																	gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																	AND {{ BUDGET_SORCE_END }}
@@ -1294,6 +1319,7 @@ FROM
 																		AND GL.GLHEADSTATUS != 'V'
 																		AND ACC.ACCOUNTSTATUS = 'Y'
 																		AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																		AND (
 																			gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																			AND {{ BUDGET_SORCE_END }}
@@ -1338,6 +1364,7 @@ FROM
 																	AND GL.GLHEADSTATUS != 'V'
 																	AND ACC.ACCOUNTSTATUS = 'Y'
 																	AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																	AND (
 																		gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																		AND {{ BUDGET_SORCE_END }}
@@ -1392,6 +1419,7 @@ FROM
 																			AND GL.GLHEADSTATUS != 'V'
 																			AND ACC.ACCOUNTSTATUS = 'Y'
 																			AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																			AND (
 																				gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																				AND {{ BUDGET_SORCE_END }}
@@ -1431,6 +1459,7 @@ FROM
 																		AND GL.GLHEADSTATUS != 'V'
 																		AND ACC.ACCOUNTSTATUS = 'Y'
 																		AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																		AND (
 																			gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																			AND {{ BUDGET_SORCE_END }}
@@ -1486,6 +1515,7 @@ FROM
 																						AND MASTERID = 2200001000
 																					)
 																				AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																				AND (
 																					gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																					AND {{ BUDGET_SORCE_END }}
@@ -1527,6 +1557,7 @@ FROM
 																					AND MASTERID = 2200001000
 																				)
 																			AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																			AND (
 																				gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																				AND {{ BUDGET_SORCE_END }}
@@ -1582,6 +1613,7 @@ FROM
 																					AND GL.GLHEADSTATUS != 'V'
 																					AND ACC.ACCOUNTSTATUS = 'Y'
 																					AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																					AND (
 																						gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																						AND {{ BUDGET_SORCE_END }}
@@ -1621,6 +1653,7 @@ FROM
 																				AND GL.GLHEADSTATUS != 'V'
 																				AND ACC.ACCOUNTSTATUS = 'Y'
 																				AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																				AND (
 																					gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																					AND {{ BUDGET_SORCE_END }}
@@ -1675,6 +1708,7 @@ FROM
 																						AND GL.GLHEADSTATUS != 'V'
 																						AND ACC.ACCOUNTSTATUS = 'Y'
 																						AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																						AND (
 																							gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																							AND {{ BUDGET_SORCE_END }}
@@ -1714,6 +1748,7 @@ FROM
 																					AND GL.GLHEADSTATUS != 'V'
 																					AND ACC.ACCOUNTSTATUS = 'Y'
 																					AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																					AND (
 																						gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																						AND {{ BUDGET_SORCE_END }}
@@ -1769,6 +1804,7 @@ FROM
 																									AND MASTERID = 2200005000
 																								)
 																							AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																							AND (
 																								gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																								AND {{ BUDGET_SORCE_END }}
@@ -1809,6 +1845,7 @@ FROM
 																								AND MASTERID = 2200005000
 																							)
 																						AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																						AND (
 																							gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																							AND {{ BUDGET_SORCE_END }}
@@ -1865,6 +1902,7 @@ FROM
 																										AND MASTERID = 2200006000
 																									)
 																								AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																								AND (
 																									gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																									AND {{ BUDGET_SORCE_END }}
@@ -1906,6 +1944,7 @@ FROM
 																									AND MASTERID = 2200006000
 																								)
 																							AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																							AND (
 																								gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																								AND {{ BUDGET_SORCE_END }}
@@ -1961,6 +2000,7 @@ FROM
 																											AND MASTERID = 2200004000
 																										)
 																									AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																									AND (
 																										gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																										AND {{ BUDGET_SORCE_END }}
@@ -2002,6 +2042,7 @@ FROM
 																										AND MASTERID = 2200004000
 																									)
 																								AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																								AND (
 																									gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																									AND {{ BUDGET_SORCE_END }}
@@ -2058,6 +2099,7 @@ FROM
 																												AND MASTERID = 2200008000
 																											)
 																										AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																										AND (
 																											gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																											AND {{ BUDGET_SORCE_END }}
@@ -2099,6 +2141,7 @@ FROM
 																											AND MASTERID = 2200008000
 																										)
 																									AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																									AND (
 																										gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																										AND {{ BUDGET_SORCE_END }}
@@ -2155,6 +2198,7 @@ FROM
 																													AND MASTERID = 2200009000
 																												)
 																											AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																											AND (
 																												gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																												AND {{ BUDGET_SORCE_END }}
@@ -2196,6 +2240,7 @@ FROM
 																												AND MASTERID = 2200009000
 																											)
 																										AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																										AND (
 																											gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																											AND {{ BUDGET_SORCE_END }}
@@ -2252,6 +2297,7 @@ FROM
 																														AND MASTERID = 2200010000
 																													)
 																												AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																												AND (
 																													gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																													AND {{ BUDGET_SORCE_END }}
@@ -2293,6 +2339,7 @@ FROM
 																													AND MASTERID = 2200010000
 																												)
 																											AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																											AND (
 																												gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																												AND {{ BUDGET_SORCE_END }}
@@ -2349,6 +2396,7 @@ FROM
 																															AND MASTERID = 2200011000
 																														)
 																													AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																													AND (
 																														gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																														AND {{ BUDGET_SORCE_END }}
@@ -2390,6 +2438,7 @@ FROM
 																														AND MASTERID = 2200011000
 																													)
 																												AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																												AND (
 																													gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																													AND {{ BUDGET_SORCE_END }}
@@ -2448,6 +2497,7 @@ FROM
 																														AND GL.GLHEADSTATUS != 'V'
 																														AND ACC.ACCOUNTSTATUS = 'Y'
 																														AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																														AND (
 																															gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																															AND {{ BUDGET_SORCE_END }}
@@ -2490,6 +2540,7 @@ FROM
 																													AND GL.GLHEADSTATUS != 'V'
 																													AND ACC.ACCOUNTSTATUS = 'Y'
 																													AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																													AND (
 																														gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																														AND {{ BUDGET_SORCE_END }}
@@ -2544,6 +2595,7 @@ FROM
 																															AND GL.GLHEADSTATUS != 'V'
 																															AND ACC.ACCOUNTSTATUS = 'Y'
 																															AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																															AND (
 																																gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																AND {{ BUDGET_SORCE_END }}
@@ -2583,6 +2635,7 @@ FROM
 																														AND GL.GLHEADSTATUS != 'V'
 																														AND ACC.ACCOUNTSTATUS = 'Y'
 																														AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																														AND (
 																															gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																															AND {{ BUDGET_SORCE_END }}
@@ -2644,6 +2697,7 @@ FROM
 																																		AND GL.GLHEADSTATUS != 'V'
 																																		AND ACC.ACCOUNTSTATUS = 'Y'
 																																		AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                
 																																		AND (
 																																			gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																			AND {{ BUDGET_SORCE_END }}
@@ -2700,6 +2754,7 @@ FROM
 																																					AND ACC.ACCOUNTSTATUS = 'Y'
 																																					AND GLHEAD.GLHEADDATE >= TO_DATE ('{{DATE_FRIST}}', 'DD/MM/YYYY')
 																																					AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																																					AND (
 																																						gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																						AND {{ BUDGET_SORCE_END }}
@@ -2745,6 +2800,7 @@ FROM
 																																				AND ACC.ACCOUNTSTATUS = 'Y'
 																																				AND GLHEAD.GLHEADDATE >= TO_DATE ('{{DATE_FRIST}}', 'DD/MM/YYYY')
 																																				AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																																				AND (
 																																					gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																					AND {{ BUDGET_SORCE_END }}
@@ -2788,6 +2844,7 @@ FROM
 																															AND GL.GLHEADSTATUS != 'V'
 																															AND ACC.ACCOUNTSTATUS = 'Y'
 																															AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																															AND (
 																																gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																AND {{ BUDGET_SORCE_END }}
@@ -2859,6 +2916,7 @@ FROM
                                                                                                                                                                                                                                                                                             AND GL.GLHEADSTATUS != 'V'
                                                                                                                                                                                                                                                                                             AND ACC.ACCOUNTSTATUS = 'Y'
                                                                                                                                                                                                                                                                                             AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                            AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
                                                                                                                                                                                                                                                                                              AND (
 																																gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																AND {{ BUDGET_SORCE_END }}
@@ -2910,6 +2968,7 @@ FROM
                                                                                                                                                                                                                                                                                                                     AND ACC.ACCOUNTSTATUS = 'Y'
                                                                                                                                                                                                                                                                                                                     AND GLHEAD.GLHEADDATE >= TO_DATE ('{{DATE_FRIST}}', 'DD/MM/YYYY')
                                                                                                                                                                                                                                                                                                                     AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                                                    AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
                                                                                                                                                                                                                                                                                                                     AND (
 																																gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																AND {{ BUDGET_SORCE_END }}
@@ -2950,6 +3009,7 @@ FROM
                                                                                                                                                                                                                                                                                                             AND ACC.ACCOUNTSTATUS = 'Y'
                                                                                                                                                                                                                                                                                                             AND GLHEAD.GLHEADDATE >= TO_DATE ('{{DATE_FRIST}}', 'DD/MM/YYYY')
                                                                                                                                                                                                                                                                                                             AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                                            AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
                                                                                                                                                                                                                                                                                                             AND (
 																																gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																AND {{ BUDGET_SORCE_END }}
@@ -2992,6 +3052,7 @@ FROM
                                                                                                                                                                                                                                                                     AND GL.GLHEADSTATUS != 'V'
                                                                                                                                                                                                                                                                     AND ACC.ACCOUNTSTATUS = 'Y'
                                                                                                                                                                                                                                                                     AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                    AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
                                                                                                                                                                                                                                                                         AND (
 																																gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																AND {{ BUDGET_SORCE_END }}
@@ -3049,6 +3110,7 @@ FROM
 																																		AND GL.GLHEADSTATUS != 'V'
 																																		AND ACC.ACCOUNTSTATUS = 'Y'
 																																		AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																																		AND (
 																																			gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																			AND {{ BUDGET_SORCE_END }}
@@ -3088,6 +3150,7 @@ FROM
 																																	AND GL.GLHEADSTATUS != 'V'
 																																	AND ACC.ACCOUNTSTATUS = 'Y'
 																																	AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																																	AND (
 																																		gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																		AND {{ BUDGET_SORCE_END }}
@@ -3145,6 +3208,7 @@ FROM
 																																			AND GL.GLHEADSTATUS != 'V'
 																																			AND ACC.ACCOUNTSTATUS = 'Y'
 																																			AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																																			AND (
 																																				gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																				AND {{ BUDGET_SORCE_END }}
@@ -3187,6 +3251,7 @@ FROM
 																																		AND GL.GLHEADSTATUS != 'V'
 																																		AND ACC.ACCOUNTSTATUS = 'Y'
 																																		AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																																		AND (
 																																			gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																			AND {{ BUDGET_SORCE_END }}
@@ -3241,6 +3306,7 @@ FROM
 																																				AND GL.GLHEADSTATUS != 'V'
 																																				AND ACC.ACCOUNTSTATUS = 'Y'
 																																				AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																																				AND (
 																																					gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																					AND {{ BUDGET_SORCE_END }}
@@ -3280,6 +3346,7 @@ FROM
 																																			AND GL.GLHEADSTATUS != 'V'
 																																			AND ACC.ACCOUNTSTATUS = 'Y'
 																																			AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																																			AND (
 																																				gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																				AND {{ BUDGET_SORCE_END }}
@@ -3334,6 +3401,7 @@ FROM
 																																					AND GL.GLHEADSTATUS != 'V'
 																																					AND ACC.ACCOUNTSTATUS = 'Y'
 																																					AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																																					AND (
 																																						gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																						AND {{ BUDGET_SORCE_END }}
@@ -3373,6 +3441,7 @@ FROM
 																																				AND GL.GLHEADSTATUS != 'V'
 																																				AND ACC.ACCOUNTSTATUS = 'Y'
 																																				AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																																				AND (
 																																					gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																					AND {{ BUDGET_SORCE_END }}
@@ -3427,6 +3496,7 @@ FROM
 																																						AND GL.GLHEADSTATUS != 'V'
 																																						AND ACC.ACCOUNTSTATUS = 'Y'
 																																						AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																																						AND (
 																																							gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																							AND {{ BUDGET_SORCE_END }}
@@ -3466,6 +3536,7 @@ FROM
 																																					AND GL.GLHEADSTATUS != 'V'
 																																					AND ACC.ACCOUNTSTATUS = 'Y'
 																																					AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_PREVIOUS}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                                        AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																																					AND (
 																																						gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																						AND {{ BUDGET_SORCE_END }}
@@ -3545,6 +3616,7 @@ FROM
 																																						AND GL.GLHEADSTATUS != 'V'
 																																						AND ACC.ACCOUNTSTATUS = 'Y'
 																																						AND GLHEAD.GLHEADDATE <= TO_DATE ('{{DATE_END}}', 'DD/MM/YYYY')
+                                                                                                                                                                                                                                                                                                                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
 																																						AND (
 																																							gl.BUDGETGROUPID BETWEEN {{ BUDGET_SORCE_START }}
 																																							AND {{ BUDGET_SORCE_END }}
