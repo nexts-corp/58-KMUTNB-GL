@@ -41,5 +41,9 @@ public interface IFormService {
     @CIOperation(Uri = "/user",Authentication = true,ResourceCode ="*")
     public String user();
     
+    @CIOperation(Uri = "/departmentCurrent",Authentication = true,ResourceCode ="*")
+    public List<Department> departmentCurrent();
     
-}
+    
+    
+} 

@@ -244,11 +244,20 @@ public class FormService extends CServiceBase implements IFormService {
     }
     
     
-
     @Override
     public String user() {
         return this.account.getName() +" ("+this.account.getDataDomain()+")";
     }
+    
+    
+    @Override
+    public List<Department> departmentCurrent() {
+        String sql = "SELECT DEPARTMENTID AS departmentId , DEPARTMENTNAME AS departmentName FROM MASTER3D.DEPARTMENT WHERE DEPARTMENTID = "+this.account.getDataDomain();
+        List<Department> datas = (List<Department>) this.dbcon.nativeQuery(Department.class, sql);
+
+        return datas;
+    }
+    
 
     @Override
     public List<Account> account() {

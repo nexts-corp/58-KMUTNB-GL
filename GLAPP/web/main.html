@@ -31,7 +31,7 @@
                 top:50px;
                 position:fixed;
                 width:100%;
-                height: 45px;
+                height: 47px;
                 z-index: 100;
                 color: #000000;
 
@@ -42,12 +42,22 @@
                 border-radius:5px;
                 padding: 5px;
                 width:340px;
-                height: 45px;
+                height: 47px;
                 z-index: 100;
                 color: #000000;
                 background-color: #E6E6E6;
                 text-align: center;
             }
+            
+            .panel-info,.panel-danger{
+                border-color: #000;
+            }
+            
+            
+            .chosen-container-single .chosen-single{
+                border-color: #000;
+            }
+            
         </style>
 
     </head>
@@ -66,9 +76,10 @@
                 </div>
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <p class="navbar-text">Signed in as Mark Otto</p>
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="user_adminname">พงศ์ปณต ทัศนียาชุมพาลี (0)</span> <span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="user_adminname"></span> <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="/api/gl/authen/signout"><i class="fa fa-power-off"></i>&nbsp;&nbsp;ออกจากระบบ</a></li>
                             </ul>
@@ -93,7 +104,7 @@
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="panel panel-primary">
+                            <div class="panel panel-info">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">รายงานและวันที่</h3>
                                 </div>
@@ -105,14 +116,14 @@
                                                 <option value="RPT01">รายงานงบทดลอง</option>
                                                 <option value="RPT02">รายงานบัญชีแยกประเภท</option>
                                                 <option value="RPT02_2">รายงานบัญชีแยกประเภท (หน่วยงาน)</option>
-                                                <option value="RPT05">รายงานฐานะการเงิน</option>
+                                                <option value="RPT05">รายงานงบฐานะการเงิน</option>
                                                 <option value="RPT03">รายงานรายละเอียดประกอบงบแสดงฐานะการเงิน</option>
                                                 <option value="RPT06">รายงานงบรายได้และค่าใช้จ่าย</option>
                                                 <option value="RPT04">รายงานรายละเอียดประกอบงบรายได้และค่าใช้จ่าย</option>
                                                 <option value="RPT07">รายงานกระดาษทำการ</option>
                                                 <option value="RPT08">รายงานเงินรายจ่ายของมหาวิทยาลัย</option>
-                                                <option value="RPT09">รายงานงบกระแสเงินสดรวม</option>
-                                                <option value="RPT10">รายงานวิเคราะห์งบการเงิน</option>
+                                                <option value="RPT09" class="openRpt" style="display:none;">รายงานงบกระแสเงินสดรวม</option>
+                                                <option value="RPT10" class="openRpt" style="display:none;">รายงานวิเคราะห์งบการเงิน</option>
                                                 <option value="RPT11">รายงานค้ำประกันสัญญา (รายงานสัญญา)</option>
                                                 <option value="RPT12">รายงานค้ำประกันซอง (รายบริษัท)</option>
                                                 <option value="RPT13">รายงานทะเบียนคุมเงินประกันเช่าทรัพย์สิน</option>
@@ -124,9 +135,9 @@
                                         <div class="form-group">
                                             <label for="date">วันที่</label>
                                             <div class="input-group">
-                                                <input id="date_start" type="text" class="form-control cDate" style="padding:5px;">
-                                                <span class="input-group-addon">ถึง</span>
-                                                <input id="date_end" type="text" class="form-control cDate" style="padding:5px;">
+                                                <input id="date_start" type="text" class="form-control cDate" style="padding:5px;border-color:#000;">
+                                                <span class="input-group-addon" style="border-color:#000;">ถึง</span>
+                                                <input id="date_end" type="text" class="form-control cDate" style="padding:5px;border-color:#000;">
                                             </div>
                                         </div>
                                     </div>
@@ -135,7 +146,7 @@
                         </div>
 
                         <div class="col-sm-6">
-                            <div class="panel panel-primary">
+                            <div class="panel panel-info">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">บัญชี</h3>
                                 </div>
@@ -165,7 +176,7 @@
 
                     <div class="row">
                         <div class="col-sm-4">
-                            <div class="panel panel-primary">
+                            <div class="panel panel-info">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">หน่วยงาน</h3>
                                 </div>
@@ -195,7 +206,7 @@
                             </div>
                         </div>
                         <div class="col-sm-4">
-                            <div class="panel panel-primary">
+                            <div class="panel panel-info">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">แหล่งเงิน</h3>
                                 </div>
@@ -230,7 +241,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="panel panel-primary">
+                            <div class="panel panel-info">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">แผนงาน</h3>
                                 </div>
@@ -256,7 +267,7 @@
                     <div class="row">
 
                         <div class="col-md-4">
-                            <div class="panel panel-primary">
+                            <div class="panel panel-info">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">โครงการ</h3>
                                 </div>
@@ -279,7 +290,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="panel panel-primary">
+                            <div class="panel panel-info">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">กิจกรรม</h3>
                                 </div>
@@ -302,7 +313,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="panel panel-primary">
+                            <div class="panel panel-info">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">กองทุน</h3>
                                 </div>

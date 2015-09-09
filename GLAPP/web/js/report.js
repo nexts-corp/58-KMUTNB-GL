@@ -6,6 +6,7 @@ $(document).ready(function () {
 
     var chAjaxLoad = [];
     chAjaxLoad["user"] = false;
+    chAjaxLoad["departmentCurrent"] = false;
     chAjaxLoad["department"] = false;
     chAjaxLoad["departmentDetail"] = false;
     chAjaxLoad["account"] = false;
@@ -29,7 +30,7 @@ $(document).ready(function () {
                     chAjaxLoad["departmentDetail"] == true && chAjaxLoad["account"] == true &&
                     chAjaxLoad["project"] == true && chAjaxLoad["plan"] == true &&
                     chAjaxLoad["activity"] == true && chAjaxLoad["fundGroup"] == true &&
-                    chAjaxLoad["budgetGroup"] == true
+                    chAjaxLoad["budgetGroup"] == true && chAjaxLoad["departmentCurrent"]
                     ) {
                 $(".loading").hide();
             } else {
@@ -55,6 +56,14 @@ $(document).ready(function () {
     $.post("/api/gl/form/user", {}, function (data) {
         $(".user_adminname").text(data.user);
         UCheckAjaxLoad("user");
+    }).fail(eror_401);
+    
+    $.post("/api/gl/form/departmentCurrent", {}, function (data) {
+        if(data[0].departmentId===0){
+            $(".openRpt").show();
+            $('#report_type').trigger("chosen:updated");
+        }
+        UCheckAjaxLoad("departmentCurrent");
     }).fail(eror_401);
 
 
@@ -357,11 +366,11 @@ $(document).ready(function () {
     $(document).on("change", "[check-hl]", function () {
         var cHL = $("."+$(this).attr("check-hl"));
         if(parseInt(cHL.eq(0).val())>parseInt(cHL.eq(1).val())){
-            cHL.parents(".panel").removeClass("panel-primary"); 
+            cHL.parents(".panel").removeClass("panel-info"); 
             cHL.parents(".panel").addClass("panel-danger"); 
         }else{
             cHL.parents(".panel").removeClass("panel-danger"); 
-            cHL.parents(".panel").addClass("panel-primary"); 
+            cHL.parents(".panel").addClass("panel-info"); 
         }
         enableBtnExport();
         
