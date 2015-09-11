@@ -13,6 +13,7 @@ import th.ac.kmutnb.gl.myreport.entity.Department;
 import th.ac.kmutnb.gl.myreport.entity.FundGroup;
 import th.ac.kmutnb.gl.myreport.entity.Plan;
 import th.ac.kmutnb.gl.myreport.entity.Project;
+import th.ac.kmutnb.gl.myreport.entity.Mgr;
 import th.ac.kmutnb.gl.myreport.service.IFormService;
 import th.co.bpg.cde.core.CServiceBase;
 import th.co.bpg.cde.data.CDataContext;
@@ -246,7 +247,7 @@ public class FormService extends CServiceBase implements IFormService {
     
     @Override
     public String user() {
-        return this.account.getName() +" ("+this.account.getDataDomain()+")";
+        return this.account.getName();
     }
     
     
@@ -263,6 +264,14 @@ public class FormService extends CServiceBase implements IFormService {
     public List<Account> account() {
         String sql = this.readSQL("account");
         List<Account> datas = (List<Account>) this.dbcon.nativeQuery(Account.class, sql);
+        return datas;
+    }
+    
+    @Override
+    public List<Mgr> mgr() {
+        String sql = "SELECT ROW_NUMBER() OVER (ORDER BY mgr.MGRCODE)  AS id, mgr.MGRCODE AS mgrCode , mgr.MGRNAMETHAI AS mgrNameThai , refer.MGRDEPARTMENTID AS mgrDepartmentId , refer.REFERNAME AS referName FROM MASTER3D.MGR mgr INNER JOIN ( SELECT refer.MGRCODE, refer.MGRDEPARTMENTID, refer.REFERNAME FROM MASTER3D.REFER refer UNION ALL SELECT more.MGRCODE , more.MGRDEPARTMENTID , refer.REFERNAME FROM MASTER3D.REFER refer INNER JOIN MASTER3D.MORETITLE more ON refer.REFERID = more.REFERID ) refer ON mgr.MGRCODE = refer.MGRCODE WHERE mgr.MGRCODE = 01 OR mgr.MGRCODE = 06 OR mgr.MGRCODE = 20 OR mgr.MGRCODE = 30 ORDER BY MGRCODE";
+        List<Mgr> datas = (List<Mgr>) this.dbcon.nativeQuery(Mgr.class, sql);
+
         return datas;
     }
     

@@ -25,6 +25,7 @@
     <class>th.ac.kmutnb.gl.myreport.model.RPT09_model</class>
     <class>th.ac.kmutnb.gl.myreport.model.RPT08_model</class>
     <class>th.ac.kmutnb.gl.myreport.model.RPT13_model</class>
+    <class>th.ac.kmutnb.gl.myreport.entity.Mgr</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@25.32.200.27:1521:gl3d"/>
       <property name="javax.persistence.jdbc.user" value="acreporter"/>

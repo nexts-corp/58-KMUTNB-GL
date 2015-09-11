@@ -7,6 +7,7 @@ import th.ac.kmutnb.gl.myreport.entity.Department;
 import th.ac.kmutnb.gl.myreport.entity.FundGroup;
 import th.ac.kmutnb.gl.myreport.entity.Plan;
 import th.ac.kmutnb.gl.myreport.entity.Project;
+import th.ac.kmutnb.gl.myreport.entity.Mgr;
 import th.co.bpg.cde.annotation.CIOperation;
 import th.co.bpg.cde.annotation.CIService;
 
@@ -43,6 +44,9 @@ public interface IFormService {
     
     @CIOperation(Uri = "/departmentCurrent",Authentication = true,ResourceCode ="*")
     public List<Department> departmentCurrent();
+    
+    @CIOperation(Uri = "/mgr",Authentication = true,ResourceCode ="*")
+    public List<Mgr> mgr();
     
     
     

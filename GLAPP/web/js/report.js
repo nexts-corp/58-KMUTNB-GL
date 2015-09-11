@@ -58,7 +58,10 @@ $(document).ready(function () {
         UCheckAjaxLoad("user");
     }).fail(eror_401);
     
+    
+    
     $.post("/api/gl/form/departmentCurrent", {}, function (data) {
+        $("#departmentName").text(data[0].departmentName);
         if(data[0].departmentId===0){
             $(".openRpt").show();
             $('#report_type').trigger("chosen:updated");
@@ -200,10 +203,10 @@ $(document).ready(function () {
     getOptionPlanProjectActivity(null);
 
 
+
+
+
     function getOptionPlanProjectActivity(depIdVal) {
-
-
-
 
         $.post("./api/gl/form/project", {depId: depIdVal}, function (data) {
 
@@ -272,7 +275,7 @@ $(document).ready(function () {
         });
 
     }).fail(eror_401);
-    ;
+    
 
 
 
@@ -390,6 +393,118 @@ $(document).ready(function () {
     }
     
     
+    
+    
+    
+    
+    function findIndexObject(obj, attr, value){
+        for(var i = 0; i < obj.length; i += 1) {
+            if(obj[i][attr] === value) {
+                return i;
+            }
+        }
+    };
+    
+    
+    var dataMgr = [];
+    $.post("./api/gl/form/mgr", {}, function (data) {
+        dataMgr = data;
+        console.log(dataMgr);
+    }).fail(eror_401);
+    
+    
+    function masterDepartment(dep){
+        
+        var masterId = parseInt(dep.attr("master-id"));
+        if (masterId === 0) {
+            return parseInt(dep.val());
+        }else{
+            return masterId;
+        }
+        
+    }
+    
+    function budgetType(select){
+        var budgetId = 1;
+        var budgetText = "";
+        
+        var start_fsourceid = $("#source_start").val().substring(0, 1);
+        var end_fsourceid = $("#source_end").val().substring(0, 1);
+        var bType = $("#budgetType").val();
+        if (start_fsourceid === '1' && end_fsourceid === '1') {
+            budgetText = "เงินงบประมาณแผ่นดิน";
+            budgetId = 2;
+        } else if (((start_fsourceid === '2' && end_fsourceid === '9') || (start_fsourceid === '2' && end_fsourceid === '3') || (start_fsourceid === '3' && end_fsourceid === '9')) && bType !== '3') {
+            budgetText = "เงินรายได้รวม";
+            budgetId = 5;
+        } else if (start_fsourceid === '2' && end_fsourceid === '9' && bType === '3') {
+            budgetText = "เงินรายได้ศูนย์รวม";
+            budgetId = 3;
+        } else if (start_fsourceid === '3' && end_fsourceid === '3') {
+            budgetText = "เงินทุนคณะ";
+            budgetId = 4;
+        }
+        
+        if(select==="id"){
+            return budgetId;
+        }else if(select==="text"){
+            return budgetText;
+        }
+    }
+    
+    
+    
+    
+    function signature(){
+        
+        var referName1 = "";
+        var mgrNameThai1 = "";
+        var referName2 = "";
+        var mgrNameThai2 = "";
+        
+        var valMasterStart = masterDepartment($("#department_start option:selected"));
+        var valMasterEnd = masterDepartment($("#department_end option:selected"));
+        
+        
+        if(valMasterStart >= 20000 && valMasterStart===valMasterEnd){
+            
+            referName2 = dataMgr[findIndexObject(dataMgr,"mgrDepartmentId",parseInt(valMasterStart))].referName;
+            mgrNameThai2 = dataMgr[findIndexObject(dataMgr,"mgrDepartmentId",parseInt(valMasterStart))].mgrNameThai;
+             
+        }else if((valMasterStart < 20000 && valMasterStart===valMasterEnd)){
+            
+            referName2 = dataMgr[findIndexObject(dataMgr,"mgrCode",6)].referName;
+            mgrNameThai2 = dataMgr[findIndexObject(dataMgr,"mgrCode",6)].mgrNameThai;
+            
+        }else{
+            
+            referName2 = dataMgr[findIndexObject(dataMgr,"mgrCode",6)].referName;
+            mgrNameThai2 = dataMgr[findIndexObject(dataMgr,"mgrCode",6)].mgrNameThai;
+            
+            
+            if(budgetType("id")===2 || budgetType("id")===5){
+                referName1 = dataMgr[findIndexObject(dataMgr,"mgrCode",1)].referName;
+                mgrNameThai1 = dataMgr[findIndexObject(dataMgr,"mgrCode",1)].mgrNameThai;
+            }
+            
+        }
+        
+        return [{referName:referName1,mgrNameThai:mgrNameThai1},{referName:referName2,mgrNameThai:mgrNameThai2}];
+        
+    }
+    
+    $(document).on("click", ".test", function () {
+        
+        
+        
+        
+    });
+    
+    
+    
+    
+    
+    
 
     $(document).on("click", ".bExport", function () {
 
@@ -468,21 +583,8 @@ $(document).ready(function () {
             nameDepartmentAll += resDepartmentDetail[1];
         }
 
-
-        var start_fsourceid = $("#source_start").val().substring(0, 1);
-        var end_fsourceid = $("#source_end").val().substring(0, 1);
-        var bType = $("#budgetType").val();
-        if (start_fsourceid === '1' && end_fsourceid === '1') {
-            nameDepartmentAll += "  (เงินงบประมาณแผ่นดิน)";
-        } else if (((start_fsourceid === '2' && end_fsourceid === '9') || (start_fsourceid === '2' && end_fsourceid === '3') || (start_fsourceid === '3' && end_fsourceid === '9')) && bType !== '3') {
-            nameDepartmentAll += "  (เงินรายได้รวม)";
-        } else if (start_fsourceid === '2' && end_fsourceid === '9' && bType === '3') {
-            nameDepartmentAll += "  (เงินรายได้ศูนย์รวม)";
-        } else if (start_fsourceid === '3' && end_fsourceid === '3') {
-            nameDepartmentAll += "  (เงินทุนคณะ)";
-        } else {
-
-        }
+        
+        nameDepartmentAll += "  ("+budgetType('text')+")";
         sendData.DEPARTMENT = nameDepartmentAll;
 
 
