@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT05" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
-	<property name="ireport.zoom" value="1.3310000000001052"/>
+	<property name="ireport.zoom" value="1.2100000000000974"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="173"/>
+	<property name="ireport.y" value="185"/>
 	<style name="FBold" fill="Solid" hAlign="Left" vAlign="Top" fontName="TH SarabunPSK" fontSize="14" isBold="true" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H"/>
 	<style name="Rpt" fontName="TH SarabunPSK" fontSize="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
 	<style name="Default" isDefault="true" fontName="TH SarabunPSK" fontSize="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
@@ -61,10 +61,18 @@
 	<parameter name="REPORT_TYPE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["EXCEL"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="REFERNAME1" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="REFERNAME2" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="MGRNAMETHAI1" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="MGRNAMETHAI2" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="REFERNAME1" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="REFERNAME2" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MGRNAMETHAI1" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MGRNAMETHAI2" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT * FROM
   (
@@ -564,15 +572,22 @@ ORDER BY M_ACCOUNT_ID_1,M_ACCOUNT_ID_2,M_ACCOUNT_ID_3,M_ACCOUNT_ID_4,M_ACCOUNT_I
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="32" splitType="Stretch">
+		<band height="80" splitType="Stretch">
 			<printWhenExpression><![CDATA[$P{REPORT_TYPE}!="EXCEL"]]></printWhenExpression>
+			<textField pattern="dd/MM/yyyy HH:mm:ss">
+				<reportElement x="0" y="67" width="380" height="12" uuid="994e0789-ef7a-4e57-b579-0c9445411e19"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["วันที่พิมพ์ : "+new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format($V{CURRENT_DATE})]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement style="Rpt" x="380" y="20" width="135" height="12" uuid="b083821c-c77d-4824-b83f-c8871e1a675f"/>
+				<reportElement style="Rpt" x="380" y="67" width="135" height="12" uuid="b083821c-c77d-4824-b83f-c8871e1a675f"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<text><![CDATA[RPT : 05]]></text>
 			</staticText>
 			<textField>
-				<reportElement style="Default" x="0" y="0" width="380" height="20" uuid="7ad1e87b-215f-4c0b-823b-f01e03410bb5"/>
+				<reportElement style="Default" x="0" y="47" width="380" height="20" uuid="7ad1e87b-215f-4c0b-823b-f01e03410bb5"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 				</box>
@@ -582,7 +597,7 @@ ORDER BY M_ACCOUNT_ID_1,M_ACCOUNT_ID_2,M_ACCOUNT_ID_3,M_ACCOUNT_ID_4,M_ACCOUNT_I
 				<textFieldExpression><![CDATA["พิมพ์โดย : " + $P{PUBLISHER}]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Auto">
-				<reportElement x="380" y="0" width="135" height="20" uuid="72c99e50-a475-4e75-8cad-7e0cba90aa20"/>
+				<reportElement x="380" y="47" width="135" height="20" uuid="72c99e50-a475-4e75-8cad-7e0cba90aa20"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 				</box>
@@ -591,32 +606,14 @@ ORDER BY M_ACCOUNT_ID_1,M_ACCOUNT_ID_2,M_ACCOUNT_ID_3,M_ACCOUNT_ID_4,M_ACCOUNT_I
 				</textElement>
 				<textFieldExpression><![CDATA["หน้า " +$V{CURRENT_PAGE}+" / " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy HH:mm:ss">
-				<reportElement x="0" y="20" width="380" height="12" uuid="994e0789-ef7a-4e57-b579-0c9445411e19"/>
-				<textElement verticalAlignment="Bottom">
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA["วันที่พิมพ์ : "+new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format($V{CURRENT_DATE})]]></textFieldExpression>
-			</textField>
+			<staticText>
+				<reportElement x="30" y="15" width="350" height="20" uuid="8095bb0d-094e-4991-a32c-cfee75e743bc"/>
+				<text><![CDATA[หมายเหตุประกอบรายงานการเงินเป็นส่วนหนึ่งของงบการเงินนี้]]></text>
+			</staticText>
 		</band>
 	</pageFooter>
 	<lastPageFooter>
 		<band height="32">
-			<staticText>
-				<reportElement style="Rpt" x="380" y="20" width="135" height="12" uuid="63818f56-5435-4349-ba2b-4f5e0e39e5b1"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<text><![CDATA[RPT : 05]]></text>
-			</staticText>
-			<textField>
-				<reportElement style="Default" x="0" y="0" width="380" height="20" uuid="7bc9f00e-d1ed-46ef-8929-b07dee223a1a"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA["พิมพ์โดย : " + $P{PUBLISHER}]]></textFieldExpression>
-			</textField>
 			<textField evaluationTime="Auto">
 				<reportElement x="380" y="0" width="135" height="20" uuid="b0a413d0-2ad1-4d83-8c78-ef4bd3efa743"/>
 				<box>
@@ -634,10 +631,25 @@ ORDER BY M_ACCOUNT_ID_1,M_ACCOUNT_ID_2,M_ACCOUNT_ID_3,M_ACCOUNT_ID_4,M_ACCOUNT_I
 				</textElement>
 				<textFieldExpression><![CDATA["วันที่พิมพ์ : "+new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format($V{CURRENT_DATE})]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement style="Rpt" x="380" y="20" width="135" height="12" uuid="63818f56-5435-4349-ba2b-4f5e0e39e5b1"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[RPT : 05]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Default" x="0" y="0" width="380" height="20" uuid="7bc9f00e-d1ed-46ef-8929-b07dee223a1a"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["พิมพ์โดย : " + $P{PUBLISHER}]]></textFieldExpression>
+			</textField>
 		</band>
 	</lastPageFooter>
 	<summary>
-		<band height="190">
+		<band height="170">
 			<textField>
 				<reportElement style="FBold" x="0" y="0" width="380" height="30" uuid="7ed89af9-aeb0-4df2-8029-8977d4bd3a4a"/>
 				<box leftPadding="30"/>
@@ -661,7 +673,7 @@ ORDER BY M_ACCOUNT_ID_1,M_ACCOUNT_ID_2,M_ACCOUNT_ID_3,M_ACCOUNT_ID_4,M_ACCOUNT_I
 				<text><![CDATA[หมายเหตุประกอบรายงานการเงินเป็นส่วนหนึ่งของงบการเงินนี้]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="36" y="138" width="180" height="30" uuid="df447e5d-1f70-44f3-851c-b0ae16e27167">
+				<reportElement x="30" y="119" width="200" height="30" uuid="df447e5d-1f70-44f3-851c-b0ae16e27167">
 					<printWhenExpression><![CDATA[$P{REFERNAME1} != ""]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -670,27 +682,27 @@ ORDER BY M_ACCOUNT_ID_1,M_ACCOUNT_ID_2,M_ACCOUNT_ID_3,M_ACCOUNT_ID_4,M_ACCOUNT_I
 				<textElement textAlignment="Center" verticalAlignment="Bottom"/>
 				<textFieldExpression><![CDATA["( "+$P{REFERNAME1}+" )"]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="36" y="168" width="180" height="20" uuid="e795b2ce-c27c-4831-8b12-b5dece599cbd">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="149" width="257" height="20" uuid="e795b2ce-c27c-4831-8b12-b5dece599cbd">
 					<printWhenExpression><![CDATA[$P{MGRNAMETHAI1} != ""]]></printWhenExpression>
 				</reportElement>
+				<box leftPadding="14" rightPadding="14"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{MGRNAMETHAI1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="299" y="138" width="180" height="30" uuid="5baab744-7f9c-4df7-a192-b2a912b334c4">
-					<printWhenExpression><![CDATA[$P{REFERNAME2}!= ""]]></printWhenExpression>
-				</reportElement>
+				<reportElement x="284" y="119" width="200" height="30" uuid="5baab744-7f9c-4df7-a192-b2a912b334c4"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA["( "+$P{REFERNAME2}+" )"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{REFERNAME2}!= "")?"( "+$P{REFERNAME2}+" )":""]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="299" y="168" width="180" height="20" uuid="a1f316c2-6a87-42bc-9f35-f923366f9862">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="258" y="149" width="257" height="20" uuid="a1f316c2-6a87-42bc-9f35-f923366f9862">
 					<printWhenExpression><![CDATA[$P{MGRNAMETHAI2} != ""]]></printWhenExpression>
 				</reportElement>
+				<box leftPadding="14" rightPadding="14"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{MGRNAMETHAI2}]]></textFieldExpression>
 			</textField>
