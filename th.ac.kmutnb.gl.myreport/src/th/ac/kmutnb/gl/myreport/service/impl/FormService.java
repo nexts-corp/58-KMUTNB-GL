@@ -26,6 +26,7 @@ public class FormService extends CServiceBase implements IFormService {
     public FormService() {
         this.dbcon = this.getDataContext();
         
+        
     }
 
     private String readSQL(String sqlName) {
@@ -270,7 +271,7 @@ public class FormService extends CServiceBase implements IFormService {
     @Override
     public List<Mgr> mgr() {
         
-        String sql = this.readSQL("mgr");;
+        String sql = this.readSQL("mgr");
         List<Mgr> datas = (List<Mgr>) this.dbcon.nativeQuery(Mgr.class, sql);
 
         return datas;
