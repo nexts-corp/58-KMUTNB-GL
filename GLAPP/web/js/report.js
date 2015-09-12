@@ -329,8 +329,7 @@ $(document).ready(function () {
             selectBudgetGroup(optionName, 2, false, 0, 0);
             selectBudgetGroup(optionName, 3, false, 0, 0);
             selectBudgetGroup(optionName, 9, true, 2, 9);
-        } else {
-        }
+        } else {}
 
         selectFristLast(optionName);
 
@@ -466,26 +465,31 @@ $(document).ready(function () {
         
         
         if(valMasterStart >= 20000 && valMasterStart===valMasterEnd){
-            
-            referName2 = dataMgr[findIndexObject(dataMgr,"mgrDepartmentId",parseInt(valMasterStart))].referName;
-            mgrNameThai2 = dataMgr[findIndexObject(dataMgr,"mgrDepartmentId",parseInt(valMasterStart))].mgrNameThai;
-             
+            var fio = findIndexObject(dataMgr,"mgrDepartmentId",parseInt(valMasterStart));
+            if(typeof fio !== 'undefined'){
+                referName2 = dataMgr[fio].referName;
+                mgrNameThai2 = dataMgr[fio].mgrNameThai;
+            }
         }else if((valMasterStart < 20000 && valMasterStart===valMasterEnd)){
-            
-            referName2 = dataMgr[findIndexObject(dataMgr,"mgrCode",6)].referName;
-            mgrNameThai2 = dataMgr[findIndexObject(dataMgr,"mgrCode",6)].mgrNameThai;
-            
+            var fio = findIndexObject(dataMgr,"mgrCode",6);
+            if(typeof fio !== 'undefined'){
+                referName2 = dataMgr[fio].referName;
+                mgrNameThai2 = dataMgr[fio].mgrNameThai;
+            }
         }else{
-            
-            referName2 = dataMgr[findIndexObject(dataMgr,"mgrCode",6)].referName;
-            mgrNameThai2 = dataMgr[findIndexObject(dataMgr,"mgrCode",6)].mgrNameThai;
-            
-            
-            if(budgetType("id")===2 || budgetType("id")===5){
-                referName1 = dataMgr[findIndexObject(dataMgr,"mgrCode",1)].referName;
-                mgrNameThai1 = dataMgr[findIndexObject(dataMgr,"mgrCode",1)].mgrNameThai;
+            var fio = findIndexObject(dataMgr,"mgrCode",6);
+            if(typeof fio !== 'undefined'){
+                referName2 = dataMgr[fio].referName;
+                mgrNameThai2 = dataMgr[fio].mgrNameThai;
             }
             
+            if(budgetType("id")===2 || budgetType("id")===5){
+                var fio = findIndexObject(dataMgr,"mgrCode",1);
+                if(typeof fio !== 'undefined'){
+                    referName1 = dataMgr[fio].referName;
+                    mgrNameThai1 = dataMgr[fio].mgrNameThai;
+                }
+            }
         }
         
         return [{referName:referName1,mgrNameThai:mgrNameThai1},{referName:referName2,mgrNameThai:mgrNameThai2}];
@@ -549,8 +553,10 @@ $(document).ready(function () {
             nameDepartmentAll += resDepartmentDetail[1];
         }
 
+        if(budgetType('id')!==1){
+            nameDepartmentAll += "  ("+budgetType('text')+")";
+        }
         
-        nameDepartmentAll += "  ("+budgetType('text')+")";
         sendData.DEPARTMENT = nameDepartmentAll;
         
         

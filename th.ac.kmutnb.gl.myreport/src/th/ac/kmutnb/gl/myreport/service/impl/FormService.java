@@ -269,7 +269,8 @@ public class FormService extends CServiceBase implements IFormService {
     
     @Override
     public List<Mgr> mgr() {
-        String sql = "SELECT ROW_NUMBER() OVER (ORDER BY mgr.MGRCODE)  AS id, mgr.MGRCODE AS mgrCode , mgr.MGRNAMETHAI AS mgrNameThai , refer.MGRDEPARTMENTID AS mgrDepartmentId , refer.REFERNAME AS referName FROM MASTER3D.MGR mgr INNER JOIN ( SELECT refer.MGRCODE, refer.MGRDEPARTMENTID, refer.REFERNAME FROM MASTER3D.REFER refer UNION ALL SELECT more.MGRCODE , more.MGRDEPARTMENTID , refer.REFERNAME FROM MASTER3D.REFER refer INNER JOIN MASTER3D.MORETITLE more ON refer.REFERID = more.REFERID ) refer ON mgr.MGRCODE = refer.MGRCODE WHERE mgr.MGRCODE = 01 OR mgr.MGRCODE = 06 OR mgr.MGRCODE = 20 OR mgr.MGRCODE = 30 ORDER BY MGRCODE";
+        
+        String sql = this.readSQL("mgr");;
         List<Mgr> datas = (List<Mgr>) this.dbcon.nativeQuery(Mgr.class, sql);
 
         return datas;
