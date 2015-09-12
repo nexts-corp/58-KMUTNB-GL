@@ -44,6 +44,42 @@ public class BaseParameter {
     String ACTIVITY_SORCE_END;
     String ACCOUNT_START;
     String ACCOUNT_END;
+    String REFERNAME1;
+    String MGRNAMETHAI1;
+    String REFERNAME2;
+    String MGRNAMETHAI2;
+
+    public String getREFERNAME1() {
+        return REFERNAME1;
+    }
+
+    public void setREFERNAME1(String REFERNAME1) {
+        this.REFERNAME1 = REFERNAME1;
+    }
+
+    public String getMGRNAMETHAI1() {
+        return MGRNAMETHAI1;
+    }
+
+    public void setMGRNAMETHAI1(String MGRNAMETHAI1) {
+        this.MGRNAMETHAI1 = MGRNAMETHAI1;
+    }
+
+    public String getREFERNAME2() {
+        return REFERNAME2;
+    }
+
+    public void setREFERNAME2(String REFERNAME2) {
+        this.REFERNAME2 = REFERNAME2;
+    }
+
+    public String getMGRNAMETHAI2() {
+        return MGRNAMETHAI2;
+    }
+
+    public void setMGRNAMETHAI2(String MGRNAMETHAI2) {
+        this.MGRNAMETHAI2 = MGRNAMETHAI2;
+    }
 
     public String getDATE_PREVIOUS() {
         return DATE_PREVIOUS;
@@ -70,11 +106,8 @@ public class BaseParameter {
     }
 
     public BaseParameter() {
-        this.REPORT_LOCALE=new Locale("th","TH");
+        this.REPORT_LOCALE = new Locale("th", "TH");
     }
-    
-    
-    
 
     public String getBUDGET_SQL() {
         return BUDGET_SQL;
@@ -260,8 +293,5 @@ public class BaseParameter {
     public void setREPORT_TYPE(String REPORT_TYPE) {
         this.REPORT_TYPE = REPORT_TYPE;
     }
-    
-    
-    
-    
+
 }
