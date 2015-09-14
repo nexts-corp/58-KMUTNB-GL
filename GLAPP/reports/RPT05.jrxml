@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT05" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
-	<property name="ireport.zoom" value="1.2100000000000974"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="185"/>
+	<property name="ireport.zoom" value="1.6105100000001302"/>
+	<property name="ireport.x" value="19"/>
+	<property name="ireport.y" value="450"/>
 	<style name="FBold" fill="Solid" hAlign="Left" vAlign="Top" fontName="TH SarabunPSK" fontSize="14" isBold="true" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H"/>
 	<style name="Rpt" fontName="TH SarabunPSK" fontSize="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
 	<style name="Default" isDefault="true" fontName="TH SarabunPSK" fontSize="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
@@ -649,7 +649,7 @@ ORDER BY M_ACCOUNT_ID_1,M_ACCOUNT_ID_2,M_ACCOUNT_ID_3,M_ACCOUNT_ID_4,M_ACCOUNT_I
 		</band>
 	</lastPageFooter>
 	<summary>
-		<band height="170">
+		<band height="210">
 			<textField>
 				<reportElement style="FBold" x="0" y="0" width="380" height="30" uuid="7ed89af9-aeb0-4df2-8029-8977d4bd3a4a"/>
 				<box leftPadding="30"/>
@@ -672,39 +672,55 @@ ORDER BY M_ACCOUNT_ID_1,M_ACCOUNT_ID_2,M_ACCOUNT_ID_3,M_ACCOUNT_ID_4,M_ACCOUNT_I
 				<reportElement x="30" y="40" width="350" height="20" uuid="eac94460-218e-46ce-b3c4-0e09bbd40f92"/>
 				<text><![CDATA[หมายเหตุประกอบรายงานการเงินเป็นส่วนหนึ่งของงบการเงินนี้]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="30" y="119" width="200" height="30" uuid="df447e5d-1f70-44f3-851c-b0ae16e27167">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="129" width="257" height="20" uuid="df447e5d-1f70-44f3-851c-b0ae16e27167">
 					<printWhenExpression><![CDATA[$P{REFERNAME1} != ""]]></printWhenExpression>
 				</reportElement>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
 				<textElement textAlignment="Center" verticalAlignment="Bottom"/>
 				<textFieldExpression><![CDATA["( "+$P{REFERNAME1}+" )"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="149" width="257" height="20" uuid="e795b2ce-c27c-4831-8b12-b5dece599cbd">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="0" y="149" width="257" height="20" uuid="e795b2ce-c27c-4831-8b12-b5dece599cbd">
 					<printWhenExpression><![CDATA[$P{MGRNAMETHAI1} != ""]]></printWhenExpression>
 				</reportElement>
 				<box leftPadding="14" rightPadding="14"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{MGRNAMETHAI1}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="284" y="119" width="200" height="30" uuid="5baab744-7f9c-4df7-a192-b2a912b334c4"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-				</box>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="258" y="129" width="257" height="20" uuid="5baab744-7f9c-4df7-a192-b2a912b334c4">
+					<printWhenExpression><![CDATA[$P{REFERNAME2}!=""]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[($P{REFERNAME2}!= "")?"( "+$P{REFERNAME2}+" )":""]]></textFieldExpression>
+				<textFieldExpression><![CDATA["( "+$P{REFERNAME2}+" )"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="258" y="149" width="257" height="20" uuid="a1f316c2-6a87-42bc-9f35-f923366f9862">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="258" y="149" width="257" height="20" uuid="a1f316c2-6a87-42bc-9f35-f923366f9862">
 					<printWhenExpression><![CDATA[$P{MGRNAMETHAI2} != ""]]></printWhenExpression>
 				</reportElement>
 				<box leftPadding="14" rightPadding="14"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{MGRNAMETHAI2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="284" y="109" width="200" height="20" uuid="cb7cc159-5738-4e1b-8a5f-8184d4a00926"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="30" y="109" width="200" height="20" uuid="88764f35-93f7-42b8-84f6-bb15bb819503">
+					<printWhenExpression><![CDATA[$P{REFERNAME1} != ""]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
