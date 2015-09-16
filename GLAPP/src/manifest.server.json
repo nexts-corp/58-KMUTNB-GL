@@ -14,6 +14,6 @@
         "authenAPI":"/api/gl/authen/signin",
         "logoutAPI":"/api/gl/authen/signout",
         "welcomePage":"/main.html",
-        "sessionTimeOut":1800
+        "sessionTimeOut":-1
     }
 }
