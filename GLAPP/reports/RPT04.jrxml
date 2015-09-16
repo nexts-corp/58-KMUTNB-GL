@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT04" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT04" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
 	<property name="ireport.zoom" value="1.2100000000001094"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -547,7 +547,7 @@ ORDER BY M_ACCOUNT_ID_1,M_ACCOUNT_ID_2,M_ACCOUNT_ID_3,M_ACCOUNT_ID_4,M_ACCOUNT_I
 		<band splitType="Stretch"/>
 	</background>
 	<pageHeader>
-		<band height="116" splitType="Stretch">
+		<band height="98" splitType="Stretch">
 			<printWhenExpression><![CDATA[($P{REPORT_TYPE}=="EXCEL")?($V{PAGE_NUMBER}==1):true]]></printWhenExpression>
 			<staticText>
 				<reportElement style="FBold" x="0" y="56" width="515" height="20" uuid="47eec812-75fb-442a-931b-5aa9ce7f1955"/>
@@ -562,15 +562,8 @@ ORDER BY M_ACCOUNT_ID_1,M_ACCOUNT_ID_2,M_ACCOUNT_ID_3,M_ACCOUNT_ID_4,M_ACCOUNT_I
 					<font size="16"/>
 					<paragraph lineSpacing="AtLeast"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{DEPARTMENT}!="")?"รายงานรายละเอียดประกอบงบรายได้และค่าใช้จ่าย\n"+$P{DEPARTMENT}:"รายงานรายละเอียดประกอบงบรายได้และค่าใช้จ่าย"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement style="FBold" positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="0" y="96" width="515" height="20" uuid="69f0c016-3c59-4c55-9c5b-64d33278639b"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="16"/>
-					<paragraph lineSpacing="AtLeast"/>
-				</textElement>
-				<textFieldExpression><![CDATA["ตั้งแต่วันที่  " + $P{DATE_START} + "    ถึงวันที่  " + $P{DATE_END}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[(($P{DEPARTMENT}!="")?"รายงานรายละเอียดประกอบงบรายได้และค่าใช้จ่าย\n"+$P{DEPARTMENT}:"รายงานรายละเอียดประกอบงบรายได้และค่าใช้จ่าย")
++"\n"+"ตั้งแต่วันที่  " + $P{DATE_START} + "    ถึงวันที่  " + $P{DATE_END}]]></textFieldExpression>
 			</textField>
 			<image hAlign="Center" vAlign="Middle">
 				<reportElement x="0" y="0" width="515" height="56" uuid="32757ff7-4beb-4c2e-8ccd-ea5b4b9b2189"/>

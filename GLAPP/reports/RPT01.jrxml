@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT01" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="762" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
-	<property name="ireport.zoom" value="1.3310000000001396"/>
-	<property name="ireport.x" value="0"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT01" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="762" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
+	<property name="ireport.zoom" value="1.210000000000127"/>
+	<property name="ireport.x" value="83"/>
 	<property name="ireport.y" value="0"/>
 	<style name="FBold" fill="Solid" hAlign="Left" vAlign="Top" fontName="TH SarabunPSK" fontSize="14" isBold="true" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H"/>
 	<style name="Rpt" fontName="TH SarabunPSK" fontSize="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
@@ -367,14 +367,14 @@ WHERE ( (DR_R-CR_R)!=0)]]>
 			<staticText>
 				<reportElement style="FBold" x="0" y="50" width="762" height="20" uuid="47eec812-75fb-442a-931b-5aa9ce7f1955"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14"/>
+					<font size="16"/>
 				</textElement>
 				<text><![CDATA[มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
 				<reportElement style="FBold" positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="0" y="90" width="762" height="20" uuid="95b04ea2-bd98-4cc5-9a78-cb88d2d99182"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14"/>
+					<font size="16"/>
 					<paragraph lineSpacing="AtLeast"/>
 				</textElement>
 				<textFieldExpression><![CDATA["ตั้งแต่วันที่  " + $P{DATE_START} + "    ถึงวันที่  " + $P{DATE_END}]]></textFieldExpression>
@@ -430,7 +430,7 @@ WHERE ( (DR_R-CR_R)!=0)]]>
 			<textField isStretchWithOverflow="true">
 				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="0" y="70" width="762" height="20" uuid="7071530f-a0b3-4559-9d61-61e9be2fe253"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14"/>
+					<font size="16"/>
 					<paragraph lineSpacing="AtLeast"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($P{DEPARTMENT}!="")?"รายงานงบทดลอง\n"+$P{DEPARTMENT}:"รายงานงบทดลอง"]]></textFieldExpression>
