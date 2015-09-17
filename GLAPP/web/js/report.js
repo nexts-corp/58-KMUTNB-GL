@@ -483,7 +483,7 @@ $(document).ready(function () {
                 mgrNameThai2 = dataMgr[fio].mgrNameThai;
             }
             
-            if(budgetType("id")===2 || budgetType("id")===5){
+            if(budgetType("id")===1 ||budgetType("id")===2 || budgetType("id")===5){
                 var fio = findIndexObject(dataMgr,"mgrCode",1);
                 if(typeof fio !== 'undefined'){
                     referName1 = dataMgr[fio].referName;
