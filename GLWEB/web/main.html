@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>ระบบบัญชีแยกประเภทสามมิติ</title>
+        
+        <link href="/GLWEB/css/bootstrap.css" rel="stylesheet">
+
+        <link href="/GLWEB/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+        <link href="/GLWEB/css/bootstrap-datepicker.css" rel="stylesheet" type="text/css">
+        <link href="/GLWEB/css/chosen.css" rel="stylesheet">
+
+        <style type="text/css">
+            .loading {
+                line-height: 100vh;
+                text-align: center;
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                left: 0;
+                top: 0;
+                background: #f1f1f1;
+                z-index: 10000;
+            }
+
+            .navExportBg{
+                margin: auto;
+                top:50px;
+                position:fixed;
+                width:100%;
+                height: 47px;
+                z-index: 100;
+                color: #000000;
+
+            }
+
+            .navExport{
+                float: right;
+                border-radius:5px;
+                padding: 5px;
+                width:340px;
+                height: 47px;
+                z-index: 100;
+                color: #000000;
+                background-color: #E6E6E6;
+                text-align: center;
+            }
+            
+            .panel-info,.panel-danger{
+                border-color: #000;
+            }
+            
+            
+            .chosen-container-single .chosen-single{
+                border-color: #000;
+            }
+            
+        </style>
+
+    </head>
+    <body>
+        <div class="loading"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">ระบบบัญชีแยกประเภทสามมิติ</a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="user_adminname"></span> <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/GLWEB/api/gl/authen/signout"><i class="fa fa-power-off"></i>&nbsp;&nbsp;ออกจากระบบ</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p id="departmentName" class="navbar-text navbar-right"></p>
+                </div>
+            </div>
+        </nav>
+        <div class="navExportBg">
+            <div class="navExport">
+                <button type="button" class="btn btn-info btn-icon bExport" exporttype="pdfview"> เรียกดู&nbsp;&nbsp;<i class="fa fa-search"></i></button>
+                <button type="button" class="btn btn-success btn-icon bExport" exporttype="word"> Word&nbsp;&nbsp;<i class="fa fa-file-text-o"></i></button>
+                <button type="button" class="btn btn-success btn-icon bExport" exporttype="excel"> Excel&nbsp;&nbsp;<i class="fa fa-table"></i></button>
+                <button type="button" class="btn btn-success btn-icon bExport" exporttype="pdf"> PDF&nbsp;&nbsp;<i class="fa fa-file-o"></i></button>
+            </div>
+
+        </div>
+        <br><br><br><br><br>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">รายงานและวันที่</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="report_type">ประเภทรายงาน</label>
+                                            <select id="report_type" class="form-control">
+                                                <option value="RPT01">รายงานงบทดลอง</option>
+                                                <option value="RPT02">รายงานบัญชีแยกประเภท</option>
+                                                <option value="RPT02_2">รายงานบัญชีแยกประเภท (หน่วยงาน)</option>
+                                                <option value="RPT05">รายงานงบฐานะการเงิน</option>
+                                                <option value="RPT03">รายงานรายละเอียดประกอบงบแสดงฐานะการเงิน</option>
+                                                <option value="RPT06">รายงานงบรายได้และค่าใช้จ่าย</option>
+                                                <option value="RPT04">รายงานรายละเอียดประกอบงบรายได้และค่าใช้จ่าย</option>
+                                                <option value="RPT07">รายงานกระดาษทำการ</option>
+                                                <option value="RPT08">รายงานเงินรายจ่ายของมหาวิทยาลัย</option>
+                                                <option value="RPT09" class="openRpt" style="display:none;">รายงานงบกระแสเงินสดรวม</option>
+                                                <option value="RPT10" class="openRpt" style="display:none;">รายงานวิเคราะห์งบการเงิน</option>
+                                                <option value="RPT11">รายงานค้ำประกันสัญญา (รายงานสัญญา)</option>
+                                                <option value="RPT12">รายงานค้ำประกันซอง (รายบริษัท)</option>
+                                                <option value="RPT13">รายงานทะเบียนคุมเงินประกันเช่าทรัพย์สิน</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="date">วันที่</label>
+                                            <div class="input-group has-error">
+                                                <input id="date_start" type="text" class="form-control cDate" style="padding:5px;border-color:#000;">
+                                                <span class="input-group-addon" style="border-color:#000;">ถึง</span>
+                                                <input id="date_end" type="text" class="form-control cDate" style="padding:5px;border-color:#000;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">บัญชี</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="account_start">บัญชี</label>
+                                            <select id="account_start" class="form-control cAccount" check-hl="cAccount" disabled>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="account_end">ถึงบัญชี</label>
+                                            <select id="account_end" class="form-control cAccount" check-hl="cAccount" disabled>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>   
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">หน่วยงาน</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="department">หน่วยงาน</label>
+                                            <select id="department" class="form-control" check-hl="cDepartment">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="department_start">หน่วยงานย่อย</label>
+                                            <select id="department_start" class="form-control cDepartment" check-hl="cDepartment">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="department_end">ถึงหน่วยงานย่อย</label>
+                                            <select id="department_end" class="form-control cDepartment" check-hl="cDepartment">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">แหล่งเงิน</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="budgetType">ประเภทแหล่งเงิน</label>
+                                            <select id="budgetType" class="form-control" check-hl="cSource">
+                                                <option value="1">ทุกประเภท</option>
+                                                <option value="2">เงินงบประมาณแผ่นดิน</option>
+                                                <option value="3">เงินรายได้ศูนย์รวม</option>
+                                                <option value="4">เงินทุนคณะ</option>
+                                                <option value="5">เงินรายได้รวม</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="source_start">แหล่งเงิน</label>
+                                            <select id="source_start" class="form-control cSource" check-hl="cSource">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="source_end">ถึงแหล่งเงิน</label>
+                                            <select id="source_end" class="form-control cSource" check-hl="cSource">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">แผนงาน</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="plan_start">แผนงาน</label>
+                                            <select id="plan_start" class="form-control cPlan" check-hl="cPlan">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="plan_end">ถึงแผนงาน</label>
+                                            <select id="plan_end" class="form-control cPlan" check-hl="cPlan">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-4">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">โครงการ</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="project_start">โครงการ</label>
+                                            <select id="project_start" class="form-control cProject" check-hl="cProject">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="project_end">ถึงโครงการ</label>
+                                            <select id="project_end" class="form-control cProject" check-hl="cProject">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">กิจกรรม</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="activity_start">กิจกรรม</label>
+                                            <select id="activity_start" class="form-control cActivity" check-hl="cActivity">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="activity_end">ถึงกิจกรรม</label>
+                                            <select id="activity_end" class="form-control cActivity" check-hl="cActivity">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">กองทุน</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="fund_start">กองทุน</label>
+                                            <select id="fund_start" class="form-control cFund" check-hl="cFund">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="fund_end">ถึงกองทุน</label>
+                                            <select id="fund_end" class="form-control cFund" check-hl="cFund">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+
+        <script src="/GLWEB/js/jquery-2.1.0.js"></script>
+        <script src="/GLWEB/js/bootstrap.min.js"></script>
+
+        <script src="/GLWEB/js/bootstrap-datepicker.js"></script>
+        <script src="/GLWEB/js/bootstrap-datepicker-thai.js"></script>
+        <script src="/GLWEB/js/bootstrap-datepicker.th.js"></script>
+        
+        <script src="/GLWEB/js/chosen.jquery.js"></script>
+        
+        <script src="/GLWEB/js/report.js"></script>
+    </body>
+</html>

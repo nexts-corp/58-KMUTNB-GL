@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="default" transaction-type="JTA">
+    <jta-data-source>jdbc/3ddb</jta-data-source>
+    <class>th.ac.kmutnb.gl.myreport.entity.Account</class>
+    <class>th.ac.kmutnb.gl.myreport.entity.Activity</class>
+    <class>th.ac.kmutnb.gl.myreport.entity.BudgetGroup</class>
+    <class>th.ac.kmutnb.gl.myreport.entity.Department</class>
+    <class>th.ac.kmutnb.gl.myreport.entity.FundGroup</class>
+    <class>th.ac.kmutnb.gl.myreport.entity.Plan</class>
+    <class>th.ac.kmutnb.gl.myreport.entity.Project</class>
+    <class>th.ac.kmutnb.gl.myreport.entity.User</class>
+    <class>th.ac.kmutnb.gl.myreport.model.RPT01_model</class>
+    <class>th.ac.kmutnb.gl.myreport.model.RPT02_2_model</class>
+    <class>th.ac.kmutnb.gl.myreport.model.RPT02_model</class>
+    <class>th.ac.kmutnb.gl.myreport.model.RPT03_model</class>
+    <class>th.ac.kmutnb.gl.myreport.model.RPT04_model</class>
+    <class>th.ac.kmutnb.gl.myreport.model.RPT05_model</class>
+    <class>th.ac.kmutnb.gl.myreport.model.RPT06_model</class>
+    <class>th.ac.kmutnb.gl.myreport.model.RPT07_model</class>
+    <class>th.ac.kmutnb.gl.myreport.model.RPT08_model</class>
+    <class>th.ac.kmutnb.gl.myreport.model.RPT09_model</class>
+    <class>th.ac.kmutnb.gl.myreport.model.RPT10_model</class>
+    <class>th.ac.kmutnb.gl.myreport.model.RPT11_model</class>
+    <class>th.ac.kmutnb.gl.myreport.model.RPT12_model</class>
+    
+    <properties>
+     
+    </properties>
+  </persistence-unit>
+</persistence>

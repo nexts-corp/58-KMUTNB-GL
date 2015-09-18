@@ -1,0 +1,2178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Template" language="groovy" pageWidth="1190" pageHeight="842" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="1150" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
+	<property name="ireport.zoom" value="1.9965000000000817"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="377"/>
+	<style name="FBold" fill="Solid" hAlign="Left" vAlign="Top" fontName="TH SarabunPSK" fontSize="14" isBold="true" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H"/>
+	<style name="Rpt" fontName="TH SarabunPSK" fontSize="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
+	<style name="Default" isDefault="true" fontName="TH SarabunPSK" fontSize="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="DATE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["1/10/56"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATE_END" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA["31/10/56"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PUBLISHER" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["พงศ์ปณต ทัศนียาชุมพาลี"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATE_CURRENT" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DEPARTMENT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="REPORT_TYPE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["EXCEL"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="BUDGET_SORCE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[201000]]></defaultValueExpression>
+	</parameter>
+	<parameter name="BUDGET_SORCE_END" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[906010]]></defaultValueExpression>
+	</parameter>
+	<parameter name="FUND_SORCE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[100]]></defaultValueExpression>
+	</parameter>
+	<parameter name="FUND_SORCE_END" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[709]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DEPARTMENT_SORCE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DEPARTMENT_SORCE_END" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[91001]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PLAN_SORCE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[10]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PLAN_SORCE_END" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[90]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PROJECT_SORCE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PROJECT_SORCE_END" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[90907]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ACTIVITY_SORCE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ACTIVITY_SORCE_END" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[9090931]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+  ROW_NUMBER() OVER (ORDER BY NULL) AS id,
+  PLANID,
+  PLANNAME,
+  M_DEPARTMENTID,
+  M_DEPARTMENTNAME,
+  DEPARTMENTID,
+  DEPARTMENTNAME,
+  ACCOUNTID,
+  ACCOUNTNAME,
+  SUM(DR) AS DR,
+  SUM(CR) AS CR
+  FROM
+  (
+    SELECT
+      gl1.PLANID,
+      pla.PLANNAME,
+      mdep.DEPARTMENTID AS M_DEPARTMENTID,
+      mdep.DEPARTMENTNAME AS M_DEPARTMENTNAME,
+      gl1.DEPARTMENTID,
+      dep.DEPARTMENTNAME,
+      dep.MASTERID,
+      regexp_substr(maps.M_ACCOUNT_ID,'[^|]+', 1, maps.REFLEVEL-1) ACCOUNTID,
+      regexp_substr(maps.M_ACCOUNT_NAME,'[^|]+', 1, maps.REFLEVEL-1) ACCOUNTNAME,
+      gl1.DR,
+      gl1.CR
+    FROM
+     (
+
+      SELECT gl.ACCOUNTID,gl.PLANID,gl.DEPARTMENTID,SUM(gl.DR) AS DR,SUM(gl.CR) AS CR
+      FROM MASTER3D.GL gl
+      LEFT JOIN MASTER3D.GLHEAD glh
+      ON glh.GLHEADID = gl.GLHEADID
+      WHERE GL.ACCOUNTID LIKE '5%'
+      AND glh.GLHEADSTATUS != 'V'
+      AND glh.GLHEADDATE >= TO_DATE('01/10/2014', 'DD/MM/YYYY')
+      AND glh.GLHEADDATE <= TO_DATE('31/10/2014', 'DD/MM/YYYY')
+      GROUP BY gl.PLANID,gl.DEPARTMENTID,gl.ACCOUNTID
+    )gl1
+
+    INNER JOIN
+      (
+
+          SELECT M_ACCOUNT_ID,M_ACCOUNT_NAME,ACCOUNTID,ACCOUNTNAME,REFLEVEL FROM
+            (
+              SELECT
+                SYS_CONNECT_BY_PATH(ACCOUNTID,'|')   AS M_ACCOUNT_ID ,
+                SYS_CONNECT_BY_PATH(ACCOUNTNAME,'|') AS M_ACCOUNT_NAME,
+                ACCOUNTID,ACCOUNTNAME,MASTERID,TO_NUMBER(LEVEL) AS REFLEVEL
+              FROM MASTER3D.ACCOUNT
+              START WITH MASTERID        = '0'
+              CONNECT BY PRIOR ACCOUNTID = MASTERID
+              ORDER SIBLINGS BY ACCOUNTID
+            )
+          WHERE ACCOUNTID LIKE '5%'
+          AND (ACCOUNTID NOT BETWEEN 5150101000 AND 5150105000)
+
+          UNION ALL
+          SELECT
+            CONCAT('|5000000000|5100000000|5150000000|5150100000|5150101000|',ACCOUNTID) AS M_ACCOUNT_ID,
+            CONCAT('|ค่าใช้จ่าย|ค่าใช้จ่ายจากการดำเนินงาน|ค่าเสื่อมราคาและค่าตัดจำหน่าย|ค่าเสื่อมราคา|ค่าเสื่อมราคา - อาคารและสิ่งปลูกสร้าง|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
+            ACCOUNTID,
+            ACCOUNTNAME,
+            6 AS REFLEVEL
+          FROM MASTER3D.ACCOUNT
+          WHERE MASTERID BETWEEN 5150101000 AND 5150104000
+
+      )maps
+      ON gl1.ACCOUNTID = maps.ACCOUNTID
+
+      LEFT OUTER JOIN MASTER3D.DEPARTMENT dep
+      ON gl1.DEPARTMENTID = dep.DEPARTMENTID
+
+      LEFT OUTER JOIN MASTER3D.PLAN pla
+      ON gl1.PLANID = pla.PLANID
+
+      LEFT OUTER JOIN MASTER3D.DEPARTMENT mdep
+      ON dep.MASTERID = mdep.DEPARTMENTID
+
+  ) GROUP BY
+    DEPARTMENTNAME,
+    DEPARTMENTID,
+    M_DEPARTMENTNAME,
+    M_DEPARTMENTID,
+    PLANNAME,
+    PLANID,
+    ACCOUNTNAME,
+    ACCOUNTID
+  ORDER BY PLANID,M_DEPARTMENTID,DEPARTMENTID,ACCOUNTID]]>
+	</queryString>
+	<field name="ID" class="java.lang.String"/>
+	<field name="PLANID" class="java.lang.String"/>
+	<field name="PLANNAME" class="java.lang.String"/>
+	<field name="M_DEPARTMENTID" class="java.lang.String"/>
+	<field name="M_DEPARTMENTNAME" class="java.lang.String"/>
+	<field name="DEPARTMENTID" class="java.lang.String"/>
+	<field name="DEPARTMENTNAME" class="java.lang.String"/>
+	<field name="ACCOUNTID" class="java.lang.String"/>
+	<field name="ACCOUNTNAME" class="java.lang.String"/>
+	<field name="DR" class="java.math.BigDecimal"/>
+	<field name="CR" class="java.math.BigDecimal"/>
+	<variable name="CURRENT_PAGE" class="java.lang.Integer" resetType="None" calculation="DistinctCount">
+		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Integer(1)]]></initialValueExpression>
+	</variable>
+	<variable name="CURRENT_DATE" class="java.util.Date">
+		<variableExpression><![CDATA[new Date()]]></variableExpression>
+		<initialValueExpression><![CDATA[new Date()]]></initialValueExpression>
+	</variable>
+	<variable name="DRCR" class="java.math.BigDecimal" resetType="None">
+		<variableExpression><![CDATA[$F{DR}-$F{CR}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5110101000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5110101000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5110102000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5110102000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5110103000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5110103000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5110104000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5110104000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5110105000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5110105000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5110106000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5110106000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5110107000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5110107000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5110109000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5110109000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5110110000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5110110000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5110301000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5110301000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5110302000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5110302000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5110303000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5110303000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5110401000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5110401000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5110402000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5110402000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5120100000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5120100000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5120200000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5120200000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5120301000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5120301000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5120302000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5120302000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5120400000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5120400000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5130100000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5130100000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5150101000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5150101000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5150107000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5150107000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5150108000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5150108000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5150109000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5150109000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5150202000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5150202000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="5160000000" class="java.math.BigDecimal" resetType="Group" resetGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACCOUNTID}=="5160000000")?$F{DR}-$F{CR}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SUMROW" class="java.math.BigDecimal" resetType="None">
+		<variableExpression><![CDATA[$V{5110101000}+$V{5110102000}+$V{5110103000}+$V{5110104000}+$V{5110105000}
++$V{5110106000}+$V{5110107000}+$V{5110109000}+$V{5110110000}+$V{5110301000}+$V{5110302000}
++$V{5110303000}+$V{5110401000}+$V{5110402000}+$V{5120100000}+$V{5120200000}+$V{5120301000}
++$V{5120302000}+$V{5120400000}+$V{5130100000}+$V{5150101000}+$V{5150107000}+$V{5150108000}+$V{5150109000}
++$V{5150202000}+$V{5160000000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5110101000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5110101000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5110102000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5110102000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5110103000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5110103000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5110104000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5110104000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5110105000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5110105000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5110106000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5110106000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5110107000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5110107000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5110109000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5110109000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5110110000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5110110000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5110301000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5110301000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5110302000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5110302000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5110303000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5110303000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5110401000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5110401000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5110402000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5110402000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5120100000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5120100000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5120200000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5120200000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5120301000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5120301000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5120302000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5120302000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5120400000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5120400000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5130100000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5130100000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5150101000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5150101000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5150107000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5150107000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5150108000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5150108000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5150109000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5150109000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5150202000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5150202000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG2_5160000000" class="java.math.BigDecimal" resetType="Group" resetGroup="G2" incrementType="Group" incrementGroup="G3" calculation="Sum">
+		<variableExpression><![CDATA[$V{5160000000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SUMROWG2" class="java.math.BigDecimal" resetType="None">
+		<variableExpression><![CDATA[$V{SG2_5110101000}+$V{SG2_5110102000}+$V{SG2_5110103000}+$V{SG2_5110104000}+$V{SG2_5110105000}
++$V{SG2_5110106000}+$V{SG2_5110107000}+$V{SG2_5110109000}+$V{SG2_5110110000}+$V{SG2_5110301000}+$V{SG2_5110302000}
++$V{SG2_5110303000}+$V{SG2_5110401000}+$V{SG2_5110402000}+$V{SG2_5120100000}+$V{SG2_5120200000}+$V{SG2_5120301000}
++$V{SG2_5120302000}+$V{SG2_5120400000}+$V{SG2_5130100000}+$V{SG2_5150101000}+$V{SG2_5150107000}+$V{SG2_5150108000}+$V{SG2_5150109000}
++$V{SG2_5150202000}+$V{SG2_5160000000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5110101000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5110101000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5110102000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5110102000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5110103000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5110103000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5110104000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5110104000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5110105000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5110105000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5110106000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5110106000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5110107000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5110107000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5110109000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5110109000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5110110000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5110110000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5110301000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5110301000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5110302000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5110302000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5110303000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5110303000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5110401000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5110401000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5110402000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5110402000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5120100000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5120100000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5120200000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5120200000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5120301000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5120301000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5120302000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5120302000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5120400000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5120400000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5130100000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5130100000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5150101000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5150101000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5150107000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5150107000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5150108000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5150108000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5150109000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5150109000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5150202000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5150202000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SG1_5160000000" class="java.math.BigDecimal" resetType="Group" resetGroup="G1" incrementType="Group" incrementGroup="G2" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG2_5160000000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SUMROWG1" class="java.math.BigDecimal" resetType="None">
+		<variableExpression><![CDATA[$V{SG1_5110101000}+$V{SG1_5110102000}+$V{SG1_5110103000}+$V{SG1_5110104000}+$V{SG1_5110105000}
++$V{SG1_5110106000}+$V{SG1_5110107000}+$V{SG1_5110109000}+$V{SG1_5110110000}+$V{SG1_5110301000}+$V{SG1_5110302000}
++$V{SG1_5110303000}+$V{SG1_5110401000}+$V{SG1_5110402000}+$V{SG1_5120100000}+$V{SG1_5120200000}+$V{SG1_5120301000}
++$V{SG1_5120302000}+$V{SG1_5120400000}+$V{SG1_5130100000}+$V{SG1_5150101000}+$V{SG1_5150107000}+$V{SG1_5150108000}+$V{SG1_5150109000}
++$V{SG1_5150202000}+$V{SG1_5160000000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5110101000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5110101000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5110102000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5110102000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5110103000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5110103000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5110104000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5110104000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5110105000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5110105000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5110106000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5110106000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5110107000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5110107000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5110109000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5110109000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5110110000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5110110000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5110301000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5110301000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5110302000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5110302000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5110303000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5110303000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5110401000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5110401000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5110402000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5110402000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5120100000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5120100000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5120200000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5120200000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5120301000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5120301000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5120302000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5120302000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5120400000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5120400000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5130100000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5130100000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5150101000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5150101000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5150107000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5150107000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5150108000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5150108000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5150109000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5150109000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5150202000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5150202000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_5160000000" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SG1_5160000000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_ROW" class="java.math.BigDecimal" resetType="None">
+		<variableExpression><![CDATA[$V{TOTAL_5110101000}+$V{TOTAL_5110102000}+$V{TOTAL_5110103000}+$V{TOTAL_5110104000}+$V{TOTAL_5110105000}
++$V{TOTAL_5110106000}+$V{TOTAL_5110107000}+$V{TOTAL_5110109000}+$V{TOTAL_5110110000}+$V{TOTAL_5110301000}+$V{TOTAL_5110302000}
++$V{TOTAL_5110303000}+$V{TOTAL_5110401000}+$V{TOTAL_5110402000}+$V{TOTAL_5120100000}+$V{TOTAL_5120200000}+$V{TOTAL_5120301000}
++$V{TOTAL_5120302000}+$V{TOTAL_5120400000}+$V{TOTAL_5130100000}+$V{TOTAL_5150101000}+$V{TOTAL_5150107000}+$V{TOTAL_5150108000}+$V{TOTAL_5150109000}
++$V{TOTAL_5150202000}+$V{TOTAL_5160000000}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<group name="G1">
+		<groupExpression><![CDATA[$F{PLANID}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<printWhenExpression><![CDATA[$P{REPORT_MAX_COUNT}>0]]></printWhenExpression>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="0" y="0" width="122" height="20" uuid="b1da5115-e204-4cc4-a17c-bbcf0f67b945"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PLANNAME}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="13">
+				<printWhenExpression><![CDATA[$P{REPORT_MAX_COUNT}>0]]></printWhenExpression>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="0" y="0" width="122" height="13" uuid="063884cf-a2aa-4c5f-b87a-cd43883e05f8"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA["รวม"+$F{PLANNAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="122" y="0" width="38" height="13" uuid="2ac24897-45ae-450e-8dc3-d56148d7126a"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5110101000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="160" y="0" width="38" height="13" uuid="3d61872b-b55a-4343-867e-c182d45114ad"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5110102000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="198" y="0" width="38" height="13" uuid="41b5cbe5-1715-4ad4-b169-6d71a48e3a3b"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5110103000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="236" y="0" width="38" height="13" uuid="5adc318d-1def-4aff-a36c-849c29f17a56"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5110104000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="274" y="0" width="38" height="13" uuid="0b95a922-3828-46a6-9e05-d0adced2bb42"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5110105000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="312" y="0" width="38" height="13" uuid="b6f0282a-754c-4ab5-b9f2-448c55ab78ef"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5110106000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="350" y="0" width="38" height="13" uuid="98d3334b-c816-4f55-8952-1c62069569fe"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5110107000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="388" y="0" width="38" height="13" uuid="de34a2d3-be7f-45ba-829e-048581ac5865"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5110109000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="426" y="0" width="38" height="13" uuid="8ee6013c-8ace-4ec7-ba46-63fb87bb46a1"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5110110000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="464" y="0" width="38" height="13" uuid="37a93784-8062-42c7-a052-9131098490b4"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5110301000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="502" y="0" width="38" height="13" uuid="44c4a6d1-fffe-4a46-ac49-29883fa4b4a4"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5110302000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="540" y="0" width="38" height="13" uuid="54f5ff29-a56d-4de2-80a8-2f2334c60edb"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5110303000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="578" y="0" width="38" height="13" uuid="0e7e68c3-59be-4a0d-98f3-e5a2af6ad3c0"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5110401000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="616" y="0" width="38" height="13" uuid="dd9ec66d-3af1-4fba-8e36-48695263a8c7"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5110402000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="654" y="0" width="38" height="13" uuid="9c7d9e76-9b4f-4ca6-a1c2-e2684072a6c9"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5120100000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="768" y="0" width="38" height="13" uuid="0206d123-3e94-4354-8536-db61148c54e9"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5120302000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="730" y="0" width="38" height="13" uuid="eceee2cd-5fea-4412-84fc-99654ee83c11"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5120301000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="882" y="0" width="38" height="13" uuid="afaa4958-7990-4c8c-a0f5-f874fdf175ac"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5150101000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="844" y="0" width="38" height="13" uuid="48661b79-5bf7-4b5d-896a-ee87ab5b4bba"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5130100000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="692" y="0" width="38" height="13" uuid="e4d3208a-ff3c-4d5b-9633-200348092b04"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5120200000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="806" y="0" width="38" height="13" uuid="7e97eb00-ee5f-4cce-8019-54cce93db9b8"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5120400000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="920" y="0" width="38" height="13" uuid="882fd2e7-8cc2-48ae-b457-aadd4663f02e"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5150107000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="958" y="0" width="38" height="13" uuid="b946a536-566c-4df6-89a1-a2a962aa3fb3"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5150108000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="1034" y="0" width="38" height="13" uuid="724f0c78-afb9-43e1-a074-2f854f337e37"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5150202000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="996" y="0" width="38" height="13" uuid="24356e7d-49b8-42f1-b77d-27876d92907e"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5150109000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="1072" y="0" width="38" height="13" uuid="83955f94-d8a5-498a-82ef-3d6fa44551dc"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG1_5160000000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="1110" y="0" width="40" height="13" uuid="098ceb85-626f-4a6e-923d-478888e65147"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUMROWG1}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="G2">
+		<groupExpression><![CDATA[$F{M_DEPARTMENTID}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<printWhenExpression><![CDATA[$P{REPORT_MAX_COUNT}>0]]></printWhenExpression>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="5" y="0" width="117" height="20" uuid="8e5c7de0-62ae-4f62-9aad-59458c22d47e"/>
+					<box topPadding="2" bottomPadding="2"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{M_DEPARTMENTNAME}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="13">
+				<printWhenExpression><![CDATA[$P{REPORT_MAX_COUNT}>0]]></printWhenExpression>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="0" y="0" width="122" height="13" uuid="fc17a009-7128-4451-9b32-48957ded84e4"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2">
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA["รวม"+$F{M_DEPARTMENTNAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="122" y="0" width="38" height="13" uuid="231bd2df-54b0-41d5-b13b-f1c97f8aecd4"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5110101000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="160" y="0" width="38" height="13" uuid="d09c0370-02e3-4fd1-b507-aa04d7549c24"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5110102000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="198" y="0" width="38" height="13" uuid="15e0b153-dc52-4ba3-965e-8040faeac227"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5110103000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="236" y="0" width="38" height="13" uuid="55e6ad5e-c6f0-4b44-87a2-5b3d5e3dd197"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5110104000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="274" y="0" width="38" height="13" uuid="1a2e4ebe-e8b7-45ec-ab41-19350263012c"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5110105000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="312" y="0" width="38" height="13" uuid="c8f66a91-4fc8-494f-af86-b689d5099b24"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5110106000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="350" y="0" width="38" height="13" uuid="a19e1984-a9bb-46ca-a69c-b28d353788d7"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5110107000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="388" y="0" width="38" height="13" uuid="356c281d-20f3-46c9-8489-599dcfe0de00"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5110109000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="426" y="0" width="38" height="13" uuid="3a768b52-85db-4c79-b553-337965d0b23e"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5110110000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="464" y="0" width="38" height="13" uuid="0a128e7f-1481-4a1c-84d3-17b61fe4cfec"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5110301000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="502" y="0" width="38" height="13" uuid="9752d1bf-566b-4307-8e19-e67884158986"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5110302000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="540" y="0" width="38" height="13" uuid="6589aed5-f661-4328-8eee-c6ac669efea7"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5110303000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="578" y="0" width="38" height="13" uuid="87a467f0-7b81-4f21-ae8e-871e5863857d"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5110401000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="616" y="0" width="38" height="13" uuid="98a4a573-39dc-41b5-a8ec-91fefda69aeb"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5110402000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="654" y="0" width="38" height="13" uuid="80ada21c-b4ed-44e3-8f74-3ab66be7a98f"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5120100000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="768" y="0" width="38" height="13" uuid="6371d787-8646-4784-9918-dd12fdf9c23e"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5120302000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="730" y="0" width="38" height="13" uuid="cd98de4b-65a2-4c52-90cc-1ae314ce7be8"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5120301000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="882" y="0" width="38" height="13" uuid="451ee2a6-2be7-4a2a-a6b1-471b130199a5"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5150101000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="844" y="0" width="38" height="13" uuid="9c668d40-fa94-4058-bf99-ce8f8f9c3a59"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5130100000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="692" y="0" width="38" height="13" uuid="e94213a6-e571-4aff-a6dd-d1a3b4f3b86b"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5120200000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="806" y="0" width="38" height="13" uuid="53a5b088-b22b-4251-9649-5ee28f08c738"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5120400000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="920" y="0" width="38" height="13" uuid="76b03b08-a628-45cd-a515-7d42107fbec7"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5150107000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="958" y="0" width="38" height="13" uuid="0b07af16-9bfe-4e29-a0f3-ceac8cba1cd2"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5150108000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="1034" y="0" width="38" height="13" uuid="b779b039-f26b-458a-836f-eac93c0d7e57"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5150202000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="996" y="0" width="38" height="13" uuid="b2d48a94-66e1-49f8-8713-d93b1aa398db"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5150109000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="1072" y="0" width="38" height="13" uuid="4ff5d383-7e17-40bb-9cb3-40ad326c7c17"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SG2_5160000000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="1110" y="0" width="40" height="13" uuid="e3649210-0509-406a-8743-d7bdba9b04dc"/>
+					<box>
+						<topPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUMROWG2}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="G3">
+		<groupExpression><![CDATA[$F{DEPARTMENTID}]]></groupExpression>
+		<groupHeader>
+			<band height="15">
+				<printWhenExpression><![CDATA[$F{PLANID}==null&&$P{REPORT_MAX_COUNT}>0]]></printWhenExpression>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<printWhenExpression><![CDATA[$P{REPORT_MAX_COUNT}>0]]></printWhenExpression>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Default" stretchType="RelativeToBandHeight" x="10" y="0" width="112" height="20" uuid="1f426df9-3494-4f44-a2a5-54815cc6bcef"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DEPARTMENTNAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="122" y="0" width="38" height="20" uuid="7f9ac1dd-adab-480c-b3c1-861f43fdccb6"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5110101000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="160" y="0" width="38" height="20" uuid="4abf404e-8250-427d-80d7-ace524801952"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5110102000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="198" y="0" width="38" height="20" uuid="4566b05d-bc05-4c11-a474-43bf0a461849"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5110103000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="236" y="0" width="38" height="20" uuid="151ec453-888a-4165-9964-0ede70faf7f5"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5110104000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="274" y="0" width="38" height="20" uuid="724f821a-d8ab-4ba4-8e67-3d539b31d8f9"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5110105000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="312" y="0" width="38" height="20" uuid="c83e3221-433e-4a04-8f3d-90961e2beea3"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5110106000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="350" y="0" width="38" height="20" uuid="c6419859-8eea-44e6-8237-5e51b4de3392"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5110107000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="388" y="0" width="38" height="20" uuid="2819c80f-2004-452d-b447-b34926681390"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5110109000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="426" y="0" width="38" height="20" uuid="ed0c7068-f03b-4057-a4e9-0d6dcd7fe588"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5110110000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="464" y="0" width="38" height="20" uuid="bf130a77-70f7-44d9-a8ee-c55c54433625"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5110301000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="502" y="0" width="38" height="20" uuid="51224bbd-c4bf-4149-89cb-d05238e87904"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5110302000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="540" y="0" width="38" height="20" uuid="7078b7e8-2e8d-4834-aa79-a62cde14fc31"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5110303000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="578" y="0" width="38" height="20" uuid="dbc37d2a-e5bf-4d21-8e28-9d5e9f7f7744"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5110401000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="616" y="0" width="38" height="20" uuid="50c669e5-611e-43c9-b0dd-2203d4ff7e76"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5110402000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="654" y="0" width="38" height="20" uuid="1caacd37-4525-412a-9022-dd5fdf451c0f"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5120100000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="768" y="0" width="38" height="20" uuid="59a0736b-16cd-4ca7-a637-fa76bc8ec370"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5120302000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="730" y="0" width="38" height="20" uuid="f49f67e4-4768-4aa0-9e1d-c58d5aa2a9bd"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5120301000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="882" y="0" width="38" height="20" uuid="3df26e21-3433-40fd-a10c-c92c541da9f8"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5150101000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="844" y="0" width="38" height="20" uuid="556eec44-10b0-411e-82b8-9609817b9c1d"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5130100000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="692" y="0" width="38" height="20" uuid="1cb2afbc-6009-4cb3-920e-f6fc2d8a6a18"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5120200000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="806" y="0" width="38" height="20" uuid="fa54f83a-4940-4ba0-8157-4126b0b17370"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5120400000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="920" y="0" width="38" height="20" uuid="70f5d9ff-e378-4a28-98bc-9f1f7027d5c5"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5150107000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="958" y="0" width="38" height="20" uuid="b678cdfd-ab04-403f-898b-c69fc9e19c9e"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5150108000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="1034" y="0" width="38" height="20" uuid="9a57cfb3-6831-4cc7-9e27-0102a5e3f551"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5150202000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="996" y="0" width="38" height="20" uuid="f18db5af-e037-4cea-9f1e-c4272fce216c"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5150109000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement stretchType="RelativeToBandHeight" x="1072" y="0" width="38" height="20" uuid="0b894a6c-945b-44a4-a5d8-eaafa468785b"/>
+					<box leftPadding="1" rightPadding="1"/>
+					<textElement textAlignment="Right">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{5160000000}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" stretchType="RelativeToBandHeight" x="1110" y="0" width="40" height="20" uuid="71a3c6fe-3122-45af-997c-458051b13fcd"/>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUMROW}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="177" splitType="Stretch">
+			<staticText>
+				<reportElement style="FBold" x="0" y="56" width="1150" height="20" uuid="47eec812-75fb-442a-931b-5aa9ce7f1955"/>
+				<textElement textAlignment="Center">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="0" width="1150" height="56" uuid="0645b418-ab4c-4cc8-b596-97eeb996177d"/>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode("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"))]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement style="FBold" positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="0" y="96" width="1150" height="20" uuid="95b04ea2-bd98-4cc5-9a78-cb88d2d99182"/>
+				<textElement textAlignment="Center">
+					<font size="16"/>
+					<paragraph lineSpacing="Double"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ตั้งแต่วันที่  " + $P{DATE_START} + "    ถึงวันที่  " + $P{DATE_END}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="0" y="76" width="1150" height="20" uuid="147c327f-a550-4d02-abea-b70d911dce53"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{DEPARTMENT}!="")?"รายงานเงินรายจ่ายของมหาวิทยาลัย\n"+$P{DEPARTMENT}:"รายงานเงินรายจ่ายของมหาวิทยาลัย"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="0" y="116" width="575" height="20" uuid="846481f5-b2c7-407f-8476-3b79a010da86"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["แหล่งเงินจาก "+$P{BUDGET_SORCE_START}+" ถึง "+$P{BUDGET_SORCE_END}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="576" y="116" width="574" height="20" uuid="9b19d087-9ce1-4c38-b82e-4490e1a1174b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["แผนงานจาก "+$P{PLAN_SORCE_START}+" ถึง "+$P{PLAN_SORCE_END}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="576" y="136" width="574" height="20" uuid="36191d78-a74f-4217-a3dc-4803b577650a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["โครงการจาก "+$P{PROJECT_SORCE_START}+" ถึง "+$P{PROJECT_SORCE_END}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="576" y="156" width="574" height="20" uuid="629e85b0-087c-44ab-98a1-04248f65402f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["กิจกรรมจาก "+$P{ACTIVITY_SORCE_START}+" ถึง "+$P{ACTIVITY_SORCE_END}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="0" y="136" width="575" height="20" uuid="097b10d0-d25a-4537-afdd-c28e54dd984f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["กองทุนจาก "+$P{FUND_SORCE_START}+" ถึง "+$P{FUND_SORCE_END}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="0" y="156" width="575" height="20" uuid="41299415-b9ed-4226-a3fe-c9d7f3d5fd47"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["หน่วยงานจาก "+$P{DEPARTMENT_SORCE_START}+" ถึง "+$P{DEPARTMENT_SORCE_END}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="60" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{ID}==null]]></printWhenExpression>
+			<staticText>
+				<reportElement style="FBold" x="124" y="5" width="38" height="50" uuid="29dd42b7-abf2-4a65-98e5-fe7ff382f723"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[เงินเดือน
+(GFMIS)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="162" y="5" width="38" height="50" uuid="dd25206d-7b42-44e0-95c1-7af64eb021e6"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ค่าจ้างประจำ (GFMIS)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="200" y="5" width="38" height="50" uuid="916e7d6a-386d-4ff5-a896-e703c6bb5d7f"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ค่าจ้าง
+ชั่วคราว]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="238" y="5" width="38" height="50" uuid="af6ea5f2-2182-4dd6-b3aa-adb19afa0ea1"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[เงินเดือนพนักงานราชการ (GFMIS)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="276" y="5" width="38" height="50" uuid="294e542c-edb6-43d7-b318-f4e5483cd0a1"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[เงินประจำ
+ตำแหน่ง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="314" y="5" width="38" height="50" uuid="590f8398-90d1-4eff-a4b2-a6c868fa8b4a"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ค่าตอบแทน
+รายเดือนนอก
+เหนือจากเงิน
+เดือน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="542" y="5" width="38" height="50" uuid="983a96d7-7298-45af-8510-2fd3a6726317"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ค่าใช้จ่าย
+สวัสดิการ
+อื่น ๆ ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="466" y="5" width="38" height="50" uuid="40fb25bb-438a-4399-b03a-28577c9a5805"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ค่าใช้จ่าย
+สวัสดิการ
+ทั่วไป]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="428" y="5" width="38" height="50" uuid="5b710062-3d20-4dbc-b29e-b81179e0deae"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[เงินเดือน
+พนักงาน
+มหาวิทยาลัย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="390" y="5" width="38" height="50" uuid="3365aee9-9563-418e-ac5e-e7bd74ed99f7"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[เงินบำเหน็จ
+และเงิน
+ทำขวัญ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="504" y="5" width="38" height="50" uuid="d4c8a93a-34f2-451f-83fa-82d7c063572f"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[เงินสมทบ/
+ชดเชย กบข. กสจ.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="352" y="5" width="38" height="50" uuid="cbdeab40-9b86-417a-90ab-52258efb05db"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[เงินเพิ่มค่า
+ครองชีพ
+ชั่วคราว]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="618" y="5" width="38" height="50" uuid="f377462a-20a9-4391-bec5-dd424b7cd413"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[บำนาญ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="656" y="5" width="38" height="50" uuid="d4511890-8687-4592-a43f-dbaeb626b732"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ค่าตอบแทน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="770" y="5" width="38" height="50" uuid="576ee9b8-21a6-47c4-af4d-613e75aed9d6"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[วัสดุใช้ไป]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="580" y="5" width="38" height="50" uuid="d698549d-3a89-4238-a2ab-6d1d5475181a"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[บำเหน็จ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="694" y="5" width="38" height="50" uuid="26b4464a-f39c-4627-978e-b19d68f29361"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ค่าใช้สอย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="732" y="5" width="38" height="50" uuid="ed593f5a-9f6a-41b1-8369-e6d9139eaf4b"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ค่าครุภัณฑ์
+มูลค่าต่ำกว่า
+เกณฑ์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="846" y="5" width="38" height="50" uuid="000259b7-814d-4044-a184-d2dfb65c4ee1"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ค่าใช้จ่าย
+เงินอุดหนุน
+เพื่อการ
+ดำเนินงาน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="884" y="5" width="38" height="50" uuid="c14c0b04-ad59-465b-9d8e-06817f79a657"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ค่าเสื่อมราคา - อาคารและสิ่งปลูกสร้าง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="998" y="5" width="38" height="50" uuid="3cea10f5-a9ee-40cd-9fa9-80389cd03d8b"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ค่าเสื่อมราคา - ครุภัณฑ์
+จากการ
+บริจาครอรับรู้]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="808" y="5" width="38" height="50" uuid="12ae7f18-5cf8-4011-aa78-8772dae9caaf"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ค่าสาธารณู
+ปโภค]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="922" y="5" width="38" height="50" uuid="b27d9f6c-a7d5-4136-bec7-4bff6362e91c"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ค่าเสื่อมราคา - ครุภัณฑ์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="960" y="5" width="38" height="50" uuid="29f60d7b-717d-4c50-b409-1724e843c7a0"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ค่าเสื่อมราคา - ครุภัณฑ์จาก
+การบริจาค]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="1074" y="5" width="38" height="50" uuid="8d4b38d4-e342-4005-a88b-af3bbfd174fe"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ค่าใช้จ่ายอื่น]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="1036" y="5" width="38" height="50" uuid="4a89397f-1719-4eaf-8cf5-79cd8e47d807"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ค่าตัด
+จำหน่าย -
+โปรแกรมคอมพิวเตอร์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="1112" y="5" width="38" height="50" uuid="a7769448-6c99-4488-9f83-7ca9ef932b13"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[รวม]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{PLANID}==null]]></printWhenExpression>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{PLANNAME}==null]]></printWhenExpression>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement style="Rpt" x="358" y="20" width="792" height="12" uuid="b083821c-c77d-4824-b83f-c8871e1a675f"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[RPT : 08]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Default" x="0" y="0" width="990" height="20" uuid="7ad1e87b-215f-4c0b-823b-f01e03410bb5"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["พิมพ์โดย : " + $P{PUBLISHER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm:ss">
+				<reportElement x="0" y="20" width="358" height="12" uuid="8cceab12-883a-46f7-9326-7686036407bc"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["วันที่พิมพ์ : "+new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format($V{CURRENT_DATE})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="990" y="0" width="145" height="20" uuid="a5e27c05-ae46-4ca2-8968-77bc7c73a9bc"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["หน้า " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="1135" y="0" width="15" height="20" uuid="b652b784-42f5-4f20-bc45-3c75698fde2e"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[" / "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="13">
+			<textField isStretchWithOverflow="true">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="0" y="0" width="122" height="13" uuid="0b0985b9-be9a-4e03-84ae-118fe4230b69"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["รวมทั้งสิ้น"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="122" y="0" width="38" height="13" uuid="81d79bf0-323e-4042-a855-70a45705c4d0"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5110101000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="160" y="0" width="38" height="13" uuid="7dc0912a-b5c6-4e2e-a77b-8324dc4f47c5"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5110102000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="198" y="0" width="38" height="13" uuid="6f4eb931-2e31-4fa4-8b58-862d2cf461c8"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5110103000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="236" y="0" width="38" height="13" uuid="2d543ae6-445c-4b80-96a2-822df39eaf9a"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5110104000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="274" y="0" width="38" height="13" uuid="cc814a89-5afe-49f8-bdfa-6214aa4f5fde"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5110105000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="312" y="0" width="38" height="13" uuid="4a82a574-aea2-4ddf-aba7-6eb50b436126"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5110106000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="350" y="0" width="38" height="13" uuid="d9e8738a-110b-4c7c-8aba-a9dc982f3281"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5110107000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="388" y="0" width="38" height="13" uuid="61f4982a-a4a5-475d-9554-c97454da9568"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5110109000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="426" y="0" width="38" height="13" uuid="004492dd-129b-4d51-977b-6723f784707a"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5110110000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="464" y="0" width="38" height="13" uuid="cb3f1af2-2bbf-46f3-8da0-27598d475772"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5110301000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="502" y="0" width="38" height="13" uuid="e25e5f3f-ad76-4551-bb44-46f138a575c7"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5110302000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="540" y="0" width="38" height="13" uuid="56f69474-0551-4d80-a2e7-731a103778a2"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5110303000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="578" y="0" width="38" height="13" uuid="9d5597c9-73c6-4607-90b2-d90671142340"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5110401000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="616" y="0" width="38" height="13" uuid="32dd6ac1-c1d3-4443-9dd0-e0129314626d"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5110402000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="654" y="0" width="38" height="13" uuid="b6ef481b-4640-4c44-8618-4bd030787953"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5120100000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="768" y="0" width="38" height="13" uuid="4b6ea3da-b1e9-45ae-8612-32129a62171f"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5120302000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="730" y="0" width="38" height="13" uuid="3da4f0b2-cfb8-449c-80a2-671ce236eb67"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5120301000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="882" y="0" width="38" height="13" uuid="1b74032c-334b-4116-98c9-7bab6813dafa"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5150101000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="844" y="0" width="38" height="13" uuid="a5c58f26-9b02-48c8-b676-73712ff31c98"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5130100000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="692" y="0" width="38" height="13" uuid="2a368c65-c075-415f-91ab-559fe3945a9a"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5120200000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="806" y="0" width="38" height="13" uuid="a2603fbc-13e1-47d0-a6de-ef8351ff9624"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5120400000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="920" y="0" width="38" height="13" uuid="f6eb27a8-a48e-4482-b483-0287590add4a"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5150107000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="958" y="0" width="38" height="13" uuid="e9ee7aa7-449b-4fa0-8417-357c8090ff4f"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5150108000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="1034" y="0" width="38" height="13" uuid="531a4c7b-2b23-4f83-ad5c-9e84ba5ae23f"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5150202000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="996" y="0" width="38" height="13" uuid="b9a511aa-cbc0-45e4-8b41-2ab3bcc7e30b"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5150109000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="1072" y="0" width="38" height="13" uuid="d341ac05-ea06-4b11-88d2-6c74ecc92b7e"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_5160000000}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="1110" y="0" width="40" height="13" uuid="c129929b-fd40-4365-8124-0363d7581702"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_ROW}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

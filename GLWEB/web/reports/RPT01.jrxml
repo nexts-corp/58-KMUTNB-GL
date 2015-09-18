@@ -1,0 +1,813 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT01" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="762" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
+	<property name="ireport.zoom" value="1.210000000000127"/>
+	<property name="ireport.x" value="83"/>
+	<property name="ireport.y" value="0"/>
+	<style name="FBold" fill="Solid" hAlign="Left" vAlign="Top" fontName="TH SarabunPSK" fontSize="14" isBold="true" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H"/>
+	<style name="Rpt" fontName="TH SarabunPSK" fontSize="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
+	<style name="Default" isDefault="true" fontName="TH SarabunPSK" fontSize="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
+	<parameter name="DATE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["1/10/57"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATE_END" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA["31/10/57"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PUBLISHER" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["พงศ์ปณต ทัศนียาชุมพาลี"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATE_CURRENT" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DEPARTMENT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="BUDGET_SORCE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[201000]]></defaultValueExpression>
+	</parameter>
+	<parameter name="BUDGET_SORCE_END" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[906010]]></defaultValueExpression>
+	</parameter>
+	<parameter name="FUND_SORCE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[100]]></defaultValueExpression>
+	</parameter>
+	<parameter name="FUND_SORCE_END" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[709]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DEPARTMENT_SORCE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[20601]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DEPARTMENT_SORCE_END" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[20601]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PLAN_SORCE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[10]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PLAN_SORCE_END" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[90]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PROJECT_SORCE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PROJECT_SORCE_END" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[90907]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ACTIVITY_SORCE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ACTIVITY_SORCE_END" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[9090931]]></defaultValueExpression>
+	</parameter>
+	<parameter name="REPORT_TYPE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["EXCEL"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT * FROM
+  (
+    SELECT ROW_NUMBER() OVER (ORDER BY maps.M_ACCOUNT_ID) AS id,
+      regexp_substr(maps.M_ACCOUNT_ID,'[^|]+', 1, 1) M_ACCOUNT_ID_1,
+      regexp_substr(maps.M_ACCOUNT_NAME,'[^|]+', 1, 1) M_ACCOUNT_NAME_1,
+      regexp_substr(maps.M_ACCOUNT_ID,'[^|]+', 1, 2) M_ACCOUNT_ID_2,
+      regexp_substr(maps.M_ACCOUNT_NAME,'[^|]+', 1, 2) M_ACCOUNT_NAME_2,
+      regexp_substr(maps.M_ACCOUNT_ID,'[^|]+', 1, 3) M_ACCOUNT_ID_3,
+      regexp_substr(maps.M_ACCOUNT_NAME,'[^|]+', 1, 3) M_ACCOUNT_NAME_3,
+      regexp_substr(maps.M_ACCOUNT_ID,'[^|]+', 1, 4) M_ACCOUNT_ID_4,
+      regexp_substr(maps.M_ACCOUNT_NAME,'[^|]+', 1, 4) M_ACCOUNT_NAME_4,
+      regexp_substr(maps.M_ACCOUNT_ID,'[^|]+', 1, 5) M_ACCOUNT_ID_5,
+      regexp_substr(maps.M_ACCOUNT_NAME,'[^|]+', 1, 5) M_ACCOUNT_NAME_5,
+      regexp_substr(maps.M_ACCOUNT_ID,'[^|]+', 1, 6) M_ACCOUNT_ID_6,
+      regexp_substr(maps.M_ACCOUNT_NAME,'[^|]+', 1, 6) M_ACCOUNT_NAME_6,
+      maps.ACCOUNTID   AS ACCOUNT_ID,
+      maps.ACCOUNTNAME AS ACCOUNT_NAME,
+      /*maps.ACCOUNT_LEVEL,COALESCE(gl.DR_R, 0) AS DR_R,COALESCE(gl.CR_R, 0) AS CR_R,*/
+
+      COALESCE(gl.DR_R, 0) AS DR_R,
+      COALESCE(gl.CR_R, 0) AS CR_R,
+      COALESCE(gl.DR_C, 0) AS DR,
+      COALESCE(gl.CR_C, 0) AS CR
+    FROM
+
+
+    (
+      SELECT
+        CASE
+          WHEN glr.ACCOUNTID IS NULL
+          THEN glc.ACCOUNTID
+          ELSE glr.ACCOUNTID
+        END    AS ACCOUNTID,
+        glr.DR AS DR_R,
+        glr.CR AS CR_R,
+        glc.DR AS DR_C,
+        glc.CR AS CR_C
+
+      FROM
+
+        (
+          SELECT gl.ACCOUNTID,
+            SUM(DR) AS DR,
+            SUM(CR) AS CR
+          FROM MASTER3D.GL gl
+          LEFT JOIN MASTER3D.GLHEAD glh
+          ON gl.GLHEADID = glh.GLHEADID
+          WHERE gl.accountid NOT IN (3200002000,3200003000)
+          AND glh.GLHEADSTATUS != 'V'
+          AND
+            (
+              glh.GLHEADDATE >= TO_DATE('01/10/2014', 'DD/MM/YYYY')
+              AND glh.GLHEADDATE <= TO_DATE('31/10/2014', 'DD/MM/YYYY')
+            )
+          AND ( gl.DEPARTMENTID BETWEEN 20601 AND 20601 )
+          GROUP BY gl.ACCOUNTID
+
+          UNION
+
+          SELECT
+            3200003000 AS ACCOUNTID,DR,CR
+          FROM
+            (
+              SELECT
+                SUM(CR) AS CR,
+                SUM(DR) AS DR
+              FROM MASTER3D.GL gl
+              LEFT JOIN MASTER3D.GLHEAD glh
+              ON glh.GLHEADID = gl.GLHEADID
+              WHERE
+                (
+                  gl.ACCOUNTID IN (3200002000,3200003000)
+                )
+              AND glh.GLHEADSTATUS != 'V'
+              AND
+                (
+                  glh.GLHEADDATE >= TO_DATE('01/10/2014', 'DD/MM/YYYY')
+                  AND glh.GLHEADDATE <= TO_DATE('31/10/2014', 'DD/MM/YYYY')
+                )
+              AND ( gl.DEPARTMENTID BETWEEN 20601 AND 20601 )
+            )
+        )glc
+
+
+
+      FULL JOIN
+
+
+        (
+
+          SELECT ACCOUNTID,SUM(DR) AS DR,SUM(CR) AS CR
+          FROM
+            (
+              /*--------------------พันยอดเฉพาะปี--------------------*/
+
+              SELECT gl.ACCOUNTID,
+                SUM(DR) AS DR,
+                SUM(CR) AS CR
+              FROM MASTER3D.GL gl
+              LEFT JOIN MASTER3D.GLHEAD glh
+              ON gl.GLHEADID = glh.GLHEADID
+              WHERE
+                (
+                  gl.ACCOUNTID LIKE '1%'
+                  OR gl.ACCOUNTID LIKE '2%'
+                  OR
+                    (
+                      gl.ACCOUNTID LIKE '3%'
+                      AND gl.accountid NOT IN (3200002000,3200003000)
+                    )
+                )
+
+              AND glh.GLHEADSTATUS != 'V'
+              AND
+                (
+                  glh.GLHEADDATE >= TO_DATE('01/10/2014', 'DD/MM/YYYY')
+                  AND glh.GLHEADDATE < TO_DATE('01/10/2014', 'DD/MM/YYYY')
+                )
+              AND ( gl.DEPARTMENTID BETWEEN 20601 AND 20601 )
+              GROUP BY gl.ACCOUNTID
+
+              UNION
+
+              SELECT
+                3200003000 AS ACCOUNTID,DR,CR
+              FROM
+                (
+                  SELECT
+                    SUM(CR) AS CR,
+                    SUM(DR) AS DR
+                  FROM MASTER3D.GL gl
+                  LEFT JOIN MASTER3D.GLHEAD glh
+                  ON glh.GLHEADID = gl.GLHEADID
+                  WHERE
+                    (
+                      gl.ACCOUNTID IN (3200002000,3200003000)
+                      OR GL.ACCOUNTID LIKE '4%'
+                      OR GL.ACCOUNTID LIKE '5%'
+                    )
+                  AND glh.GLHEADSTATUS != 'V'
+                  AND
+                    (
+                      glh.GLHEADDATE >= TO_DATE('01/10/2014', 'DD/MM/YYYY')
+                      AND glh.GLHEADDATE < TO_DATE('01/10/2014', 'DD/MM/YYYY')
+                    )
+                  AND ( gl.DEPARTMENTID BETWEEN 20601 AND 20601 )
+                )
+
+
+
+
+            UNION
+
+
+              /*--------------------พันยอดทั้งระบบ--------------------*/
+
+              SELECT gl.ACCOUNTID,
+                SUM(DR) AS DR,
+                SUM(CR) AS CR
+              FROM MASTER3D.GL gl
+              LEFT JOIN MASTER3D.GLHEAD glh
+              ON gl.GLHEADID = glh.GLHEADID
+              WHERE
+                (
+                  gl.ACCOUNTID LIKE '1%'
+                  OR gl.ACCOUNTID LIKE '2%'
+                  OR
+                    (
+                      gl.ACCOUNTID LIKE '3%'
+                      AND gl.accountid NOT IN (3200002000,3200003000)
+                    )
+                )
+
+              AND glh.GLHEADSTATUS != 'V'
+              AND ( glh.GLHEADDATE < TO_DATE('01/10/2014', 'DD/MM/YYYY') )
+              AND ( gl.DEPARTMENTID BETWEEN 20601 AND 20601 )
+              GROUP BY gl.ACCOUNTID
+
+              UNION
+
+              SELECT
+                3200003000 AS ACCOUNTID,DR,CR
+              FROM
+                (
+                  SELECT
+                    SUM(CR) AS CR,
+                    SUM(DR) AS DR
+                  FROM MASTER3D.GL gl
+                  LEFT JOIN MASTER3D.GLHEAD glh
+                  ON glh.GLHEADID = gl.GLHEADID
+                  WHERE
+                    (
+                      gl.ACCOUNTID IN (3200002000,3200003000)
+                      OR GL.ACCOUNTID LIKE '4%'
+                      OR GL.ACCOUNTID LIKE '5%'
+                    )
+                  AND glh.GLHEADSTATUS != 'V'
+                  AND ( glh.GLHEADDATE < TO_DATE('01/10/2014', 'DD/MM/YYYY') )
+                  AND ( gl.DEPARTMENTID BETWEEN 20601 AND 20601 )
+                )
+
+
+
+            )
+          GROUP BY ACCOUNTID
+
+        )glr
+
+      ON glr.ACCOUNTID = glc.ACCOUNTID
+      ORDER BY ACCOUNTID
+    )gl
+
+
+
+    LEFT OUTER JOIN
+      (
+        SELECT ACCOUNTID,
+          ACCOUNTNAME,
+          LEVEL                                AS ACCOUNT_LEVEL ,
+          SYS_CONNECT_BY_PATH(ACCOUNTID,'|')   AS M_ACCOUNT_ID ,
+          SYS_CONNECT_BY_PATH(ACCOUNTNAME,'|') AS M_ACCOUNT_NAME
+        FROM MASTER3D.ACCOUNT
+        START WITH MASTERID        = '0'
+        AND ACCOUNTSTATUS            = 'Y'
+        CONNECT BY PRIOR ACCOUNTID = MASTERID
+        ORDER SIBLINGS BY ACCOUNTID
+      ) maps
+    ON maps.ACCOUNTID = gl.ACCOUNTID
+    ORDER BY maps.ACCOUNTID
+
+  )
+
+WHERE ( (DR_R-CR_R)!=0)]]>
+	</queryString>
+	<field name="ID" class="java.lang.Integer"/>
+	<field name="M_ACCOUNT_ID_1" class="java.lang.String"/>
+	<field name="M_ACCOUNT_NAME_1" class="java.lang.String"/>
+	<field name="M_ACCOUNT_ID_2" class="java.lang.String"/>
+	<field name="M_ACCOUNT_NAME_2" class="java.lang.String"/>
+	<field name="M_ACCOUNT_ID_3" class="java.lang.String"/>
+	<field name="M_ACCOUNT_NAME_3" class="java.lang.String"/>
+	<field name="M_ACCOUNT_ID_4" class="java.lang.String"/>
+	<field name="M_ACCOUNT_NAME_4" class="java.lang.String"/>
+	<field name="M_ACCOUNT_ID_5" class="java.lang.String"/>
+	<field name="M_ACCOUNT_NAME_5" class="java.lang.String"/>
+	<field name="M_ACCOUNT_ID_6" class="java.lang.String"/>
+	<field name="M_ACCOUNT_NAME_6" class="java.lang.String"/>
+	<field name="ACCOUNT_ID" class="java.lang.String"/>
+	<field name="ACCOUNT_NAME" class="java.lang.String"/>
+	<field name="DR_R" class="java.math.BigDecimal"/>
+	<field name="CR_R" class="java.math.BigDecimal"/>
+	<field name="DR" class="java.math.BigDecimal"/>
+	<field name="CR" class="java.math.BigDecimal"/>
+	<variable name="CURRENT_PAGE" class="java.lang.Integer" resetType="None" calculation="DistinctCount">
+		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Integer(1)]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_DR" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{DR}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_CR" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{CR}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="Forward" class="java.math.BigDecimal" resetType="None">
+		<variableExpression><![CDATA[($F{DR_R}+$F{DR})-($F{CR_R}+$F{CR})]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_CR_R" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[($V{RECIVE}<0)?$V{RECIVE}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_DR_R" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[($V{RECIVE}>=0)?$V{RECIVE}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_CR_B" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[($V{Forward}<0)?$V{Forward}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_DR_B" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[($V{Forward}>=0)?$V{Forward}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="RECIVE" class="java.math.BigDecimal" resetType="None">
+		<variableExpression><![CDATA[($F{DR_R}-$F{CR_R})]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="CURRENT_DATE" class="java.util.Date">
+		<variableExpression><![CDATA[new Date()]]></variableExpression>
+		<initialValueExpression><![CDATA[new Date()]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="170" splitType="Stretch">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER}==1]]></printWhenExpression>
+			<staticText>
+				<reportElement style="FBold" x="0" y="50" width="762" height="20" uuid="47eec812-75fb-442a-931b-5aa9ce7f1955"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="FBold" positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="0" y="90" width="762" height="20" uuid="95b04ea2-bd98-4cc5-9a78-cb88d2d99182"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ตั้งแต่วันที่  " + $P{DATE_START} + "    ถึงวันที่  " + $P{DATE_END}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="412" y="110" width="350" height="20" uuid="17925446-3f1b-41cf-8765-af74972a1059"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["แผนงานจาก "+$P{PLAN_SORCE_START}+" ถึง "+$P{PLAN_SORCE_END}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="0" y="110" width="412" height="20" uuid="fb4487f5-0489-41b8-841e-ead6ab91391c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["แหล่งเงินจาก "+$P{BUDGET_SORCE_START}+" ถึง "+$P{BUDGET_SORCE_END}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="412" y="130" width="350" height="20" uuid="a4162b09-2078-4e82-917f-2da88689718b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["โครงการจาก "+$P{PROJECT_SORCE_START}+" ถึง "+$P{PROJECT_SORCE_END}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="0" y="130" width="412" height="20" uuid="b328f083-80b3-45f3-b82c-72c84893a64e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["กองทุนจาก "+$P{FUND_SORCE_START}+" ถึง "+$P{FUND_SORCE_END}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="0" y="150" width="412" height="20" uuid="bef1dcce-9056-45f3-9d90-e7fd73add7d7"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["หน่วยงานจาก "+$P{DEPARTMENT_SORCE_START}+" ถึง "+$P{DEPARTMENT_SORCE_END}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="412" y="150" width="350" height="20" uuid="faedadeb-04c1-4bac-a04a-33593fd1b04b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["กิจกรรมจาก "+$P{ACTIVITY_SORCE_START}+" ถึง "+$P{ACTIVITY_SORCE_END}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="0" y="70" width="762" height="20" uuid="7071530f-a0b3-4559-9d61-61e9be2fe253"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{DEPARTMENT}!="")?"รายงานงบทดลอง\n"+$P{DEPARTMENT}:"รายงานงบทดลอง"]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="0" width="762" height="50" uuid="b0d94c22-6633-47f3-8db0-c1f12f993dda"/>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode("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"))]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="42" splitType="Prevent">
+			<printWhenExpression><![CDATA[($P{REPORT_TYPE}=="EXCEL")?($V{PAGE_NUMBER}==1):true]]></printWhenExpression>
+			<staticText>
+				<reportElement style="FBold" x="692" y="20" width="70" height="20" uuid="0e8923c2-3709-40a9-bbf8-2bffaa0f2e33"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[เครดิต]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="552" y="20" width="70" height="20" uuid="20b9520f-fb85-42b5-93be-510686a618de"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[เครดิต]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="482" y="20" width="70" height="20" uuid="3fafead0-5fc4-40e9-954b-235be27b287e"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[เดบิต]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="622" y="20" width="70" height="20" uuid="35d15b71-cf14-414d-bce7-0c5661cac6f7"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[เดบิต]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="342" y="0" width="140" height="20" uuid="dcc0ddec-8687-4208-8280-319257830749"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[ยอดยกมา]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="342" y="20" width="70" height="20" uuid="1226c73b-4cc6-4641-9fcb-1fdf26ba6e3d"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[เดบิต]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="412" y="20" width="70" height="20" uuid="48b331db-26b7-4500-b622-017bc2b3b1b7"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[เครดิต]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="63" y="0" width="279" height="20" uuid="04520f16-3e4b-4bdf-b3a6-30a27fa9518f"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[รายการ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="622" y="0" width="140" height="20" uuid="d3f7c618-d092-4a10-8e8e-527da8f1e8c6"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[ยอดคงเหลือ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="482" y="0" width="140" height="20" uuid="37820e74-923d-4cdf-84f9-02b8abb1ebcb"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[เดือนนี้]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="0" y="0" width="63" height="20" uuid="3b2bfa51-e40a-46ba-9bdd-a8181138df0e"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[รหัสบัญชี]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="FBold" x="0" y="20" width="342" height="20" uuid="b0264efd-7ddb-4214-8f10-abade2083bd6"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Prevent">
+			<printWhenExpression><![CDATA[($P{REPORT_MAX_COUNT}>0)?true:false]]></printWhenExpression>
+			<textField isStretchWithOverflow="true" pattern="##,##0.00">
+				<reportElement stretchType="RelativeToBandHeight" x="482" y="0" width="70" height="20" uuid="2b31329d-5fd0-49cf-a22e-48f6e9d75110"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="##,##0.00">
+				<reportElement stretchType="RelativeToBandHeight" x="552" y="0" width="70" height="20" uuid="5e313352-d585-450a-a144-b9bc85b7f47b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="63" height="20" uuid="be6a348b-14ca-4169-bd21-5a00ae311ebd"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ACCOUNT_ID}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="63" y="0" width="279" height="20" uuid="26253914-7ef0-45c5-9330-3d43bb28c8da"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ACCOUNT_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="##,##0.00">
+				<reportElement stretchType="RelativeToBandHeight" x="342" y="0" width="70" height="20" uuid="56f1bb14-2d43-4987-9964-084e0477229a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{RECIVE}>=0)?$V{RECIVE}:"0.0"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="##,##0.00">
+				<reportElement stretchType="RelativeToBandHeight" x="412" y="0" width="70" height="20" uuid="bdb6d2f8-5ff0-4b32-9904-6d3f71ad651b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{RECIVE}<0)?Math.abs($V{RECIVE}):"0.0"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="##,##0.00">
+				<reportElement stretchType="RelativeToBandHeight" x="622" y="0" width="70" height="20" uuid="4151b458-7861-460d-bbf3-115c0e537273"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{Forward}>=0)?Math.abs($V{Forward}):"0.0"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="##,##0.00">
+				<reportElement stretchType="RelativeToBandHeight" x="692" y="0" width="70" height="20" uuid="91cab8f2-0aac-4942-976f-b9db8a0104cc"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{Forward}<0)?Math.abs($V{Forward}):"0.0"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="32" splitType="Stretch">
+			<printWhenExpression><![CDATA[$P{REPORT_TYPE}!="EXCEL"]]></printWhenExpression>
+			<staticText>
+				<reportElement style="Rpt" x="412" y="20" width="350" height="12" uuid="b083821c-c77d-4824-b83f-c8871e1a675f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[RPT : 01]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Default" x="0" y="0" width="622" height="20" uuid="7ad1e87b-215f-4c0b-823b-f01e03410bb5"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["พิมพ์โดย : " + $P{PUBLISHER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Auto">
+				<reportElement x="622" y="0" width="140" height="20" uuid="dc482a12-648b-47cd-bebc-02e84adbb43b"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["หน้า " + $V{CURRENT_PAGE}+" / " +$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm:ss">
+				<reportElement x="0" y="20" width="412" height="12" uuid="973fe809-5b90-42e2-baad-472782880edd"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["วันที่พิมพ์ : "+new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format($V{CURRENT_DATE})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="32">
+			<staticText>
+				<reportElement style="Rpt" x="412" y="20" width="350" height="12" uuid="f80b3abb-6d1f-400e-b0de-cbff00ca94b3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[RPT : 01]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Default" x="0" y="0" width="622" height="20" uuid="8debca99-0712-4281-93d1-91d18545a8bd"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["พิมพ์โดย : " + $P{PUBLISHER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Auto">
+				<reportElement x="622" y="0" width="140" height="20" uuid="033118e4-7c04-46a7-91e8-cd69c9f79ef7"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["หน้า " + $V{PAGE_NUMBER}+" / " +$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm:ss">
+				<reportElement x="0" y="20" width="412" height="12" uuid="1768c6f6-af4b-4b8e-b572-2d9e34980428"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["วันที่พิมพ์ : "+new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format($V{CURRENT_DATE})]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band height="30" splitType="Prevent">
+			<textField pattern="##,##0.00">
+				<reportElement style="FBold" x="482" y="0" width="70" height="30" uuid="938d6b97-68be-4f73-98fb-972f98092dff"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" pdfFontName="THSarabunNew Bold.ttf"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_DR}]]></textFieldExpression>
+			</textField>
+			<textField pattern="##,##0.00">
+				<reportElement style="FBold" x="552" y="0" width="70" height="30" uuid="f7aaeabf-4539-465d-81fb-bdefe6ef4ae8"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_CR}]]></textFieldExpression>
+			</textField>
+			<textField pattern="##,##0.00">
+				<reportElement style="FBold" x="412" y="0" width="70" height="30" uuid="ff305f54-9aae-4d6e-9719-1ed206cd357c"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[Math.abs($V{TOTAL_CR_R})]]></textFieldExpression>
+			</textField>
+			<textField pattern="##,##0.00">
+				<reportElement style="FBold" x="342" y="0" width="70" height="30" uuid="0dbc5f9e-ee70-4614-ad1b-5ff822bf886f"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_DR_R}]]></textFieldExpression>
+			</textField>
+			<textField pattern="##,##0.00">
+				<reportElement style="FBold" x="692" y="0" width="70" height="30" uuid="9d616662-8896-4fa7-b766-0871216c5ac6"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[Math.abs($V{TOTAL_CR_B})]]></textFieldExpression>
+			</textField>
+			<textField pattern="##,##0.00">
+				<reportElement style="FBold" x="622" y="0" width="70" height="30" uuid="744d4460-fc50-46c1-b1fb-2168448774ba"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_DR_B}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="FBold" x="0" y="0" width="342" height="30" uuid="47617181-4348-4ba4-ada8-2de0f2dcab0e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[รวม]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

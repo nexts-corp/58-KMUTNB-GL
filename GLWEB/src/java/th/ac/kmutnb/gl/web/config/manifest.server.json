@@ -1,0 +1,19 @@
+{
+    "server":[
+        {
+            "contextName": "/api/*",
+            "contextType": "http",
+            "propertys": [
+                {"name": "port","value": "9999"},
+                {"name": "queue","value": "100"}
+            ]
+        }
+    ],
+    "aaa":{
+        "authenForm":"/GLWEB/login.html",
+        "authenAPI":"/GLWEB/api/gl/authen/signin",
+        "logoutAPI":"/GLWEB/api/gl/authen/signout",
+        "welcomePage":"/GLWEB/main.html",
+        "sessionTimeOut":-1
+    }
+}

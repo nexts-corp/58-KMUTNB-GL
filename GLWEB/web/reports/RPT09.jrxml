@@ -1,0 +1,2477 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Template" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
+	<property name="ireport.zoom" value="1.2100000000000335"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="FBold" fill="Solid" hAlign="Left" vAlign="Top" fontName="TH SarabunPSK" fontSize="14" isBold="true" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H"/>
+	<style name="Rpt" fontName="TH SarabunPSK" fontSize="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
+	<style name="Default" isDefault="true" fontName="TH SarabunPSK" fontSize="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
+	<parameter name="DATE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["1/10/56"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATE_END" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA["31/01/56"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PUBLISHER" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["พงศ์ปณต ทัศนียาชุมพาลี"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATE_CURRENT" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DEPARTMENT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="BUDGET_SORCE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[201000]]></defaultValueExpression>
+	</parameter>
+	<parameter name="BUDGET_SORCE_END" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[906010]]></defaultValueExpression>
+	</parameter>
+	<parameter name="FUND_SORCE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[100]]></defaultValueExpression>
+	</parameter>
+	<parameter name="FUND_SORCE_END" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[709]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DEPARTMENT_SORCE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DEPARTMENT_SORCE_END" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[91001]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PLAN_SORCE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[10]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PLAN_SORCE_END" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[90]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PROJECT_SORCE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PROJECT_SORCE_END" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[90907]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ACTIVITY_SORCE_START" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ACTIVITY_SORCE_END" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[9090931]]></defaultValueExpression>
+	</parameter>
+	<parameter name="REPORT_TYPE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["EXCEL"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT ROW_NUMBER () OVER (ORDER BY NULL) AS ID,HEADER1,HEADER2,HEADER3,ACC_NAME,BALANCE_CURRENT,BALANCE_PAST
+
+FROM
+	( SELECT
+		'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+		'รายได้สูง(ต่ำ)กว่าค่าใช้จ่าย' AS HEADER2,
+		'รายได้สูง(ต่ำ)กว่าค่าใช้จ่าย' AS HEADER3,
+		'รายได้สูง(ต่ำ)กว่าค่าใช้จ่ายสุทธิ' AS ACC_NAME,
+		BALANCE_CURRENT,
+		BALANCE_PAST
+	FROM
+		(
+			SELECT
+				BALANCE_CURRENT,
+				BALANCE_PAST
+			FROM
+				(
+					SELECT
+						'1' AS MASK,
+						REVENUE_NET - EXPENSE_NET AS BALANCE_CURRENT
+					FROM
+						(
+							SELECT
+								SUM (CR - DR) AS REVENUE_NET
+							FROM
+								MASTER3D.GL
+							LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+							LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+							WHERE
+								GL.ACCOUNTID IN (
+									SELECT
+										ACCOUNTID
+									FROM
+										MASTER3D. ACCOUNT START WITH MASTERID = 4000000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+								)
+							AND GL.GLHEADSTATUS != 'V'
+							AND ACC.ACCOUNTSTATUS = 'Y'
+							AND GL.ACCOUNTID NOT IN (
+								4190700000,
+								4190400000,
+								4190103000,
+								4190800000,
+								4190900000,
+								4191000000
+							)
+							AND GLHEAD.GLHEADDATE >= TO_DATE ('01/10/2014', 'DD/MM/YYYY')
+							AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+						) REVENUE
+					CROSS JOIN (
+						SELECT
+							SUM (DR - CR) AS EXPENSE_NET
+						FROM
+							MASTER3D.GL
+						LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+						LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+						WHERE
+							GL.ACCOUNTID IN (
+								SELECT
+									ACCOUNTID
+								FROM
+									MASTER3D. ACCOUNT START WITH MASTERID = 5000000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+							)
+						AND GL.GLHEADSTATUS != 'V'
+						AND ACC.ACCOUNTSTATUS = 'Y'
+						AND GLHEAD.GLHEADDATE >= TO_DATE ('01/10/2014', 'DD/MM/YYYY')
+						AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+					) EXPENSE
+				) TMP_CURRENT
+			FULL OUTER JOIN (
+				SELECT
+					'1' AS MASK,
+					REVENUE_NET - EXPENSE_NET AS BALANCE_PAST
+				FROM
+					(
+						SELECT
+							SUM (CR - DR) AS REVENUE_NET
+						FROM
+							MASTER3D.GL
+						LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+						LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+						WHERE
+							GL.ACCOUNTID IN (
+								SELECT
+									ACCOUNTID
+								FROM
+									MASTER3D. ACCOUNT START WITH MASTERID = 4000000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+							)
+						AND GL.GLHEADSTATUS != 'V'
+						AND ACC.ACCOUNTSTATUS = 'Y'
+						AND GL.ACCOUNTID NOT IN (
+							4190700000,
+							4190400000,
+							4190103000,
+							4190800000,
+							4190900000,
+							4191000000
+						)
+						AND GLHEAD.GLHEADDATE >= TO_DATE ('01/10/2014', 'DD/MM/YYYY')
+						AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+					) REVENUE
+				CROSS JOIN (
+					SELECT
+						SUM (DR - CR) AS EXPENSE_NET
+					FROM
+						MASTER3D.GL
+					LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+					LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+					WHERE
+						GL.ACCOUNTID IN (
+							SELECT
+								ACCOUNTID
+							FROM
+								MASTER3D. ACCOUNT START WITH MASTERID = 5000000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+						)
+					AND GL.GLHEADSTATUS != 'V'
+					AND ACC.ACCOUNTSTATUS = 'Y'
+					AND GLHEAD.GLHEADDATE >= TO_DATE ('01/10/2014', 'DD/MM/YYYY')
+					AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+				) EXPENSE
+			) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+		)
+	UNION ALL
+		SELECT
+			'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+			'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+			'จากการดำเนินงาน' AS HEADER3,
+			'ค่าเสื่อมราคา-อาคารและสิ่งปลูกสร้าง' AS ACC_NAME,
+			BALANCE_CURRENT,
+			BALANCE_PAST
+		FROM
+			(
+				SELECT
+					BALANCE_CURRENT,
+					BALANCE_PAST
+				FROM
+					(
+						SELECT
+							'1' AS MASK,
+							SUM (DR - CR) AS BALANCE_CURRENT
+						FROM
+							MASTER3D.GL
+						LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+						LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+						WHERE
+							GL.ACCOUNTID IN (
+								SELECT
+									ACCOUNTID
+								FROM
+									MASTER3D. ACCOUNT START WITH (
+										MASTERID = 5150101000
+										OR MASTERID = 5150102000
+										OR MASTERID = 5150103000
+										OR MASTERID = 5150104000
+									) CONNECT BY PRIOR ACCOUNTID = MASTERID
+							)
+						AND GL.GLHEADSTATUS != 'V'
+						AND ACC.ACCOUNTSTATUS = 'Y'
+						AND GLHEAD.GLHEADDATE >= TO_DATE ('01/10/2014', 'DD/MM/YYYY')
+						AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+					) TMP_CURRENT
+				FULL OUTER JOIN (
+					SELECT
+						'1' AS MASK,
+						SUM (DR - CR) AS BALANCE_PAST
+					FROM
+						MASTER3D.GL
+					LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+					LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+					WHERE
+						GL.ACCOUNTID IN (
+							SELECT
+								ACCOUNTID
+							FROM
+								MASTER3D. ACCOUNT START WITH (
+									MASTERID = 5150101000
+									OR MASTERID = 5150102000
+									OR MASTERID = 5150103000
+									OR MASTERID = 5150104000
+								) CONNECT BY PRIOR ACCOUNTID = MASTERID
+						)
+					AND GL.GLHEADSTATUS != 'V'
+					AND ACC.ACCOUNTSTATUS = 'Y'
+					AND GLHEAD.GLHEADDATE >= TO_DATE ('01/10/2014', 'DD/MM/YYYY')
+					AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+				) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+			)
+		UNION ALL
+			SELECT
+				'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+				'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+				'จากการดำเนินงาน' AS HEADER3,
+				'ค่าเสื่อมราคา-ครุภัณฑ์' AS ACC_NAME,
+				BALANCE_CURRENT,
+				BALANCE_PAST
+			FROM
+				(
+					SELECT
+						BALANCE_CURRENT,
+						BALANCE_PAST
+					FROM
+						(
+							SELECT
+								'1' AS MASK,
+								SUM (DR - CR) AS BALANCE_CURRENT
+							FROM
+								MASTER3D.GL
+							LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+							LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+							WHERE
+								GL.ACCOUNTID IN (
+									SELECT
+										ACCOUNTID
+									FROM
+										MASTER3D. ACCOUNT START WITH MASTERID = 5150107000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+								)
+							AND GL.GLHEADSTATUS != 'V'
+							AND ACC.ACCOUNTSTATUS = 'Y'
+							AND GLHEAD.GLHEADDATE >= TO_DATE ('01/10/2014', 'DD/MM/YYYY')
+							AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+						) TMP_CURRENT
+					FULL OUTER JOIN (
+						SELECT
+							'1' AS MASK,
+							SUM (DR - CR) AS BALANCE_PAST
+						FROM
+							MASTER3D.GL
+						LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+						LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+						WHERE
+							GL.ACCOUNTID IN (
+								SELECT
+									ACCOUNTID
+								FROM
+									MASTER3D. ACCOUNT START WITH MASTERID = 5150107000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+							)
+						AND GL.GLHEADSTATUS != 'V'
+						AND ACC.ACCOUNTSTATUS = 'Y'
+						AND GLHEAD.GLHEADDATE >= TO_DATE ('01/10/2014', 'DD/MM/YYYY')
+						AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+					) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+				)
+			UNION ALL
+				SELECT
+					'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+					'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+					'จากการดำเนินงาน' AS HEADER3,
+					'ค่าตัดจำหน่าย' AS ACC_NAME,
+					BALANCE_CURRENT,
+					BALANCE_PAST
+				FROM
+					(
+						SELECT
+							BALANCE_CURRENT,
+							BALANCE_PAST
+						FROM
+							(
+								SELECT
+									'1' AS MASK,
+									SUM (DR - CR) AS BALANCE_CURRENT
+								FROM
+									MASTER3D.GL
+								LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+								LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+								WHERE
+									GL.ACCOUNTID IN (
+										SELECT
+											ACCOUNTID
+										FROM
+											MASTER3D. ACCOUNT START WITH MASTERID = 5150200000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+									)
+								AND GL.GLHEADSTATUS != 'V'
+								AND ACC.ACCOUNTSTATUS = 'Y'
+								AND GLHEAD.GLHEADDATE >= TO_DATE ('01/10/2014', 'DD/MM/YYYY')
+								AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+							) TMP_CURRENT
+						FULL OUTER JOIN (
+							SELECT
+								'1' AS MASK,
+								SUM (DR - CR) AS BALANCE_PAST
+							FROM
+								MASTER3D.GL
+							LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+							LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+							WHERE
+								GL.ACCOUNTID IN (
+									SELECT
+										ACCOUNTID
+									FROM
+										MASTER3D. ACCOUNT START WITH MASTERID = 5150200000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+								)
+							AND GL.GLHEADSTATUS != 'V'
+							AND ACC.ACCOUNTSTATUS = 'Y'
+							AND GLHEAD.GLHEADDATE >= TO_DATE ('01/10/2014', 'DD/MM/YYYY')
+							AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+						) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+					)
+				UNION ALL
+					SELECT
+						'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+						'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+						'จากการดำเนินงาน' AS HEADER3,
+						'เพิ่มขึ้น/ลดลงในลูกหนี้เงินยืมทดรองจ่าย' AS ACC_NAME,
+						BALANCE_CURRENT,
+						BALANCE_PAST
+					FROM
+						(
+							SELECT
+								BALANCE_CURRENT,
+								BALANCE_PAST
+							FROM
+								(
+									SELECT
+										'1' AS MASK,
+										SUM (CR - DR) AS BALANCE_CURRENT
+									FROM
+										MASTER3D.GL
+									LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+									LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+									WHERE
+										GL.ACCOUNTID IN (
+											SELECT
+												ACCOUNTID
+											FROM
+												MASTER3D. ACCOUNT START WITH MASTERID = 1120300000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+										)
+									AND GL.GLHEADSTATUS != 'V'
+									AND ACC.ACCOUNTSTATUS = 'Y'
+									AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+								) TMP_CURRENT
+							FULL OUTER JOIN (
+								SELECT
+									'1' AS MASK,
+									SUM (CR - DR) AS BALANCE_PAST
+								FROM
+									MASTER3D.GL
+								LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+								LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+								WHERE
+									GL.ACCOUNTID IN (
+										SELECT
+											ACCOUNTID
+										FROM
+											MASTER3D. ACCOUNT START WITH MASTERID = 1120300000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+									)
+								AND GL.GLHEADSTATUS != 'V'
+								AND ACC.ACCOUNTSTATUS = 'Y'
+								AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+							) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+						)
+					UNION ALL
+						SELECT
+							'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+							'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+							'จากการดำเนินงาน' AS HEADER3,
+							'เพิ่มขึ้น/ลดลงในลูกหนี้อื่นๆ' AS ACC_NAME,
+							BALANCE_CURRENT,
+							BALANCE_PAST
+						FROM
+							(
+								SELECT
+									BALANCE_CURRENT,
+									BALANCE_PAST
+								FROM
+									(
+										SELECT
+											'1' AS MASK,
+											SUM (DR - CR) AS BALANCE_CURRENT
+										FROM
+											MASTER3D.GL
+										LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+										LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+										WHERE
+											ACC.ACCOUNTID IN (
+												SELECT
+													ACCOUNTID
+												FROM
+													MASTER3D. ACCOUNT
+												WHERE
+													ACCOUNTSTATUS = 'Y'
+												AND MASTERID = 1120400000
+											)
+										AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+										AND GL.GLHEADSTATUS != 'V'
+									) TMP_CURRENT
+								FULL OUTER JOIN (
+									SELECT
+										'1' AS MASK,
+										SUM (DR - CR) AS BALANCE_PAST
+									FROM
+										MASTER3D.GL
+									LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+									LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+									WHERE
+										ACC.ACCOUNTID IN (
+											SELECT
+												ACCOUNTID
+											FROM
+												MASTER3D. ACCOUNT
+											WHERE
+												ACCOUNTSTATUS = 'Y'
+											AND MASTERID = 1120400000
+										)
+									AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+									AND GL.GLHEADSTATUS != 'V'
+								) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+							)
+						UNION ALL
+							SELECT
+								'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+								'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+								'จากการดำเนินงาน' AS HEADER3,
+								'เพิ่มขึ้น/ลดลงในเงินทดรองราชการรอเบิกจากคลัง' AS ACC_NAME,
+								BALANCE_CURRENT,
+								BALANCE_PAST
+							FROM
+								(
+									SELECT
+										BALANCE_CURRENT,
+										BALANCE_PAST
+									FROM
+										(
+											SELECT
+												'1' AS MASK,
+												SUM (CR - DR) AS BALANCE_CURRENT
+											FROM
+												MASTER3D.GL
+											LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+											LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+											WHERE
+												ACC.ACCOUNTID IN (
+													SELECT
+														ACCOUNTID
+													FROM
+														MASTER3D. ACCOUNT
+													WHERE
+														ACCOUNTSTATUS = 'Y'
+													AND MASTERID = 1180006000
+												)
+											AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+											AND GL.GLHEADSTATUS != 'V'
+										) TMP_CURRENT
+									FULL OUTER JOIN (
+										SELECT
+											'1' AS MASK,
+											SUM (CR - DR) AS BALANCE_PAST
+										FROM
+											MASTER3D.GL
+										LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+										LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+										WHERE
+											ACC.ACCOUNTID IN (
+												SELECT
+													ACCOUNTID
+												FROM
+													MASTER3D. ACCOUNT
+												WHERE
+													ACCOUNTSTATUS = 'Y'
+												AND MASTERID = 1180006000
+											)
+										AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+										AND GL.GLHEADSTATUS != 'V'
+									) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+								)
+							UNION ALL
+								SELECT
+									'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+									'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+									'จากการดำเนินงาน' AS HEADER3,
+									'เพิ่มขึ้น/ลดลงในรายได้ค้างรับ' AS ACC_NAME,
+									BALANCE_CURRENT,
+									BALANCE_PAST
+								FROM
+									(
+										SELECT
+											BALANCE_CURRENT,
+											BALANCE_PAST
+										FROM
+											(
+												SELECT
+													'1' AS MASK,
+													SUM (CR - DR) AS BALANCE_CURRENT
+												FROM
+													MASTER3D.GL
+												LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+												LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+												WHERE
+													GL.ACCOUNTID IN (
+														SELECT
+															ACCOUNTID
+														FROM
+															MASTER3D. ACCOUNT START WITH MASTERID = 1140000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+													)
+												AND GL.GLHEADSTATUS != 'V'
+												AND ACC.ACCOUNTSTATUS = 'Y'
+												AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+											) TMP_CURRENT
+										FULL OUTER JOIN (
+											SELECT
+												'1' AS MASK,
+												SUM (CR - DR) AS BALANCE_PAST
+											FROM
+												MASTER3D.GL
+											LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+											LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+											WHERE
+												GL.ACCOUNTID IN (
+													SELECT
+														ACCOUNTID
+													FROM
+														MASTER3D. ACCOUNT START WITH MASTERID = 1140000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+												)
+											AND GL.GLHEADSTATUS != 'V'
+											AND ACC.ACCOUNTSTATUS = 'Y'
+											AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+										) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+									)
+								UNION ALL
+									SELECT
+										'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+										'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+										'จากการดำเนินงาน' AS HEADER3,
+										'เพิ่มขึ้น/ลดลงในวัสดุคงเหลือ' AS ACC_NAME,
+										BALANCE_CURRENT,
+										BALANCE_PAST
+									FROM
+										(
+											SELECT
+												BALANCE_CURRENT,
+												BALANCE_PAST
+											FROM
+												(
+													SELECT
+														'1' AS MASK,
+														SUM (CR - DR) AS BALANCE_CURRENT
+													FROM
+														MASTER3D.GL
+													LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+													LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+													WHERE
+														ACC.ACCOUNTID IN (
+															SELECT
+																ACCOUNTID
+															FROM
+																MASTER3D. ACCOUNT START WITH MASTERID = 1160000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+														)
+													AND GL.GLHEADSTATUS != 'V'
+													AND ACC.ACCOUNTSTATUS = 'Y'
+													AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+												) TMP_CURRENT
+											FULL OUTER JOIN (
+												SELECT
+													'1' AS MASK,
+													SUM (CR - DR) AS BALANCE_PAST
+												FROM
+													MASTER3D.GL
+												LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+												LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+												WHERE
+													ACC.ACCOUNTID IN (
+														SELECT
+															ACCOUNTID
+														FROM
+															MASTER3D. ACCOUNT START WITH MASTERID = 1160000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+													)
+												AND GL.GLHEADSTATUS != 'V'
+												AND ACC.ACCOUNTSTATUS = 'Y'
+												AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+											) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+										)
+									UNION ALL
+										SELECT
+											'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+											'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+											'จากการดำเนินงาน' AS HEADER3,
+											'เพิ่มขึ้น/ลดลงในเงินประกันผลงาน' AS ACC_NAME,
+											BALANCE_CURRENT,
+											BALANCE_PAST
+										FROM
+											(
+												SELECT
+													BALANCE_CURRENT,
+													BALANCE_PAST
+												FROM
+													(
+														SELECT
+															'1' AS MASK,
+															SUM (CR - DR) AS BALANCE_CURRENT
+														FROM
+															MASTER3D.GL
+														LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+														LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+														WHERE
+															ACC.ACCOUNTID IN (
+																SELECT
+																	ACCOUNTID
+																FROM
+																	MASTER3D. ACCOUNT
+																WHERE
+																	ACCOUNTSTATUS = 'Y'
+																AND MASTERID = 1180008000
+															)
+														AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+														AND GL.GLHEADSTATUS != 'V'
+													) TMP_CURRENT
+												FULL OUTER JOIN (
+													SELECT
+														'1' AS MASK,
+														SUM (CR - DR) AS BALANCE_PAST
+													FROM
+														MASTER3D.GL
+													LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+													LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+													WHERE
+														ACC.ACCOUNTID IN (
+															SELECT
+																ACCOUNTID
+															FROM
+																MASTER3D. ACCOUNT
+															WHERE
+																ACCOUNTSTATUS = 'Y'
+															AND MASTERID = 1180008000
+														)
+													AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+													AND GL.GLHEADSTATUS != 'V'
+												) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+											)
+										UNION ALL
+											SELECT
+												'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+												'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+												'จากการดำเนินงาน' AS HEADER3,
+												'เพิ่มขึ้น/ลดลงในเจ้าหนี้ระยะสั้น' AS ACC_NAME,
+												BALANCE_CURRENT,
+												BALANCE_PAST
+											FROM
+												(
+													SELECT
+														BALANCE_CURRENT,
+														BALANCE_PAST
+													FROM
+														(
+															SELECT
+																'1' AS MASK,
+																SUM (CR - DR) AS BALANCE_CURRENT
+															FROM
+																MASTER3D.GL
+															LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+															LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+															WHERE
+																ACC.ACCOUNTID IN (
+																	SELECT
+																		ACCOUNTID
+																	FROM
+																		MASTER3D. ACCOUNT START WITH MASTERID = 2110000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																)
+															AND GL.GLHEADSTATUS != 'V'
+															AND ACC.ACCOUNTSTATUS = 'Y'
+															AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+														) TMP_CURRENT
+													FULL OUTER JOIN (
+														SELECT
+															'1' AS MASK,
+															SUM (CR - DR) AS BALANCE_PAST
+														FROM
+															MASTER3D.GL
+														LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+														LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+														WHERE
+															ACC.ACCOUNTID IN (
+																SELECT
+																	ACCOUNTID
+																FROM
+																	MASTER3D. ACCOUNT START WITH MASTERID = 2110000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+															)
+														AND GL.GLHEADSTATUS != 'V'
+														AND ACC.ACCOUNTSTATUS = 'Y'
+														AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+													) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+												)
+											UNION ALL
+												SELECT
+													'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+													'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+													'จากการดำเนินงาน' AS HEADER3,
+													'เพิ่มขึ้น/ลดลงในค่าใช้จ่ายค้างจ่าย' AS ACC_NAME,
+													BALANCE_CURRENT,
+													BALANCE_PAST
+												FROM
+													(
+														SELECT
+															BALANCE_CURRENT,
+															BALANCE_PAST
+														FROM
+															(
+																SELECT
+																	'1' AS MASK,
+																	SUM (CR - DR) AS BALANCE_CURRENT
+																FROM
+																	MASTER3D.GL
+																LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																WHERE
+																	ACC.ACCOUNTID IN (
+																		SELECT
+																			ACCOUNTID
+																		FROM
+																			MASTER3D. ACCOUNT START WITH MASTERID = 2120000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																	)
+																AND GL.GLHEADSTATUS != 'V'
+																AND ACC.ACCOUNTSTATUS = 'Y'
+																AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+															) TMP_CURRENT
+														FULL OUTER JOIN (
+															SELECT
+																'1' AS MASK,
+																SUM (CR - DR) AS BALANCE_PAST
+															FROM
+																MASTER3D.GL
+															LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+															LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+															WHERE
+																ACC.ACCOUNTID IN (
+																	SELECT
+																		ACCOUNTID
+																	FROM
+																		MASTER3D. ACCOUNT START WITH MASTERID = 2120000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																)
+															AND GL.GLHEADSTATUS != 'V'
+															AND ACC.ACCOUNTSTATUS = 'Y'
+															AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+														) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+													)
+												UNION ALL
+													SELECT
+														'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+														'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+														'จากการดำเนินงาน' AS HEADER3,
+														'เพิ่มขึ้น/ลดลงในภาษีค้างจ่าย' AS ACC_NAME,
+														BALANCE_CURRENT,
+														BALANCE_PAST
+													FROM
+														(
+															SELECT
+																BALANCE_CURRENT,
+																BALANCE_PAST
+															FROM
+																(
+																	SELECT
+																		'1' AS MASK,
+																		SUM (CR - DR) AS BALANCE_CURRENT
+																	FROM
+																		MASTER3D.GL
+																	LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																	LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																	WHERE
+																		ACC.ACCOUNTID IN (
+																			SELECT
+																				ACCOUNTID
+																			FROM
+																				MASTER3D. ACCOUNT START WITH (
+																					MASTERID = 2180001000
+																					OR MASTERID = 2180002000
+																					OR MASTERID = 2180003000
+																					OR MASTERID = 2180006000
+																				) CONNECT BY PRIOR ACCOUNTID = MASTERID
+																		)
+																	AND GL.GLHEADSTATUS != 'V'
+																	AND ACC.ACCOUNTSTATUS = 'Y'
+																	AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																) TMP_CURRENT
+															FULL OUTER JOIN (
+																SELECT
+																	'1' AS MASK,
+																	SUM (CR - DR) AS BALANCE_PAST
+																FROM
+																	MASTER3D.GL
+																LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																WHERE
+																	ACC.ACCOUNTID IN (
+																		SELECT
+																			ACCOUNTID
+																		FROM
+																			MASTER3D. ACCOUNT START WITH (
+																				MASTERID = 2180001000
+																				OR MASTERID = 2180002000
+																				OR MASTERID = 2180003000
+																				OR MASTERID = 2180006000
+																			) CONNECT BY PRIOR ACCOUNTID = MASTERID
+																	)
+																AND GL.GLHEADSTATUS != 'V'
+																AND ACC.ACCOUNTSTATUS = 'Y'
+																AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+															) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+														)
+													UNION ALL
+														SELECT
+															'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+															'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+															'จากการดำเนินงาน' AS HEADER3,
+															'เพิ่มขึ้น/ลดลงในรายได้รับล่วงหน้า' AS ACC_NAME,
+															BALANCE_CURRENT,
+															BALANCE_PAST
+														FROM
+															(
+																SELECT
+																	BALANCE_CURRENT,
+																	BALANCE_PAST
+																FROM
+																	(
+																		SELECT
+																			'1' AS MASK,
+																			SUM (CR - DR) AS BALANCE_CURRENT
+																		FROM
+																			MASTER3D.GL
+																		LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																		LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																		WHERE
+																			ACC.ACCOUNTID IN (
+																				SELECT
+																					ACCOUNTID
+																				FROM
+																					MASTER3D. ACCOUNT START WITH MASTERID = 2130000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																			)
+																		AND GL.GLHEADSTATUS != 'V'
+																		AND ACC.ACCOUNTSTATUS = 'Y'
+																		AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																	) TMP_CURRENT
+																FULL OUTER JOIN (
+																	SELECT
+																		'1' AS MASK,
+																		SUM (CR - DR) AS BALANCE_PAST
+																	FROM
+																		MASTER3D.GL
+																	LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																	LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																	WHERE
+																		ACC.ACCOUNTID IN (
+																			SELECT
+																				ACCOUNTID
+																			FROM
+																				MASTER3D. ACCOUNT START WITH MASTERID = 2130000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																		)
+																	AND GL.GLHEADSTATUS != 'V'
+																	AND ACC.ACCOUNTSTATUS = 'Y'
+																	AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+															)
+														UNION ALL
+															SELECT
+																'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+																'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+																'จากการดำเนินงาน' AS HEADER3,
+																'เพิ่มขึ้น/ลดลงในรายได้รอการรับรู้ระยะยาว' AS ACC_NAME,
+																BALANCE_CURRENT,
+																BALANCE_PAST
+															FROM
+																(
+																	SELECT
+																		BALANCE_CURRENT,
+																		BALANCE_PAST
+																	FROM
+																		(
+																			SELECT
+																				'1' AS MASK,
+																				SUM (CR - DR) AS BALANCE_CURRENT
+																			FROM
+																				MASTER3D.GL
+																			LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																			LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																			WHERE
+																				ACC.ACCOUNTID IN (
+																					SELECT
+																						ACCOUNTID
+																					FROM
+																						MASTER3D. ACCOUNT
+																					WHERE
+																						ACCOUNTSTATUS = 'Y'
+																					AND MASTERID = 2200001000
+																				)
+																			AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																			AND GL.GLHEADSTATUS != 'V'
+																		) TMP_CURRENT
+																	FULL OUTER JOIN (
+																		SELECT
+																			'1' AS MASK,
+																			SUM (CR - DR) AS BALANCE_PAST
+																		FROM
+																			MASTER3D.GL
+																		LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																		LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																		WHERE
+																			ACC.ACCOUNTID IN (
+																				SELECT
+																					ACCOUNTID
+																				FROM
+																					MASTER3D. ACCOUNT
+																				WHERE
+																					ACCOUNTSTATUS = 'Y'
+																				AND MASTERID = 2200001000
+																			)
+																		AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																		AND GL.GLHEADSTATUS != 'V'
+																	) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																)
+															UNION ALL
+																SELECT
+																	'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+																	'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+																	'จากการดำเนินงาน' AS HEADER3,
+																	'เพิ่มขึ้น/ลดลงในเงินรับฝาก' AS ACC_NAME,
+																	BALANCE_CURRENT,
+																	BALANCE_PAST
+																FROM
+																	(
+																		SELECT
+																			BALANCE_CURRENT,
+																			BALANCE_PAST
+																		FROM
+																			(
+																				SELECT
+																					'1' AS MASK,
+																					SUM (CR - DR) AS BALANCE_CURRENT
+																				FROM
+																					MASTER3D.GL
+																				LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																				LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																				WHERE
+																					ACC.ACCOUNTID IN (
+																						SELECT
+																							ACCOUNTID
+																						FROM
+																							MASTER3D. ACCOUNT START WITH MASTERID = 2200003000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																					)
+																				AND GL.GLHEADSTATUS != 'V'
+																				AND ACC.ACCOUNTSTATUS = 'Y'
+																				AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																			) TMP_CURRENT
+																		FULL OUTER JOIN (
+																			SELECT
+																				'1' AS MASK,
+																				SUM (CR - DR) AS BALANCE_PAST
+																			FROM
+																				MASTER3D.GL
+																			LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																			LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																			WHERE
+																				ACC.ACCOUNTID IN (
+																					SELECT
+																						ACCOUNTID
+																					FROM
+																						MASTER3D. ACCOUNT START WITH MASTERID = 2200003000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																				)
+																			AND GL.GLHEADSTATUS != 'V'
+																			AND ACC.ACCOUNTSTATUS = 'Y'
+																			AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																		) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																	)
+																UNION ALL
+																	SELECT
+																		'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+																		'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+																		'จากการดำเนินงาน' AS HEADER3,
+																		'เพิ่มขึ้น/ลดลงในเงินมัดจำและประกันสัญญา' AS ACC_NAME,
+																		BALANCE_CURRENT,
+																		BALANCE_PAST
+																	FROM
+																		(
+																			SELECT
+																				BALANCE_CURRENT,
+																				BALANCE_PAST
+																			FROM
+																				(
+																					SELECT
+																						'1' AS MASK,
+																						SUM (CR - DR) AS BALANCE_CURRENT
+																					FROM
+																						MASTER3D.GL
+																					LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																					LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																					WHERE
+																						ACC.ACCOUNTID IN (
+																							SELECT
+																								ACCOUNTID
+																							FROM
+																								MASTER3D. ACCOUNT START WITH MASTERID = 2160000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																						)
+																					AND GL.GLHEADSTATUS != 'V'
+																					AND ACC.ACCOUNTSTATUS = 'Y'
+																					AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																				) TMP_CURRENT
+																			FULL OUTER JOIN (
+																				SELECT
+																					'1' AS MASK,
+																					SUM (CR - DR) AS BALANCE_PAST
+																				FROM
+																					MASTER3D.GL
+																				LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																				LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																				WHERE
+																					ACC.ACCOUNTID IN (
+																						SELECT
+																							ACCOUNTID
+																						FROM
+																							MASTER3D. ACCOUNT START WITH MASTERID = 2160000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																					)
+																				AND GL.GLHEADSTATUS != 'V'
+																				AND ACC.ACCOUNTSTATUS = 'Y'
+																				AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																			) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																		)
+																	UNION ALL
+																		SELECT
+																			'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+																			'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+																			'จากการดำเนินงาน' AS HEADER3,
+																			'เพิ่มขึ้น/ลดลงในทุนการศึกษาคงยอดเงินต้น' AS ACC_NAME,
+																			BALANCE_CURRENT,
+																			BALANCE_PAST
+																		FROM
+																			(
+																				SELECT
+																					BALANCE_CURRENT,
+																					BALANCE_PAST
+																				FROM
+																					(
+																						SELECT
+																							'1' AS MASK,
+																							SUM (CR - DR) AS BALANCE_CURRENT
+																						FROM
+																							MASTER3D.GL
+																						LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																						LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																						WHERE
+																							ACC.ACCOUNTID IN (
+																								SELECT
+																									ACCOUNTID
+																								FROM
+																									MASTER3D. ACCOUNT
+																								WHERE
+																									ACCOUNTSTATUS = 'Y'
+																								AND MASTERID = 2200005000
+																							)
+																						AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																					) TMP_CURRENT
+																				FULL OUTER JOIN (
+																					SELECT
+																						'1' AS MASK,
+																						SUM (CR - DR) AS BALANCE_PAST
+																					FROM
+																						MASTER3D.GL
+																					LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																					LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																					WHERE
+																						ACC.ACCOUNTID IN (
+																							SELECT
+																								ACCOUNTID
+																							FROM
+																								MASTER3D. ACCOUNT
+																							WHERE
+																								ACCOUNTSTATUS = 'Y'
+																							AND MASTERID = 2200005000
+																						)
+																					AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																					AND GL.GLHEADSTATUS != 'V'
+																				) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																			)
+																		UNION ALL
+																			SELECT
+																				'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+																				'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+																				'จากการดำเนินงาน' AS HEADER3,
+																				'เพิ่มขึ้น/ลดลงในดอกผลทุนการศึกษาคงยอดเงินต้น' AS ACC_NAME,
+																				BALANCE_CURRENT,
+																				BALANCE_PAST
+																			FROM
+																				(
+																					SELECT
+																						BALANCE_CURRENT,
+																						BALANCE_PAST
+																					FROM
+																						(
+																							SELECT
+																								'1' AS MASK,
+																								SUM (CR - DR) AS BALANCE_CURRENT
+																							FROM
+																								MASTER3D.GL
+																							LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																							LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																							WHERE
+																								ACC.ACCOUNTID IN (
+																									SELECT
+																										ACCOUNTID
+																									FROM
+																										MASTER3D. ACCOUNT
+																									WHERE
+																										ACCOUNTSTATUS = 'Y'
+																									AND MASTERID = 2200006000
+																								)
+																							AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																							AND GL.GLHEADSTATUS != 'V'
+																						) TMP_CURRENT
+																					FULL OUTER JOIN (
+																						SELECT
+																							'1' AS MASK,
+																							SUM (CR - DR) AS BALANCE_PAST
+																						FROM
+																							MASTER3D.GL
+																						LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																						LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																						WHERE
+																							ACC.ACCOUNTID IN (
+																								SELECT
+																									ACCOUNTID
+																								FROM
+																									MASTER3D. ACCOUNT
+																								WHERE
+																									ACCOUNTSTATUS = 'Y'
+																								AND MASTERID = 2200006000
+																							)
+																						AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																					) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																				)
+																			UNION ALL
+																				SELECT
+																					'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+																					'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+																					'จากการดำเนินงาน' AS HEADER3,
+																					'เพิ่มขึ้น/ลดลงในทุนการศึกษาจ่ายผ่าน' AS ACC_NAME,
+																					BALANCE_CURRENT,
+																					BALANCE_PAST
+																				FROM
+																					(
+																						SELECT
+																							BALANCE_CURRENT,
+																							BALANCE_PAST
+																						FROM
+																							(
+																								SELECT
+																									'1' AS MASK,
+																									SUM (CR - DR) AS BALANCE_CURRENT
+																								FROM
+																									MASTER3D.GL
+																								LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																								LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																								WHERE
+																									ACC.ACCOUNTID IN (
+																										SELECT
+																											ACCOUNTID
+																										FROM
+																											MASTER3D. ACCOUNT
+																										WHERE
+																											ACCOUNTSTATUS = 'Y'
+																										AND MASTERID = 2200004000
+																									)
+																								AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																								AND GL.GLHEADSTATUS != 'V'
+																							) TMP_CURRENT
+																						FULL OUTER JOIN (
+																							SELECT
+																								'1' AS MASK,
+																								SUM (CR - DR) AS BALANCE_PAST
+																							FROM
+																								MASTER3D.GL
+																							LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																							LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																							WHERE
+																								ACC.ACCOUNTID IN (
+																									SELECT
+																										ACCOUNTID
+																									FROM
+																										MASTER3D. ACCOUNT
+																									WHERE
+																										ACCOUNTSTATUS = 'Y'
+																									AND MASTERID = 2200004000
+																								)
+																							AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																							AND GL.GLHEADSTATUS != 'V'
+																						) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																					)
+																				UNION ALL
+																					SELECT
+																						'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+																						'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+																						'จากการดำเนินงาน' AS HEADER3,
+																						'เพิ่มขึ้น/ลดลงในเงินกองทุนอุดหนุนการวิจัย' AS ACC_NAME,
+																						BALANCE_CURRENT,
+																						BALANCE_PAST
+																					FROM
+																						(
+																							SELECT
+																								BALANCE_CURRENT,
+																								BALANCE_PAST
+																							FROM
+																								(
+																									SELECT
+																										'1' AS MASK,
+																										SUM (CR - DR) AS BALANCE_CURRENT
+																									FROM
+																										MASTER3D.GL
+																									LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																									LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																									WHERE
+																										ACC.ACCOUNTID IN (
+																											SELECT
+																												ACCOUNTID
+																											FROM
+																												MASTER3D. ACCOUNT
+																											WHERE
+																												ACCOUNTSTATUS = 'Y'
+																											AND MASTERID = 2200008000
+																										)
+																									AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																									AND GL.GLHEADSTATUS != 'V'
+																								) TMP_CURRENT
+																							FULL OUTER JOIN (
+																								SELECT
+																									'1' AS MASK,
+																									SUM (CR - DR) AS BALANCE_PAST
+																								FROM
+																									MASTER3D.GL
+																								LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																								LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																								WHERE
+																									ACC.ACCOUNTID IN (
+																										SELECT
+																											ACCOUNTID
+																										FROM
+																											MASTER3D. ACCOUNT
+																										WHERE
+																											ACCOUNTSTATUS = 'Y'
+																										AND MASTERID = 2200008000
+																									)
+																								AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																								AND GL.GLHEADSTATUS != 'V'
+																							) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																						)
+																					UNION ALL
+																						SELECT
+																							'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+																							'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+																							'จากการดำเนินงาน' AS HEADER3,
+																							'เพิ่มขึ้น/ลดลงในเงินพัฒนาวิชาการ' AS ACC_NAME,
+																							BALANCE_CURRENT,
+																							BALANCE_PAST
+																						FROM
+																							(
+																								SELECT
+																									BALANCE_CURRENT,
+																									BALANCE_PAST
+																								FROM
+																									(
+																										SELECT
+																											'1' AS MASK,
+																											SUM (CR - DR) AS BALANCE_CURRENT
+																										FROM
+																											MASTER3D.GL
+																										LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																										LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																										WHERE
+																											ACC.ACCOUNTID IN (
+																												SELECT
+																													ACCOUNTID
+																												FROM
+																													MASTER3D. ACCOUNT
+																												WHERE
+																													ACCOUNTSTATUS = 'Y'
+																												AND MASTERID = 2200009000
+																											)
+																										AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																										AND GL.GLHEADSTATUS != 'V'
+																									) TMP_CURRENT
+																								FULL OUTER JOIN (
+																									SELECT
+																										'1' AS MASK,
+																										SUM (CR - DR) AS BALANCE_PAST
+																									FROM
+																										MASTER3D.GL
+																									LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																									LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																									WHERE
+																										ACC.ACCOUNTID IN (
+																											SELECT
+																												ACCOUNTID
+																											FROM
+																												MASTER3D. ACCOUNT
+																											WHERE
+																												ACCOUNTSTATUS = 'Y'
+																											AND MASTERID = 2200009000
+																										)
+																									AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																									AND GL.GLHEADSTATUS != 'V'
+																								) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																							)
+																						UNION ALL
+																							SELECT
+																								'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+																								'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+																								'จากการดำเนินงาน' AS HEADER3,
+																								'เพิ่มขึ้น/ลดลงในเงินบริจาคโดยมีวัตถุประสงค์' AS ACC_NAME,
+																								BALANCE_CURRENT,
+																								BALANCE_PAST
+																							FROM
+																								(
+																									SELECT
+																										BALANCE_CURRENT,
+																										BALANCE_PAST
+																									FROM
+																										(
+																											SELECT
+																												'1' AS MASK,
+																												SUM (CR - DR) AS BALANCE_CURRENT
+																											FROM
+																												MASTER3D.GL
+																											LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																											LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																											WHERE
+																												ACC.ACCOUNTID IN (
+																													SELECT
+																														ACCOUNTID
+																													FROM
+																														MASTER3D. ACCOUNT
+																													WHERE
+																														ACCOUNTSTATUS = 'Y'
+																													AND MASTERID = 2200010000
+																												)
+																											AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																											AND GL.GLHEADSTATUS != 'V'
+																										) TMP_CURRENT
+																									FULL OUTER JOIN (
+																										SELECT
+																											'1' AS MASK,
+																											SUM (CR - DR) AS BALANCE_PAST
+																										FROM
+																											MASTER3D.GL
+																										LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																										LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																										WHERE
+																											ACC.ACCOUNTID IN (
+																												SELECT
+																													ACCOUNTID
+																												FROM
+																													MASTER3D. ACCOUNT
+																												WHERE
+																													ACCOUNTSTATUS = 'Y'
+																												AND MASTERID = 2200010000
+																											)
+																										AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																										AND GL.GLHEADSTATUS != 'V'
+																									) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																								)
+																							UNION ALL
+																								SELECT
+																									'กระแสเงินสดจากกิจกรรมดำเนินงาน' AS HEADER1,
+																									'ปรับกระทบกำไรสุทธิ' AS HEADER2,
+																									'จากการดำเนินงาน' AS HEADER3,
+																									'เพิ่มขึ้น/ลดลงในเงินสวัสดิการมหาวิทยาลัย' AS ACC_NAME,
+																									BALANCE_CURRENT,
+																									BALANCE_PAST
+																								FROM
+																									(
+																										SELECT
+																											BALANCE_CURRENT,
+																											BALANCE_PAST
+																										FROM
+																											(
+																												SELECT
+																													'1' AS MASK,
+																													SUM (CR - DR) AS BALANCE_CURRENT
+																												FROM
+																													MASTER3D.GL
+																												LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																												LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																												WHERE
+																													ACC.ACCOUNTID IN (
+																														SELECT
+																															ACCOUNTID
+																														FROM
+																															MASTER3D. ACCOUNT
+																														WHERE
+																															ACCOUNTSTATUS = 'Y'
+																														AND MASTERID = 2200011000
+																													)
+																												AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																												AND GL.GLHEADSTATUS != 'V'
+																											) TMP_CURRENT
+																										FULL OUTER JOIN (
+																											SELECT
+																												'1' AS MASK,
+																												SUM (CR - DR) AS BALANCE_PAST
+																											FROM
+																												MASTER3D.GL
+																											LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																											LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																											WHERE
+																												ACC.ACCOUNTID IN (
+																													SELECT
+																														ACCOUNTID
+																													FROM
+																														MASTER3D. ACCOUNT
+																													WHERE
+																														ACCOUNTSTATUS = 'Y'
+																													AND MASTERID = 2200011000
+																												)
+																											AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																											AND GL.GLHEADSTATUS != 'V'
+																										) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																									)
+																								UNION ALL
+																									SELECT
+																										'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER1,
+																										'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER2,
+																										'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER3,
+																										'เพิ่มขึ้น/ลดลงในเงินลงทุน' AS ACC_NAME,
+																										BALANCE_CURRENT,
+																										BALANCE_PAST
+																									FROM
+																										(
+																											SELECT
+																												BALANCE_CURRENT,
+																												BALANCE_PAST
+																											FROM
+																												(
+																													SELECT
+																														'1' AS MASK,
+																														SUM (CR - DR) AS BALANCE_CURRENT
+																													FROM
+																														MASTER3D.GL
+																													LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																													LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																													WHERE
+																														GL.ACCOUNTID IN (
+																															SELECT
+																																ACCOUNTID
+																															FROM
+																																MASTER3D. ACCOUNT START WITH (
+																																	MASTERID = 1170000000
+																																	OR MASTERID = 1220000000
+																																) CONNECT BY PRIOR ACCOUNTID = MASTERID
+																														)
+																													AND GL.GLHEADSTATUS != 'V'
+																													AND ACC.ACCOUNTSTATUS = 'Y'
+																													AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																												) TMP_CURRENT
+																											FULL OUTER JOIN (
+																												SELECT
+																													'1' AS MASK,
+																													SUM (CR - DR) AS BALANCE_PAST
+																												FROM
+																													MASTER3D.GL
+																												LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																												LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																												WHERE
+																													GL.ACCOUNTID IN (
+																														SELECT
+																															ACCOUNTID
+																														FROM
+																															MASTER3D. ACCOUNT START WITH (
+																																MASTERID = 1170000000
+																																OR MASTERID = 1220000000
+																															) CONNECT BY PRIOR ACCOUNTID = MASTERID
+																													)
+																												AND GL.GLHEADSTATUS != 'V'
+																												AND ACC.ACCOUNTSTATUS = 'Y'
+																												AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																											) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																										)
+																									UNION ALL
+																										SELECT
+																											'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER1,
+																											'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER2,
+																											'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER3,
+																											'เพิ่มขึ้น/ลดลงในที่ดิน' AS ACC_NAME,
+																											BALANCE_CURRENT,
+																											BALANCE_PAST
+																										FROM
+																											(
+																												SELECT
+																													BALANCE_CURRENT,
+																													BALANCE_PAST
+																												FROM
+																													(
+																														SELECT
+																															'1' AS MASK,
+																															SUM (CR - DR) AS BALANCE_CURRENT
+																														FROM
+																															MASTER3D.GL
+																														LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																														LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																														WHERE
+																															GL.ACCOUNTID IN (
+																																SELECT
+																																	ACCOUNTID
+																																FROM
+																																	MASTER3D. ACCOUNT START WITH MASTERID = 1230000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																															)
+																														AND GL.GLHEADSTATUS != 'V'
+																														AND ACC.ACCOUNTSTATUS = 'Y'
+																														AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																													) TMP_CURRENT
+																												FULL OUTER JOIN (
+																													SELECT
+																														'1' AS MASK,
+																														SUM (CR - DR) AS BALANCE_PAST
+																													FROM
+																														MASTER3D.GL
+																													LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																													LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																													WHERE
+																														GL.ACCOUNTID IN (
+																															SELECT
+																																ACCOUNTID
+																															FROM
+																																MASTER3D. ACCOUNT START WITH MASTERID = 1230000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																														)
+																													AND GL.GLHEADSTATUS != 'V'
+																													AND ACC.ACCOUNTSTATUS = 'Y'
+																													AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																												) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																											)
+																										UNION ALL
+																											SELECT
+																												'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER1,
+																												'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER2,
+																												'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER3,
+																												'เพิ่มขึ้น/ลดลงในอาคารและสิ่งปลูกสร้าง' AS ACC_NAME,
+																												BALANCE_CURRENT,
+																												BALANCE_PAST
+																											FROM
+																												(
+																													SELECT
+																														BALANCE_CURRENT,
+																														BALANCE_PAST
+																													FROM
+																														(
+																															SELECT
+																																'1' AS MASK,
+																																(
+																																	BALANCE_CURRENT - TOTAL_DEPRECIATE
+																																) AS BALANCE_CURRENT
+																															FROM
+																																(
+																																	SELECT
+																																		SUM (CR - DR) AS BALANCE_CURRENT
+																																	FROM
+																																		MASTER3D.GL
+																																	LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																																	LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																																	WHERE
+																																		GL.ACCOUNTID IN (
+																																			SELECT
+																																				ACCOUNTID
+																																			FROM
+																																				MASTER3D. ACCOUNT START WITH MASTERID = 1240000000
+																																			AND ACCOUNTID != 1240500000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																																		)
+																																	AND GL.GLHEADSTATUS != 'V'
+																																	AND ACC.ACCOUNTSTATUS = 'Y'
+																																	AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																																)
+																															CROSS JOIN (
+																																SELECT
+																																	(
+																																		BALANCE_CURRENT - BALANCE_PAST
+																																	) AS TOTAL_DEPRECIATE
+																																FROM
+																																	(
+																																		SELECT
+																																			BALANCE_CURRENT,
+																																			BALANCE_PAST
+																																		FROM
+																																			(
+																																				SELECT
+																																					'1' AS MASK,
+																																					SUM (DR - CR) AS BALANCE_CURRENT
+																																				FROM
+																																					MASTER3D.GL
+																																				LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																																				LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																																				WHERE
+																																					GL.ACCOUNTID IN (
+																																						SELECT
+																																							ACCOUNTID
+																																						FROM
+																																							MASTER3D. ACCOUNT START WITH (
+																																								MASTERID = 5150101000
+																																								OR MASTERID = 5150102000
+																																								OR MASTERID = 5150103000
+																																								OR MASTERID = 5150104000
+																																							) CONNECT BY PRIOR ACCOUNTID = MASTERID
+																																					)
+																																				AND GL.GLHEADSTATUS != 'V'
+																																				AND ACC.ACCOUNTSTATUS = 'Y'
+																																				AND GLHEAD.GLHEADDATE >= TO_DATE ('01/10/2014', 'DD/MM/YYYY')
+																																				AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																																			) TMP_CURRENT
+																																		FULL OUTER JOIN (
+																																			SELECT
+																																				'1' AS MASK,
+																																				SUM (DR - CR) AS BALANCE_PAST
+																																			FROM
+																																				MASTER3D.GL
+																																			LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																																			LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																																			WHERE
+																																				GL.ACCOUNTID IN (
+																																					SELECT
+																																						ACCOUNTID
+																																					FROM
+																																						MASTER3D. ACCOUNT START WITH (
+																																							MASTERID = 5150101000
+																																							OR MASTERID = 5150102000
+																																							OR MASTERID = 5150103000
+																																							OR MASTERID = 5150104000
+																																						) CONNECT BY PRIOR ACCOUNTID = MASTERID
+																																				)
+																																			AND GL.GLHEADSTATUS != 'V'
+																																			AND ACC.ACCOUNTSTATUS = 'Y'
+																																			AND GLHEAD.GLHEADDATE >= TO_DATE ('01/10/2014', 'DD/MM/YYYY')
+																																			AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																																		) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																																	)
+																															)
+																														) TMP_CURRENT
+																													FULL OUTER JOIN (
+																														SELECT
+																															'1' AS MASK,
+																															SUM (CR - DR) AS BALANCE_PAST
+																														FROM
+																															MASTER3D.GL
+																														LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																														LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																														WHERE
+																															GL.ACCOUNTID IN (
+																																SELECT
+																																	ACCOUNTID
+																																FROM
+																																	MASTER3D. ACCOUNT START WITH MASTERID = 1240000000
+																																AND ACCOUNTID != 1240500000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																															)
+																														AND GL.GLHEADSTATUS != 'V'
+																														AND ACC.ACCOUNTSTATUS = 'Y'
+																														AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																													) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																												)
+																											UNION ALL
+																												SELECT
+																													'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER1,
+																													'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER2,
+																													'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER3,
+																													'เพิ่มขึ้น/ลดลงในครุภัณฑ์' AS ACC_NAME,
+																													BALANCE_CURRENT,
+																													BALANCE_PAST
+																												FROM
+																													(
+																														SELECT
+																															BALANCE_CURRENT,
+																															BALANCE_PAST
+																														FROM
+																															(
+																																SELECT
+																																	'1' AS MASK,
+																																	SUM (CR) - SUM (DR) AS BALANCE_CURRENT
+																																FROM
+																																	MASTER3D.GL
+																																LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																																LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																																WHERE
+																																	GL.ACCOUNTID IN (
+																																		SELECT
+																																			ACCOUNTID
+																																		FROM
+																																			MASTER3D. ACCOUNT START WITH (
+																																				MASTERID = 1250000000
+																																				OR MASTERID = 5210002000
+																																			) CONNECT BY PRIOR ACCOUNTID = MASTERID
+																																	)
+																																AND GL.GLHEADSTATUS != 'V'
+																																AND ACC.ACCOUNTSTATUS = 'Y'
+																																AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																															) TMP_CURRENT
+																														FULL OUTER JOIN (
+																															SELECT
+																																'1' AS MASK,
+																																SUM (CR) - SUM (DR) AS BALANCE_PAST
+																															FROM
+																																MASTER3D.GL
+																															LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																															LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																															WHERE
+																																GL.ACCOUNTID IN (
+																																	SELECT
+																																		ACCOUNTID
+																																	FROM
+																																		MASTER3D. ACCOUNT START WITH MASTERID = 1250000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																																)
+																															AND GL.GLHEADSTATUS != 'V'
+																															AND ACC.ACCOUNTSTATUS = 'Y'
+																															AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																														) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																													)
+																												UNION ALL
+																													SELECT
+																														'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER1,
+																														'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER2,
+																														'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER3,
+																														'เพิ่มขึ้น/ลดลงในโปรแกรมคอมพิวเตอร์' AS ACC_NAME,
+																														BALANCE_CURRENT,
+																														BALANCE_PAST
+																													FROM
+																														(
+																															SELECT
+																																BALANCE_CURRENT,
+																																BALANCE_PAST
+																															FROM
+																																(
+																																	SELECT
+																																		'1' AS MASK,
+																																		SUM (CR - DR) AS BALANCE_CURRENT
+																																	FROM
+																																		MASTER3D.GL
+																																	LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																																	LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																																	WHERE
+																																		GL.ACCOUNTID IN (
+																																			SELECT
+																																				ACCOUNTID
+																																			FROM
+																																				MASTER3D. ACCOUNT START WITH MASTERID = 1270200000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																																		)
+																																	AND GL.GLHEADSTATUS != 'V'
+																																	AND ACC.ACCOUNTSTATUS = 'Y'
+																																	AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																																) TMP_CURRENT
+																															FULL OUTER JOIN (
+																																SELECT
+																																	'1' AS MASK,
+																																	SUM (CR - DR) AS BALANCE_PAST
+																																FROM
+																																	MASTER3D.GL
+																																LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																																LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																																WHERE
+																																	GL.ACCOUNTID IN (
+																																		SELECT
+																																			ACCOUNTID
+																																		FROM
+																																			MASTER3D. ACCOUNT START WITH MASTERID = 1270200000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																																	)
+																																AND GL.GLHEADSTATUS != 'V'
+																																AND ACC.ACCOUNTSTATUS = 'Y'
+																																AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																															) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																														)
+																													UNION ALL
+																														SELECT
+																															'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER1,
+																															'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER2,
+																															'กระแสเงินสดจากกิจกรรมลงทุน' AS HEADER3,
+																															'เพิ่มขึ้น/ลดลงในงานระหว่างทำ' AS ACC_NAME,
+																															BALANCE_CURRENT,
+																															BALANCE_PAST
+																														FROM
+																															(
+																																SELECT
+																																	BALANCE_CURRENT,
+																																	BALANCE_PAST
+																																FROM
+																																	(
+																																		SELECT
+																																			'1' AS MASK,
+																																			SUM (CR - DR) AS BALANCE_CURRENT
+																																		FROM
+																																			MASTER3D.GL
+																																		LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																																		LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																																		WHERE
+																																			GL.ACCOUNTID IN (
+																																				SELECT
+																																					ACCOUNTID
+																																				FROM
+																																					MASTER3D. ACCOUNT START WITH (
+																																						MASTERID = 1240500000
+																																						OR MASTERID = 1270400000
+																																					) CONNECT BY PRIOR ACCOUNTID = MASTERID
+																																			)
+																																		AND GL.GLHEADSTATUS != 'V'
+																																		AND ACC.ACCOUNTSTATUS = 'Y'
+																																		AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																																	) TMP_CURRENT
+																																FULL OUTER JOIN (
+																																	SELECT
+																																		'1' AS MASK,
+																																		SUM (CR - DR) AS BALANCE_PAST
+																																	FROM
+																																		MASTER3D.GL
+																																	LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																																	LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																																	WHERE
+																																		GL.ACCOUNTID IN (
+																																			SELECT
+																																				ACCOUNTID
+																																			FROM
+																																				MASTER3D. ACCOUNT START WITH (
+																																					MASTERID = 1240500000
+																																					OR MASTERID = 1270400000
+																																				) CONNECT BY PRIOR ACCOUNTID = MASTERID
+																																		)
+																																	AND GL.GLHEADSTATUS != 'V'
+																																	AND ACC.ACCOUNTSTATUS = 'Y'
+																																	AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																																) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																															)
+																														UNION ALL
+																															SELECT
+																																'กระแสเงินสดจากกิจกรรมจัดหาเงิน' AS HEADER1,
+																																'กระแสเงินสดจากกิจกรรมจัดหาเงิน' AS HEADER2,
+																																'กระแสเงินสดจากกิจกรรมจัดหาเงิน' AS HEADER3,
+																																'เพิ่มขึ้น/ลดลงในเงินสำรองเงินคงคลัง' AS ACC_NAME,
+																																BALANCE_CURRENT,
+																																BALANCE_PAST
+																															FROM
+																																(
+																																	SELECT
+																																		BALANCE_CURRENT,
+																																		BALANCE_PAST
+																																	FROM
+																																		(
+																																			SELECT
+																																				'1' AS MASK,
+																																				SUM (CR - DR) AS BALANCE_CURRENT
+																																			FROM
+																																				MASTER3D.GL
+																																			LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																																			LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																																			WHERE
+																																				GL.ACCOUNTID IN (
+																																					SELECT
+																																						ACCOUNTID
+																																					FROM
+																																						MASTER3D. ACCOUNT START WITH MASTERID = 3100009000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																																				)
+																																			AND GL.GLHEADSTATUS != 'V'
+																																			AND ACC.ACCOUNTSTATUS = 'Y'
+																																			AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																																		) TMP_CURRENT
+																																	FULL OUTER JOIN (
+																																		SELECT
+																																			'1' AS MASK,
+																																			SUM (CR - DR) AS BALANCE_PAST
+																																		FROM
+																																			MASTER3D.GL
+																																		LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																																		LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																																		WHERE
+																																			GL.ACCOUNTID IN (
+																																				SELECT
+																																					ACCOUNTID
+																																				FROM
+																																					MASTER3D. ACCOUNT START WITH MASTERID = 3100009000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																																			)
+																																		AND GL.GLHEADSTATUS != 'V'
+																																		AND ACC.ACCOUNTSTATUS = 'Y'
+																																		AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																																	) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																																)
+																															UNION ALL
+																																SELECT
+																																	'กระแสเงินสดจากกิจกรรมจัดหาเงิน' AS HEADER1,
+																																	'กระแสเงินสดจากกิจกรรมจัดหาเงิน' AS HEADER2,
+																																	'กระแสเงินสดจากกิจกรรมจัดหาเงิน' AS HEADER3,
+																																	'เพิ่มขึ้น/ลดลงในทุน' AS ACC_NAME,
+																																	BALANCE_CURRENT,
+																																	BALANCE_PAST
+																																FROM
+																																	(
+																																		SELECT
+																																			BALANCE_CURRENT,
+																																			BALANCE_PAST
+																																		FROM
+																																			(
+																																				SELECT
+																																					'1' AS MASK,
+																																					SUM (CR - DR) AS BALANCE_CURRENT
+																																				FROM
+																																					MASTER3D.GL
+																																				LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																																				LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																																				WHERE
+																																					GL.ACCOUNTID IN (
+																																						SELECT
+																																							ACCOUNTID
+																																						FROM
+																																							MASTER3D. ACCOUNT START WITH MASTERID = 3100011000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																																					)
+																																				AND GL.GLHEADSTATUS != 'V'
+																																				AND ACC.ACCOUNTSTATUS = 'Y'
+																																				AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																																			) TMP_CURRENT
+																																		FULL OUTER JOIN (
+																																			SELECT
+																																				'1' AS MASK,
+																																				SUM (CR - DR) AS BALANCE_PAST
+																																			FROM
+																																				MASTER3D.GL
+																																			LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																																			LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																																			WHERE
+																																				GL.ACCOUNTID IN (
+																																					SELECT
+																																						ACCOUNTID
+																																					FROM
+																																						MASTER3D. ACCOUNT START WITH MASTERID = 3100011000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																																				)
+																																			AND GL.GLHEADSTATUS != 'V'
+																																			AND ACC.ACCOUNTSTATUS = 'Y'
+																																			AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																																		) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																																	)
+																																UNION ALL
+																																	SELECT
+																																		'กระแสเงินสดจากกิจกรรมจัดหาเงิน' AS HEADER1,
+																																		'กระแสเงินสดจากกิจกรรมจัดหาเงิน' AS HEADER2,
+																																		'กระแสเงินสดจากกิจกรรมจัดหาเงิน' AS HEADER3,
+																																		'เพิ่มขึ้น/ลดลงในรายได้สูง(ต่ำ)กว่าค่าใช้จ่ายสะสม' AS ACC_NAME,
+																																		BALANCE_CURRENT,
+																																		BALANCE_PAST
+																																	FROM
+																																		(
+																																			SELECT
+																																				BALANCE_CURRENT,
+																																				BALANCE_PAST
+																																			FROM
+																																				(
+																																					SELECT
+																																						'1' AS MASK,
+																																						SUM (CR - DR) AS BALANCE_CURRENT
+																																					FROM
+																																						MASTER3D.GL
+																																					LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																																					LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																																					WHERE
+																																						GL.ACCOUNTID IN (
+																																							SELECT
+																																								ACCOUNTID
+																																							FROM
+																																								MASTER3D. ACCOUNT START WITH MASTERID = 3200000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																																						)
+																																					AND GL.GLHEADSTATUS != 'V'
+																																					AND ACC.ACCOUNTSTATUS = 'Y'
+																																					AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																																				) TMP_CURRENT
+																																			FULL OUTER JOIN (
+																																				SELECT
+																																					'1' AS MASK,
+																																					SUM (CR - DR) AS BALANCE_PAST
+																																				FROM
+																																					MASTER3D.GL
+																																				LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																																				LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																																				WHERE
+																																					GL.ACCOUNTID IN (
+																																						SELECT
+																																							ACCOUNTID
+																																						FROM
+																																							MASTER3D. ACCOUNT START WITH MASTERID = 3200000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																																					)
+																																				AND GL.GLHEADSTATUS != 'V'
+																																				AND ACC.ACCOUNTSTATUS = 'Y'
+																																				AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																																			) TMP_PAST ON TMP_PAST.MASK = TMP_CURRENT.MASK
+																																		)
+																																	UNION ALL
+																																		SELECT
+																																			'รวม' AS HEADER1,
+																																			'รวม' AS HEADER2,
+																																			'รวม' AS HEADER3,
+																																			'เงินสดและรายการเทียบเท่าเงินสดคงเหลือ ณ วันต้นงวด' AS ACC_NAME,
+																																			(DR - CR) AS BALANCE_CURRENT,
+																																			0 AS BALANCE_PAST
+																																		FROM
+																																			(
+																																				SELECT
+																																					'1' AS MASK,
+																																					SUM (DR) AS DR,
+																																					SUM (CR) AS CR
+																																				FROM
+																																					MASTER3D.GL
+																																				LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																																				LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																																				WHERE
+																																					GL.ACCOUNTID IN (
+																																						SELECT
+																																							ACCOUNTID
+																																						FROM
+																																							MASTER3D. ACCOUNT START WITH MASTERID = 1110000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																																					)
+																																				AND GL.GLHEADSTATUS != 'V'
+																																				AND ACC.ACCOUNTSTATUS = 'Y'
+																																				AND GLHEAD.GLHEADDATE <= TO_DATE ('31/05/2015', 'DD/MM/YYYY')
+																																			)
+																																		UNION ALL
+																																			SELECT
+																																				'รวม' AS HEADER1,
+																																				'รวม' AS HEADER2,
+																																				'รวม' AS HEADER3,
+																																				'เงินสดและรายการเทียบเท่าเงินสดคงเหลือ ณ วันปลายงวด' AS ACC_NAME,
+																																				(DR - CR) AS BALANCE_CURRENT,
+																																				0 AS BALANCE_PAST
+																																			FROM
+																																				(
+																																					SELECT
+																																						'1' AS MASK,
+																																						SUM (DR) AS DR,
+																																						SUM (CR) AS CR
+																																					FROM
+																																						MASTER3D.GL
+																																					LEFT OUTER JOIN MASTER3D.GLHEAD ON GLHEAD.GLHEADID = GL.GLHEADID
+																																					LEFT OUTER JOIN MASTER3D. ACCOUNT ACC ON ACC.ACCOUNTID = GL.ACCOUNTID
+																																					WHERE
+																																						GL.ACCOUNTID IN (
+																																							SELECT
+																																								ACCOUNTID
+																																							FROM
+																																								MASTER3D. ACCOUNT START WITH MASTERID = 1110000000 CONNECT BY PRIOR ACCOUNTID = MASTERID
+																																						)
+																																					AND GL.GLHEADSTATUS != 'V'
+																																					AND ACC.ACCOUNTSTATUS = 'Y'
+																																					AND GLHEAD.GLHEADDATE <= TO_DATE ('30/06/2015', 'DD/MM/YYYY')
+																																				) )]]>
+	</queryString>
+	<field name="ID" class="java.lang.String"/>
+	<field name="HEADER1" class="java.lang.String"/>
+	<field name="HEADER2" class="java.lang.String"/>
+	<field name="HEADER3" class="java.lang.String"/>
+	<field name="ACC_NAME" class="java.lang.String"/>
+	<field name="BALANCE_CURRENT" class="java.math.BigDecimal"/>
+	<field name="BALANCE_PAST" class="java.math.BigDecimal"/>
+	<variable name="CURRENT_PAGE" class="java.lang.Integer" resetType="None" calculation="DistinctCount">
+		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Integer(1)]]></initialValueExpression>
+	</variable>
+	<variable name="SUM_CURRENT" class="java.math.BigDecimal" resetType="Group" resetGroup="G_LVL1" calculation="Sum">
+		<variableExpression><![CDATA[$F{BALANCE_CURRENT}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SUM_PAST" class="java.math.BigDecimal" resetType="Group" resetGroup="G_LVL1" calculation="Sum">
+		<variableExpression><![CDATA[$F{BALANCE_PAST}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="RESULT_ROW" class="java.math.BigDecimal" resetType="Group" resetGroup="G_LVL1" calculation="Sum">
+		<variableExpression><![CDATA[$F{BALANCE_CURRENT}-$F{BALANCE_PAST}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="SUM_CASH" class="java.math.BigDecimal" incrementType="Group" incrementGroup="G_LVL1" calculation="Sum">
+		<variableExpression><![CDATA[($F{HEADER1}!="รวม")?$V{RESULT_ROW}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="CURRENT_DATE" class="java.util.Date">
+		<variableExpression><![CDATA[new Date()]]></variableExpression>
+		<initialValueExpression><![CDATA[new Date()]]></initialValueExpression>
+	</variable>
+	<variable name="DateThai" class="java.util.Collection" resetType="None">
+		<variableExpression><![CDATA[java.util.Arrays.asList("ม.ค", "ก.พ", "มี.ค", "เม.ย","พ.ค", "มิ.ย", "ก.ค", "ส.ค","ก.ย", "ต.ค", "พ.ย", "ธ.ค")]]></variableExpression>
+		<initialValueExpression><![CDATA[java.util.Arrays.asList("")]]></initialValueExpression>
+	</variable>
+	<variable name="money_plai" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACC_NAME}=="เงินสดและรายการเทียบเท่าเงินสดคงเหลือ ณ วันปลายงวด")?$F{BALANCE_CURRENT}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="money_ton" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACC_NAME}=="เงินสดและรายการเทียบเท่าเงินสดคงเหลือ ณ วันต้นงวด")?$F{BALANCE_CURRENT}:0.0]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="money_updown_suti" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[($F{ACC_NAME}=="เงินสดเพิ่มขึ้นลงสุทธิ")?$F{BALANCE_CURRENT}:0.0]]></variableExpression>
+	</variable>
+	<group name="G_LVL1">
+		<groupExpression><![CDATA[$F{HEADER1}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<printWhenExpression><![CDATA[($P{REPORT_MAX_COUNT}>0)&&$F{HEADER1}!="รวม"]]></printWhenExpression>
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="0" width="555" height="20" uuid="9dd2de36-7ba0-4bb2-af97-c9bc62eabac6"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{HEADER1}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<printWhenExpression><![CDATA[$F{HEADER1}!="รวม"]]></printWhenExpression>
+				<textField>
+					<reportElement style="FBold" x="10" y="0" width="285" height="20" uuid="3985ebe0-26a6-48d4-a62a-b2964a154a93"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{HEADER1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" x="385" y="0" width="90" height="20" uuid="a4c16242-2768-47eb-ad82-4b13ada4d2b1"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{SUM_PAST}==null)?0.0:$V{SUM_PAST}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" x="295" y="0" width="90" height="20" uuid="f4a1f91a-1417-483e-9d0d-ce021deba209"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{SUM_CURRENT}==null)?0.0:$V{SUM_CURRENT}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement style="FBold" x="475" y="0" width="80" height="20" uuid="83870579-b573-4964-89a2-aa5ff673714f"/>
+					<box topPadding="0">
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{RESULT_ROW}==null)?0.0:$V{RESULT_ROW}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="G_LVL2">
+		<groupExpression><![CDATA[$F{HEADER2}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<printWhenExpression><![CDATA[$F{HEADER2}!="กระแสเงินสดจากกิจกรรมลงทุน"&&$F{HEADER2}!="กระแสเงินสดจากกิจกรรมจัดหาเงิน"&&($P{REPORT_MAX_COUNT}>0)&&$F{HEADER1}!="รวม"]]></printWhenExpression>
+				<textField isBlankWhenNull="true">
+					<reportElement style="FBold" x="10" y="0" width="285" height="20" uuid="d09132f2-eb5a-48ac-87aa-20bc4ec3bddd"/>
+					<textFieldExpression><![CDATA[$F{HEADER2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+					<reportElement x="385" y="0" width="90" height="20" uuid="388b5943-8d0e-44d2-ba74-4b5805fdaf27">
+						<printWhenExpression><![CDATA[$F{HEADER2}!="ปรับกระทบกำไรสุทธิ"]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{BALANCE_PAST}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+					<reportElement x="295" y="0" width="90" height="20" uuid="30156526-1d3f-41e2-adc5-d7ccc9daafa5">
+						<printWhenExpression><![CDATA[$F{HEADER2}!="ปรับกระทบกำไรสุทธิ"]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{BALANCE_CURRENT}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+					<reportElement x="475" y="0" width="80" height="20" uuid="eb82fce7-23bf-4650-aec9-ab29e7dcba0e">
+						<printWhenExpression><![CDATA[$F{HEADER2}!="ปรับกระทบกำไรสุทธิ"]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{BALANCE_CURRENT}-$F{BALANCE_PAST}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="G_LVL3">
+		<groupExpression><![CDATA[$F{HEADER3}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<printWhenExpression><![CDATA[$F{HEADER2}!="รายได้สูง(ต่ำ)กว่าค่าใช้จ่าย"&&$F{HEADER2}!="กระแสเงินสดจากกิจกรรมลงทุน"&&$F{HEADER2}!="กระแสเงินสดจากกิจกรรมจัดหาเงิน"&&($P{REPORT_MAX_COUNT}>0)&&$F{HEADER1}!="รวม"]]></printWhenExpression>
+				<textField isBlankWhenNull="true">
+					<reportElement style="FBold" x="20" y="0" width="275" height="20" uuid="183a6327-b25b-4cb4-9f1c-3364ce134122"/>
+					<textFieldExpression><![CDATA[$F{HEADER3}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="178" splitType="Stretch">
+			<printWhenExpression><![CDATA[($P{REPORT_TYPE}=="EXCEL")?($V{PAGE_NUMBER}==1):true]]></printWhenExpression>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="0" y="96" width="555" height="20" uuid="6368a091-1d4c-4188-90f3-6db62007f332"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["สำหรับปี สิ้นสุดวันที่ "+$P{DATE_END}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="FBold" x="0" y="56" width="555" height="20" uuid="47eec812-75fb-442a-931b-5aa9ce7f1955"/>
+				<textElement textAlignment="Center">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="0" width="555" height="56" uuid="d20e6f7f-99fb-4e96-9cec-c2f4bb0d71f2"/>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.decode("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"))]]></imageExpression>
+			</image>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="FBold" stretchType="RelativeToBandHeight" x="0" y="76" width="555" height="20" uuid="41f6fac6-2bd1-4275-8a9e-f2d58bc4ab5d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{DEPARTMENT}!="")?"รายงานงบกระแสเงินสดรวม\n"+$P{DEPARTMENT}:"รายงานงบกระแสเงินสดรวม"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="276" y="136" width="279" height="20" uuid="80db5f2a-b2ff-4094-b1f9-7e4b545ca2a2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["โครงการจาก "+$P{PROJECT_SORCE_START}+" ถึง "+$P{PROJECT_SORCE_END}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="276" y="116" width="279" height="20" uuid="d38a25eb-f631-4cfe-8d43-cf62c5a1aca4"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["แผนงานจาก "+$P{PLAN_SORCE_START}+" ถึง "+$P{PLAN_SORCE_END}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="0" y="116" width="276" height="20" uuid="bd682a8e-6b9d-4b4e-b517-37de975362e8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["แหล่งเงินจาก "+$P{BUDGET_SORCE_START}+" ถึง "+$P{BUDGET_SORCE_END}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="276" y="156" width="279" height="20" uuid="4ffd417f-004b-45da-a79a-4ea85c325ad6"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["กิจกรรมจาก "+$P{ACTIVITY_SORCE_START}+" ถึง "+$P{ACTIVITY_SORCE_END}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="0" y="156" width="276" height="20" uuid="dd97eb7f-c31f-4e77-8c2e-f7bb13ecbeb0"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["หน่วยงานจาก "+$P{DEPARTMENT_SORCE_START}+" ถึง "+$P{DEPARTMENT_SORCE_END}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="0" y="136" width="276" height="20" uuid="36479b19-0fa9-4772-991c-a1698227529a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["กองทุนจาก "+$P{FUND_SORCE_START}+" ถึง "+$P{FUND_SORCE_END}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20">
+			<printWhenExpression><![CDATA[($P{REPORT_TYPE}=="EXCEL")?($V{PAGE_NUMBER}==1):true]]></printWhenExpression>
+			<textField pattern="">
+				<reportElement style="FBold" x="295" y="0" width="90" height="20" uuid="1cfcef44-2b8f-406d-84b0-ade687151b2c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["เดือน "+$V{DateThai}.get(Integer.parseInt($P{DATE_END}.substring(3,5))-1)+" "+$P{DATE_END}.substring(6)]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement style="FBold" x="385" y="0" width="90" height="20" uuid="4405b950-d2bf-46ad-8a89-2ca755703f63"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[(Integer.parseInt($P{DATE_END}.substring(3,5))-2==-1)?"เดือน "+$V{DateThai}.get(11)+" "+(Integer.parseInt($P{DATE_END}.substring(6))-1):("เดือน "+$V{DateThai}.get(Integer.parseInt($P{DATE_END}.substring(3,5))-2)+" "+$P{DATE_END}.substring(6))]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{HEADER3}!="รายได้สูง(ต่ำ)กว่าค่าใช้จ่าย"&&($P{REPORT_MAX_COUNT}>0)&&$F{HEADER1}!="รวม"]]></printWhenExpression>
+			<textField isBlankWhenNull="true">
+				<reportElement x="30" y="0" width="265" height="20" uuid="53106a6a-9783-4d6f-8c37-ab082d516368"/>
+				<textFieldExpression><![CDATA[$F{ACC_NAME}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement x="295" y="0" width="90" height="20" uuid="066486a0-be65-4abe-b1dc-bca32e9c83d0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{BALANCE_CURRENT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement x="385" y="0" width="90" height="20" uuid="93adeeb2-5acb-4bba-94e6-005571d9871b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{BALANCE_PAST}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement x="475" y="0" width="80" height="20" uuid="dbd1301d-f83d-4745-ac56-4b07de3b4cc6"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{BALANCE_CURRENT}-$F{BALANCE_PAST}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="32" splitType="Stretch">
+			<printWhenExpression><![CDATA[$P{REPORT_TYPE}!="EXCEL"]]></printWhenExpression>
+			<staticText>
+				<reportElement style="Rpt" x="295" y="20" width="260" height="12" uuid="b083821c-c77d-4824-b83f-c8871e1a675f"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[RPT : 09]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Default" x="0" y="0" width="295" height="20" uuid="7ad1e87b-215f-4c0b-823b-f01e03410bb5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["พิมพ์โดย : " + $P{PUBLISHER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Auto">
+				<reportElement x="295" y="0" width="260" height="20" uuid="eb800fe9-e105-4093-901b-f11ae05c2712"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["หน้า " + $V{CURRENT_PAGE}+" / " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="-1" y="20" width="296" height="12" uuid="2cf9b7da-189e-477e-83b8-4a8b10d81c5a"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["วันที่พิมพ์ : "+new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format($V{CURRENT_DATE})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="32">
+			<staticText>
+				<reportElement style="Rpt" x="295" y="20" width="260" height="12" uuid="c45f6036-86a0-4126-b3af-8832f9e7c033"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[RPT : 09]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Default" x="0" y="0" width="295" height="20" uuid="cfde5d33-59b3-4ec3-88c3-6f4f38431384"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["พิมพ์โดย : " + $P{PUBLISHER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Auto">
+				<reportElement x="295" y="0" width="260" height="20" uuid="07f2507c-ca68-464f-9e89-cdd6cca79869"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["หน้า " + $V{PAGE_NUMBER}+" / " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="-1" y="20" width="296" height="12" uuid="b95ce6ad-4757-4fab-9e82-4a6aa6187f8e"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<textFieldExpression><![CDATA["วันที่พิมพ์ : "+new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format($V{CURRENT_DATE})]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="40" width="295" height="20" uuid="f3d657b8-f236-44bb-b3b4-bd494b8eefda"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[เงินสดและรายการเทียบเท่าเงินสดคงเหลือ ณ วันปลายงวด]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="295" height="20" uuid="15155619-6159-4fb6-8575-e5925a908185"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[เงินสดเพิ่มขึ้นลดลงสุทธิ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="295" height="20" uuid="13118cf9-6ec8-4808-98a7-3b2be18384f9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[เงินสดและรายการเทียบเท่าเงินสดคงเหลือ ณ วันต้นงวด]]></text>
+			</staticText>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" x="295" y="40" width="260" height="20" uuid="9fcf2bf3-da2d-4cfb-a6d5-cc605d0bf6d1"/>
+				<box>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{SUM_CASH}+$V{money_ton}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" x="295" y="0" width="260" height="20" uuid="60a85dfe-a5d1-4253-a2c5-9d63c3059e5c"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{SUM_CASH}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement style="FBold" x="295" y="20" width="260" height="20" uuid="92a42c49-c1fc-474a-ae70-85a8ab7747b9"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{money_ton}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
