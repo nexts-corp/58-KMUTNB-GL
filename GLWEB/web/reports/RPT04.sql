@@ -34,7 +34,7 @@ SELECT * FROM
         AND glh.GLHEADSTATUS != 'V'
         AND 
             ( 
-                glh.GLHEADDATE >= TO_DATE('{{DATE_FRIST}}', 'DD/MM/YYYY')
+                glh.GLHEADDATE >= TO_DATE('{{DATE_START}}', 'DD/MM/YYYY')
                 AND glh.GLHEADDATE <= TO_DATE('{{DATE_END}}', 'DD/MM/YYYY')
             )
 
@@ -44,7 +44,7 @@ SELECT * FROM
         AND (gl.PROJECTID BETWEEN {{PROJECT_SORCE_START}} AND {{PROJECT_SORCE_END}} )
         AND (gl.ACTIVITYID BETWEEN {{ACTIVITY_SORCE_START}} AND {{ACTIVITY_SORCE_END}} )
         AND (gl.FUNDGROUPID BETWEEN {{FUND_SORCE_START}} AND {{FUND_SORCE_END}} )
-        {{BUDGET_SQL}}
+        {{& BUDGET_SQL}}
 
 
         GROUP BY ACCOUNTID

@@ -26,10 +26,13 @@ SELECT * FROM
   
     (
       SELECT
-
-        glc.ACCOUNTID,
-        0 AS DR_R,
-        0 AS CR_R,
+        CASE
+          WHEN glr.ACCOUNTID IS NULL
+          THEN glc.ACCOUNTID
+          ELSE glr.ACCOUNTID
+        END    AS ACCOUNTID,
+        glr.DR AS DR_R,
+        glr.CR AS CR_R,
         glc.DR AS DR_C,
         glc.CR AS CR_C
             
@@ -97,7 +100,88 @@ SELECT * FROM
               )
         )glc
       
-        ORDER BY ACCOUNTID
+      
+      
+      FULL JOIN
+      
+      
+        (
+        
+          SELECT ACCOUNTID,SUM(DR) AS DR,SUM(CR) AS CR
+          FROM
+            (
+              
+              /*--------------------พันยอดทั้งระบบ--------------------*/
+              
+                SELECT gl.ACCOUNTID,
+                  SUM(DR) AS DR,
+                  SUM(CR) AS CR
+                FROM MASTER3D.GL gl
+                LEFT JOIN MASTER3D.GLHEAD glh
+                ON gl.GLHEADID = glh.GLHEADID
+                WHERE 
+                  (
+                    gl.ACCOUNTID LIKE '1%'
+                    OR gl.ACCOUNTID LIKE '2%'
+                    OR
+                      (
+                        gl.ACCOUNTID LIKE '3%' 
+                        AND gl.accountid NOT IN (3200002000,3200003000)
+                      )
+                  )
+
+                AND glh.GLHEADSTATUS != 'V'
+                AND ( glh.GLHEADDATE < TO_DATE('{{DATE_FRIST}}', 'DD/MM/YYYY') )
+
+                AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
+                AND (gl.BUDGETGROUPID BETWEEN {{BUDGET_SORCE_START}} AND {{BUDGET_SORCE_END}} )
+                AND (gl.PLANID BETWEEN {{PLAN_SORCE_START}} AND {{PLAN_SORCE_END}} )
+                AND (gl.PROJECTID BETWEEN {{PROJECT_SORCE_START}} AND {{PROJECT_SORCE_END}} )
+                AND (gl.ACTIVITYID BETWEEN {{ACTIVITY_SORCE_START}} AND {{ACTIVITY_SORCE_END}} )
+                AND (gl.FUNDGROUPID BETWEEN {{FUND_SORCE_START}} AND {{FUND_SORCE_END}} )
+                {{BUDGET_SQL}}
+
+              GROUP BY gl.ACCOUNTID
+              
+              UNION
+              
+              SELECT 
+                3200003000 AS ACCOUNTID,DR,CR
+              FROM
+                (
+                    SELECT 
+                      SUM(CR) AS CR,
+                      SUM(DR) AS DR
+                    FROM MASTER3D.GL gl
+                    LEFT JOIN MASTER3D.GLHEAD glh
+                    ON glh.GLHEADID = gl.GLHEADID
+                    WHERE 
+                      (
+                        gl.ACCOUNTID IN (3200002000,3200003000)
+                        OR gl.ACCOUNTID LIKE '4%'
+                        OR gl.ACCOUNTID LIKE '5%'
+                      )
+                    AND glh.GLHEADSTATUS != 'V'
+                    AND ( glh.GLHEADDATE < TO_DATE('{{DATE_FRIST}}', 'DD/MM/YYYY') )
+
+                    AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
+                    AND (gl.BUDGETGROUPID BETWEEN {{BUDGET_SORCE_START}} AND {{BUDGET_SORCE_END}} )
+                    AND (gl.PLANID BETWEEN {{PLAN_SORCE_START}} AND {{PLAN_SORCE_END}} )
+                    AND (gl.PROJECTID BETWEEN {{PROJECT_SORCE_START}} AND {{PROJECT_SORCE_END}} )
+                    AND (gl.ACTIVITYID BETWEEN {{ACTIVITY_SORCE_START}} AND {{ACTIVITY_SORCE_END}} )
+                    AND (gl.FUNDGROUPID BETWEEN {{FUND_SORCE_START}} AND {{FUND_SORCE_END}} )
+                    {{BUDGET_SQL}}
+                )
+                
+                
+                
+            )
+          GROUP BY ACCOUNTID
+        
+        )glr
+        
+      ON glr.ACCOUNTID = glc.ACCOUNTID
+      ORDER BY ACCOUNTID
     )gl
     
     

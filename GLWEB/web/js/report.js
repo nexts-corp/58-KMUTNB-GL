@@ -53,14 +53,14 @@ $(document).ready(function () {
     }
 
 
-    $.post("/api/gl/form/user", {}, function (data) {
+    $.post("/GLWEB/api/gl/form/user", {}, function (data) {
         $(".user_adminname").text(data.user);
         UCheckAjaxLoad("user");
     }).fail(eror_401);
     
     
     
-    $.post("/api/gl/form/departmentCurrent", {}, function (data) {
+    $.post("/GLWEB/api/gl/form/departmentCurrent", {}, function (data) {
         $("#departmentName").text(data[0].departmentName);
         if(data[0].departmentId===0){
             $(".openRpt").show();
@@ -97,7 +97,7 @@ $(document).ready(function () {
 
 
 
-    $.post("./api/gl/form/department", {}, function (data) {
+    $.post("/GLWEB/api/gl/form/department", {}, function (data) {
         ksCallBack(function () {
 
             var i;
@@ -117,7 +117,7 @@ $(document).ready(function () {
     }).fail(eror_401);
 
 
-    $.post("./api/gl/form/departmentDetail", {}, function (data) {
+    $.post("/GLWEB/api/gl/form/departmentDetail", {}, function (data) {
         ksCallBack(function () {
 
             var i;
@@ -159,7 +159,7 @@ $(document).ready(function () {
     });
 
 
-    $.post("./api/gl/form/account", {}, function (data) {
+    $.post("/GLWEB/api/gl/form/account", {}, function (data) {
 
         ksCallBack(function () {
 
@@ -180,7 +180,7 @@ $(document).ready(function () {
     }).fail(eror_401);
 
 
-    $.post("./api/gl/form/plan", {depId: 0}, function (data) {
+    $.post("/GLWEB/api/gl/form/plan", {depId: 0}, function (data) {
 
         ksCallBack(function () {
 
@@ -208,7 +208,7 @@ $(document).ready(function () {
 
     function getOptionPlanProjectActivity(depIdVal) {
 
-        $.post("./api/gl/form/project", {depId: depIdVal}, function (data) {
+        $.post("/GLWEB/api/gl/form/project", {depId: depIdVal}, function (data) {
 
             ksCallBack(function () {
 
@@ -229,7 +229,7 @@ $(document).ready(function () {
         }).fail(eror_401);
 
 
-        $.post("./api/gl/form/activity", {depId: depIdVal}, function (data) {
+        $.post("/GLWEB/api/gl/form/activity", {depId: depIdVal}, function (data) {
 
             ksCallBack(function () {
 
@@ -256,7 +256,7 @@ $(document).ready(function () {
 
 
 
-    $.post("./api/gl/form/fundGroup", {}, function (data) {
+    $.post("/GLWEB/api/gl/form/fundGroup", {}, function (data) {
 
         ksCallBack(function () {
 
@@ -279,7 +279,7 @@ $(document).ready(function () {
 
 
 
-    $.post("./api/gl/form/budgetGroup", {}, function (data) {
+    $.post("/GLWEB/api/gl/form/budgetGroup", {}, function (data) {
 
         ksCallBack(function () {
 
@@ -406,7 +406,7 @@ $(document).ready(function () {
     
     
     var dataMgr = [];
-    $.post("./api/gl/form/mgr", {}, function (data) {
+    $.post("/GLWEB/api/gl/form/mgr", {}, function (data) {
         dataMgr = data;
     }).fail(eror_401);
     
@@ -496,9 +496,23 @@ $(document).ready(function () {
         
     }
     
+    
+    
+    //เช็ควันแรกของปีงบประมาณ
+    function FristDayBudgetYear(date){
+        var splitText = date.split("/");
+        
+        if((splitText[0]+splitText[1])==="0110"){
+            return true;
+        }else{
+            return false;
+        }
+        
+    }
    
 
     $(document).on("click", ".bExport", function () {
+        
         
         var sendData = {
             BUDGET_SORCE_START: $('#source_start').val(),
@@ -523,7 +537,8 @@ $(document).ready(function () {
             REFERNAME1: '',
             MGRNAMETHAI1: '',
             REFERNAME2: '',
-            MGRNAMETHAI2: ''
+            MGRNAMETHAI2: '',
+            QUERYALLSYSTEM:FristDayBudgetYear($('#date_start').val())
         };
 
 
@@ -574,7 +589,7 @@ $(document).ready(function () {
         };
         console.log(JSON.stringify(sendData, null, 4));
 
-        var url = "/api/gl/report/export?reportcode=" + data.reportcode + "&export=" + data.export + "&param=" + data.param;
+        var url = "/GLWEB/api/gl/report/export?reportcode=" + data.reportcode + "&export=" + data.export + "&param=" + data.param;
         
         if (data.export == "pdfview") {
             var win = window.open();

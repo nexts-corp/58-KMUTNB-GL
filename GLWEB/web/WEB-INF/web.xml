@@ -5,14 +5,15 @@
 	 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	 version="3.1">
     
-    <servlet>
+   <servlet>
         <servlet-name>CRequestServlet2</servlet-name>
         <servlet-class>th.co.bpg.cde.handler.http.CRequestServlet</servlet-class>
+       <async-supported>true</async-supported>
     </servlet>
     <servlet-mapping>
         <servlet-name>CRequestServlet2</servlet-name>
         <url-pattern>/GLWEB/api/*</url-pattern>
-        
+<!--        <async-supported>true</async-supported>-->
     </servlet-mapping>
     <session-config>
         <session-timeout>

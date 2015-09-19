@@ -30,8 +30,9 @@ public class FormService extends CServiceBase implements IFormService {
     }
 
     private String readSQL(String sqlName) {
+     
         StringBuilder sb = new StringBuilder();
-        try (Scanner scanner = new Scanner(new FileInputStream("./sql/" + sqlName + ".sql"), "UTF-8")) {
+        try (Scanner scanner = new Scanner(new FileInputStream(this.currentPaht+"/sql/" + sqlName + ".sql"), "UTF-8")) {
             while (scanner.hasNextLine()) {
                 sb.append(scanner.nextLine());
                 sb.append(" ");

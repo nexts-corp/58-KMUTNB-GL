@@ -50,7 +50,7 @@ public class ReportService extends CServiceBase implements IReportService {
 
         gen.setReport(reportName + ".jasper");
         try {
-            gen.setReport(new FileInputStream("./reports/" + reportName + ".jasper"));
+            gen.setReport(new FileInputStream(this.currentPaht+"/reports/" + reportName + ".jasper"));
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ReportService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -88,7 +88,7 @@ public class ReportService extends CServiceBase implements IReportService {
         }
         
         StringBuilder sb = new StringBuilder();
-        try (Scanner scanner = new Scanner(new FileInputStream("./reports/" + reportName + qa + ".sql"), "UTF-8")) {
+        try (Scanner scanner = new Scanner(new FileInputStream(this.currentPaht+"/reports/" + reportName + qa + ".sql"), "UTF-8")) {
             while (scanner.hasNextLine()) {
                 sb.append(scanner.nextLine());
                 sb.append(" ");

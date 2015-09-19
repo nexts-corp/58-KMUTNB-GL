@@ -57,8 +57,9 @@ public class AuthenService extends CServiceBase implements CIAuthentication {
             connectionProps.put("password", password);
             Class.forName("oracle.jdbc.OracleDriver");
             //DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
-
-            conn = DriverManager.getConnection("jdbc:oracle:thin:@25.32.200.27:1521:gl3d", connectionProps);
+            //String xx=(String) this.getDataContext().getEntityManager().getProperties().get("URL");
+            
+            conn = DriverManager.getConnection("jdbc:oracle:thin:@10.10.200.9:1521:gl3d", connectionProps);
 
             conn.close();
             return true;

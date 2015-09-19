@@ -23,7 +23,9 @@
     <class>th.ac.kmutnb.gl.myreport.model.RPT10_model</class>
     <class>th.ac.kmutnb.gl.myreport.model.RPT11_model</class>
     <class>th.ac.kmutnb.gl.myreport.model.RPT12_model</class>
-    
+    <class>th.ac.kmutnb.gl.myreport.entity.Mgr</class>
+    <class>th.ac.kmutnb.gl.myreport.model.RPT13_model</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
      
     </properties>
