@@ -129,7 +129,7 @@ FROM
 
 
 
-      UNION
+      UNION ALL
 
 
 

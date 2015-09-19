@@ -48,6 +48,8 @@ public class BaseParameter {
     String MGRNAMETHAI1;
     String REFERNAME2;
     String MGRNAMETHAI2;
+    Boolean QUERYALLSYSTEM;
+    String QUERYALLSYSTEM_SQL;
 
     public String getREFERNAME1() {
         return REFERNAME1;
@@ -293,5 +295,27 @@ public class BaseParameter {
     public void setREPORT_TYPE(String REPORT_TYPE) {
         this.REPORT_TYPE = REPORT_TYPE;
     }
+
+    public Boolean getQUERYALLSYSTEM() {
+        return QUERYALLSYSTEM;
+    }
+
+    public void setQUERYALLSYSTEM(Boolean QUERYALLSYSTEM) {
+        this.QUERYALLSYSTEM = QUERYALLSYSTEM;
+    }
+
+    public String getQUERYALLSYSTEM_SQL() {
+        return QUERYALLSYSTEM_SQL;
+    }
+
+    public void setQUERYALLSYSTEM_SQL(String QUERYALLSYSTEM_SQL) {
+        this.QUERYALLSYSTEM_SQL = QUERYALLSYSTEM_SQL;
+    }
+
+    
+    
+    
+    
+    
 
 }

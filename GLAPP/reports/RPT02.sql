@@ -123,7 +123,7 @@ FROM
     ) glall ON acc.ACCOUNTID = glall.ACCOUNTID
     
     
-  UNION
+  UNION ALL
   
   
   

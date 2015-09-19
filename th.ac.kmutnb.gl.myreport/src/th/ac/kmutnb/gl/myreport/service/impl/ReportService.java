@@ -77,13 +77,18 @@ public class ReportService extends CServiceBase implements IReportService {
     }
 
     private String readSQL(String reportName) {
-        return this.readSQL(reportName, null);
+        return this.readSQL(reportName, null,null);
     }
 
-    private String readSQL(String reportName, Object params) {
-
+    private String readSQL(String reportName, Object params,Boolean checkQueryAll) {
+        
+        String qa = "";
+        if(checkQueryAll && (reportName.equals("RPT01") || reportName.equals("RPT07"))){
+            qa = "A";
+        }
+        
         StringBuilder sb = new StringBuilder();
-        try (Scanner scanner = new Scanner(new FileInputStream("./reports/" + reportName + ".sql"), "UTF-8")) {
+        try (Scanner scanner = new Scanner(new FileInputStream("./reports/" + reportName + qa + ".sql"), "UTF-8")) {
             while (scanner.hasNextLine()) {
                 sb.append(scanner.nextLine());
                 sb.append(" ");
@@ -117,7 +122,7 @@ public class ReportService extends CServiceBase implements IReportService {
             Class reportClass = Class.forName("th.ac.kmutnb.gl.myreport.model."+ reportCode.toUpperCase() + "_model");
             String reportName = reportCode.toUpperCase();
 
-            String reportSQL = this.readSQL(reportName,initialParam(psql));
+            String reportSQL = this.readSQL(reportName,initialParam(psql),psql.getQUERYALLSYSTEM());
 
             List<BaseReport> datas = (List<BaseReport>) this.dbcon.nativeQuery(reportClass, reportSQL);
             CReportGenerater gen = this.newReportGenerater(reportName, exportType);
@@ -154,6 +159,11 @@ public class ReportService extends CServiceBase implements IReportService {
         paramJson.setDATE_FRIST(DateUtil.FirstPeriod(paramJson.getDATE_START()));
         String DATE_Previous = DateUtil.DATE_Previous(paramJson.getDATE_END());
         paramJson.setDATE_PREVIOUS(DATE_Previous);
+        
+        if(!paramJson.getQUERYALLSYSTEM()){
+            paramJson.setQUERYALLSYSTEM_SQL("AND  glh.GLHEADDATE >= TO_DATE('"+paramJson.getDATE_START()+"', 'DD/MM/YYYY')");
+        }
+        
         if(paramJson.getBUDGET_TYPE().equals("3")){
             paramJson.setBUDGET_SQL("AND (gl.BUDGETGROUPID != 301010)");
         }

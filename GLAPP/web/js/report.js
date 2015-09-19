@@ -496,9 +496,23 @@ $(document).ready(function () {
         
     }
     
+    
+    
+    //เช็ควันแรกของปีงบประมาณ
+    function FristDayBudgetYear(date){
+        var splitText = date.split("/");
+        
+        if((splitText[0]+splitText[1])==="0110"){
+            return true;
+        }else{
+            return false;
+        }
+        
+    }
    
 
     $(document).on("click", ".bExport", function () {
+        
         
         var sendData = {
             BUDGET_SORCE_START: $('#source_start').val(),
@@ -523,7 +537,8 @@ $(document).ready(function () {
             REFERNAME1: '',
             MGRNAMETHAI1: '',
             REFERNAME2: '',
-            MGRNAMETHAI2: ''
+            MGRNAMETHAI2: '',
+            QUERYALLSYSTEM:FristDayBudgetYear($('#date_start').val())
         };
 
 
