@@ -150,13 +150,13 @@ FROM
           SELECT ACCOUNTID,
           ''                                    AS ACCOUNTNAME,
           000000                                AS GLHEADID,
-          TO_DATE('01/10/2014', 'DD/MM/YYYY')-1 AS GLHEADDATE,
+          TO_DATE('{{DATE_START}}', 'DD/MM/YYYY') AS GLHEADDATE,
           ''                                    AS DOCNUMBER,
           'ยอดยกมา'                             AS DESCRIPTION1,
           DEPARTMENTID,
           ''                                    AS REFDOC,
           ''                                    AS CHEQUEID,
-          TO_DATE('01/10/2014', 'DD/MM/YYYY')   AS REFDATE2,
+          TO_DATE('{{DATE_START}}', 'DD/MM/YYYY')   AS REFDATE2,
           CR,
           DR
         FROM

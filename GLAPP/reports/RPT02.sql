@@ -144,7 +144,7 @@ FROM
       SELECT ACCOUNTID,
       ''                                    AS ACCOUNTNAME,
       000000                                AS GLHEADID,
-      TO_DATE('{{DATE_START}}', 'DD/MM/YYYY')-1 AS GLHEADDATE,
+      TO_DATE('{{DATE_START}}', 'DD/MM/YYYY') AS GLHEADDATE,
       ''                                    AS DOCNUMBER,
       'ยอดยกมา'                             AS DESCRIPTION1,
       0                                     AS DEPARTMENTID,
