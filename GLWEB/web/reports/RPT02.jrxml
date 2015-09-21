@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT02" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
-	<property name="ireport.zoom" value="1.5421731577182582"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="2.4836852922368364"/>
+	<property name="ireport.x" value="20"/>
+	<property name="ireport.y" value="306"/>
 	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
 	<style name="FBold" fill="Solid" hAlign="Left" vAlign="Top" fontName="TH SarabunPSK" fontSize="14" isBold="true" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H"/>
 	<style name="Rpt" fontName="TH SarabunPSK" fontSize="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
@@ -359,7 +359,7 @@
 		<band height="40" splitType="Stretch">
 			<printWhenExpression><![CDATA[($P{REPORT_TYPE}=="EXCEL")?($V{PAGE_NUMBER}==1):true]]></printWhenExpression>
 			<staticText>
-				<reportElement style="FBold" x="0" y="20" width="53" height="20" uuid="a9568b26-fca8-465b-8fac-5a2cba7b342f"/>
+				<reportElement style="FBold" x="0" y="20" width="48" height="20" uuid="a9568b26-fca8-465b-8fac-5a2cba7b342f"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="0.0"/>
@@ -371,7 +371,7 @@
 				<text><![CDATA[วันที่]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="FBold" x="117" y="20" width="269" height="20" uuid="b1777716-2d0e-43e3-9ee5-72b7d4899f24"/>
+				<reportElement style="FBold" x="112" y="20" width="250" height="20" uuid="b1777716-2d0e-43e3-9ee5-72b7d4899f24"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
@@ -427,7 +427,7 @@
 				<text><![CDATA[เดบิต]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="FBold" x="416" y="20" width="69" height="20" uuid="1a3166a8-75bd-4040-a0e8-6b53b826e139"/>
+				<reportElement style="FBold" x="392" y="20" width="93" height="20" uuid="1a3166a8-75bd-4040-a0e8-6b53b826e139"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
@@ -438,7 +438,7 @@
 				<text><![CDATA[เอกสารอ้างอิง]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="FBold" x="53" y="20" width="64" height="20" uuid="c4ba7042-b8b9-40e1-92f6-34ab2df57616"/>
+				<reportElement style="FBold" x="48" y="20" width="64" height="20" uuid="c4ba7042-b8b9-40e1-92f6-34ab2df57616"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
@@ -449,7 +449,7 @@
 				<text><![CDATA[เลขที่เอกสาร]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="FBold" x="386" y="20" width="30" height="20" uuid="82ae5df2-c690-4cc2-8698-fbc18213c63a"/>
+				<reportElement style="FBold" x="362" y="20" width="30" height="20" uuid="82ae5df2-c690-4cc2-8698-fbc18213c63a"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
@@ -486,7 +486,7 @@
 		<band height="20" splitType="Prevent">
 			<printWhenExpression><![CDATA[($P{REPORT_MAX_COUNT}>0)?true:false]]></printWhenExpression>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="53" height="20" uuid="95054f46-4963-4519-b15d-8f5a23bbafb2"/>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="48" height="20" uuid="95054f46-4963-4519-b15d-8f5a23bbafb2"/>
 				<textElement verticalAlignment="Top">
 					<font size="12"/>
 				</textElement>
@@ -507,28 +507,7 @@
 				<textFieldExpression><![CDATA[($F{GLHEADID}!="0")?(($F{REFDATE2}==null)?"-":$F{REFDATE2}):""]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="386" y="0" width="30" height="20" uuid="f30e5072-8a40-4f95-b3a8-5f705b536d04"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($F{GLHEADID}!="0")?(($F{DEPARTMENTID}==null)?"-":$F{DEPARTMENTID}):""]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
-				<reportElement stretchType="RelativeToBandHeight" x="732" y="0" width="70" height="20" uuid="19a80f8a-a56b-49a4-963a-588c08c8c1f9"/>
-				<textElement textAlignment="Right" verticalAlignment="Top">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{BALANCE}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="53" y="0" width="64" height="20" uuid="a70485d3-e12f-4971-8645-bd7934842dbb"/>
-				<textElement verticalAlignment="Top">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($F{GLHEADID}!="0")?(($F{DOCNUMBER}==null)?"-":$F{DOCNUMBER}):""]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="117" y="0" width="269" height="20" uuid="00351e17-3752-4595-8bfe-4fc95d192e05"/>
+				<reportElement stretchType="RelativeToBandHeight" x="112" y="0" width="250" height="20" uuid="00351e17-3752-4595-8bfe-4fc95d192e05"/>
 				<textElement verticalAlignment="Top" markup="html">
 					<font size="12"/>
 				</textElement>
@@ -549,11 +528,32 @@
 				<textFieldExpression><![CDATA[($V{RECIVE}>=0.0)?$V{RECIVE}:0.0]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="416" y="0" width="69" height="20" uuid="e4dd7509-ac87-48dd-bc3d-4a087ef9c62f"/>
+				<reportElement stretchType="RelativeToBandHeight" x="392" y="0" width="93" height="20" uuid="e4dd7509-ac87-48dd-bc3d-4a087ef9c62f"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($F{GLHEADID}!="0")?(($F{REFDOC}==null)?"-":$F{REFDOC}):""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="362" y="0" width="30" height="20" uuid="f30e5072-8a40-4f95-b3a8-5f705b536d04"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{GLHEADID}!="0")?(($F{DEPARTMENTID}==null)?"-":$F{DEPARTMENTID}):""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToBandHeight" x="732" y="0" width="70" height="20" uuid="19a80f8a-a56b-49a4-963a-588c08c8c1f9"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{BALANCE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="48" y="0" width="64" height="20" uuid="a70485d3-e12f-4971-8645-bd7934842dbb"/>
+				<textElement verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{GLHEADID}!="0")?(($F{DOCNUMBER}==null)?"-":$F{DOCNUMBER}):""]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
