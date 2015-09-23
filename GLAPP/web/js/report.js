@@ -97,7 +97,7 @@ $(document).ready(function () {
 
 
 
-    $.post("./api/gl/form/department", {}, function (data) {
+    $.post("/api/gl/form/department", {}, function (data) {
         ksCallBack(function () {
 
             var i;
@@ -117,7 +117,7 @@ $(document).ready(function () {
     }).fail(eror_401);
 
 
-    $.post("./api/gl/form/departmentDetail", {}, function (data) {
+    $.post("/api/gl/form/departmentDetail", {}, function (data) {
         ksCallBack(function () {
 
             var i;
@@ -159,7 +159,7 @@ $(document).ready(function () {
     });
 
 
-    $.post("./api/gl/form/account", {}, function (data) {
+    $.post("/api/gl/form/account", {}, function (data) {
 
         ksCallBack(function () {
 
@@ -180,7 +180,7 @@ $(document).ready(function () {
     }).fail(eror_401);
 
 
-    $.post("./api/gl/form/plan", {depId: 0}, function (data) {
+    $.post("/api/gl/form/plan", {depId: 0}, function (data) {
 
         ksCallBack(function () {
 
@@ -208,7 +208,7 @@ $(document).ready(function () {
 
     function getOptionPlanProjectActivity(depIdVal) {
 
-        $.post("./api/gl/form/project", {depId: depIdVal}, function (data) {
+        $.post("/api/gl/form/project", {depId: depIdVal}, function (data) {
 
             ksCallBack(function () {
 
@@ -229,7 +229,7 @@ $(document).ready(function () {
         }).fail(eror_401);
 
 
-        $.post("./api/gl/form/activity", {depId: depIdVal}, function (data) {
+        $.post("/api/gl/form/activity", {depId: depIdVal}, function (data) {
 
             ksCallBack(function () {
 
@@ -256,7 +256,7 @@ $(document).ready(function () {
 
 
 
-    $.post("./api/gl/form/fundGroup", {}, function (data) {
+    $.post("/api/gl/form/fundGroup", {}, function (data) {
 
         ksCallBack(function () {
 
@@ -279,7 +279,7 @@ $(document).ready(function () {
 
 
 
-    $.post("./api/gl/form/budgetGroup", {}, function (data) {
+    $.post("/api/gl/form/budgetGroup", {}, function (data) {
 
         ksCallBack(function () {
 
@@ -406,7 +406,7 @@ $(document).ready(function () {
     
     
     var dataMgr = [];
-    $.post("./api/gl/form/mgr", {}, function (data) {
+    $.post("/api/gl/form/mgr", {}, function (data) {
         dataMgr = data;
     }).fail(eror_401);
     
