@@ -174,6 +174,7 @@ public class DateUtil {
     }
 
     public static String currentDate() {
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Bangkok"));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Date now = new Date();
 
@@ -181,7 +182,7 @@ public class DateUtil {
     }
 
     public static String DATE_Previous(String date) {
-
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Bangkok"));
         DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Date today = null;
         try {
