@@ -249,6 +249,7 @@ public class FormService extends CServiceBase implements IFormService {
     
     @Override
     public String user() {
+        this.response.addData("ssid",this.request.getValue(String.class, "JSESSIONID"));
         return this.account.getName();
     }
     

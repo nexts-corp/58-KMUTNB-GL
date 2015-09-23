@@ -18,7 +18,10 @@ import java.util.Locale;
  * @author Panya
  */
 public class BaseParameter {
+    String SSID;
 
+    String REPORT_CODE;
+    String EXPORT_TYPE;
     Locale REPORT_LOCALE;
     int REPORT_MAX_COUNT;
     String REPORT_TYPE;
@@ -311,6 +314,34 @@ public class BaseParameter {
     public void setQUERYALLSYSTEM_SQL(String QUERYALLSYSTEM_SQL) {
         this.QUERYALLSYSTEM_SQL = QUERYALLSYSTEM_SQL;
     }
+
+    public String getREPORT_CODE() {
+        return REPORT_CODE;
+    }
+
+    public void setREPORT_CODE(String REPORT_CODE) {
+        this.REPORT_CODE = REPORT_CODE;
+    }
+
+    public String getEXPORT_TYPE() {
+        return EXPORT_TYPE;
+    }
+
+    public void setEXPORT_TYPE(String EXPORT_TYPE) {
+        this.EXPORT_TYPE = EXPORT_TYPE;
+    }
+
+    public String getSSID() {
+        return SSID;
+    }
+
+    public void setSSID(String SSID) {
+        this.SSID = SSID;
+    }
+
+   
+    
+    
 
     
     

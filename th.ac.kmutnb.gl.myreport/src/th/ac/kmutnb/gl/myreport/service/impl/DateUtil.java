@@ -173,6 +173,12 @@ public class DateUtil {
 
     }
 
+    public static String currentTimestamp(){
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Bangkok"));
+         Date now = new Date();
+         return now.getTime()+"";
+    }
+    
     public static String currentDate() {
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Bangkok"));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
