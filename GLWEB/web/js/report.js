@@ -1,7 +1,6 @@
-//ggggg
+
 $(document).ready(function () {
-
-
+    
     $(".bExport").attr("disabled",true)
     $(".cDate").datepicker({language: 'th-th', format: 'dd/mm/yyyy', autoclose: true});
 
@@ -53,9 +52,11 @@ $(document).ready(function () {
         }
     }
 
+    var _current_ssid="";
 
     $.post("/GLWEB/api/gl/form/user", {}, function (data) {
         $(".user_adminname").text(data.user);
+        _current_ssid=data.ssid;
         UCheckAjaxLoad("user");
     }).fail(eror_401);
     
@@ -148,8 +149,6 @@ $(document).ready(function () {
             $(optionName).find("option").hide();
             $(optionName).find('option[value="' + $("#department").val() + '"]').show();
             $(optionName).find('option[master-id="' + $("#department").val() + '"]').show();
-            //$(optionName).find('option[master-id="' + $("#department").val() + '"]').first().attr("selected", true);
-
             $(optionName).find('option[value="' + $("#department").val() + '"]').first().attr("selected", true);
             $(optionName).find('option[master-id="' + $("#department").val() + '"]').last().attr("selected", true);
         }
@@ -498,8 +497,6 @@ $(document).ready(function () {
     }
     
     
-    
-    //เช็ควันแรกของปีงบประมาณ
     function FristDayBudgetYear(date){
         var splitText = date.split("/");
         
@@ -513,9 +510,11 @@ $(document).ready(function () {
    
 
     $(document).on("click", ".bExport", function () {
-        
-        
+      
         var sendData = {
+            SSID:_current_ssid,
+            REPORT_CODE: $('#report_type').val(),
+            EXPORT_TYPE: $(this).attr('exporttype'),
             BUDGET_SORCE_START: $('#source_start').val(),
             BUDGET_SORCE_END: $('#source_end').val(),
             DATE_START: $('#date_start').val(),
@@ -582,28 +581,15 @@ $(document).ready(function () {
         sendData.REFERNAME2 = signature[1].referName;
         sendData.MGRNAMETHAI2 = signature[1].mgrNameThai;
 
-
-        var data = {
-            reportcode: $('#report_type').val(),
-            export: $(this).attr('exporttype'),
-            param: encodeURIComponent(JSON.stringify(sendData))
-        };
-        console.log(JSON.stringify(sendData, null, 4));
-
-        var url = "/GLWEB/api/gl/report/export?reportcode=" + data.reportcode + "&export=" + data.export + "&param=" + data.param;
-        
-        if (data.export == "pdfview") {
-            var win = window.open();
-            win.document.write('<title>เรียกดูรายงาน : ระบบบัญชีแยกประเภทสามมิติ</title><link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"><style type="text/css"> .loading {text-align: center; position: fixed; width: 100%; height: 100%; left: 0; top: 0; background: #f1f1f1; z-index: 1000; } </style><script>function fn(){document.getElementById("loading").remove();}</script><div id="loading" class="loading"><br><br><br><br><i class="fa fa-cog fa-spin fa-2x"></i><br>กรุณารอสักครู่</div><iframe src="' + url + '" onload="fn()" name="theFrame" frameborder="0" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="100%" width="100%"></iframe><script>location.hash = "viewReport"</script>');
-        } else {
-            var win = window.open();
-            win.document.write('<title>ดาวน์โหลดไฟล์ : ระบบบัญชีแยกประเภทสามมิติ</title><link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"><style type="text/css"> .loading {text-align: center; position: fixed; width: 100%; height: 100%; left: 0; top: 0; background: #f1f1f1; z-index: 1000; } </style><script> function fn(){document.getElementById("loading").remove();}</script><div id="loading" class="loading"><br><br><br><br><i class="fa fa-download fa-2x"></i><br>ทำการดาวน์โหลดไฟล์</div><iframe src="' + url + '" onload="fn()" name="theFrame" frameborder="0" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="100%" width="100%"></iframe><script>location.hash = "viewReport"</script>');
-        }
-
-
-
+      
+        var bytes = utf8.encode(JSON.stringify(sendData));
+        var encoded = base64.encode(bytes);
+        //encoded=encodeURIComponent(encoded);
+      //  alert(encoded);
+        window.open("/GLWEB/api/gl/report/export?param="+encoded);
     });
-
-
+    
 
 });
+
+
