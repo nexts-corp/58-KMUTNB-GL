@@ -13,9 +13,10 @@ import th.co.bpg.cde.collection.CJFile;
 public interface IReportService {
 
     @CIOperation(Uri = "/export",Authentication = true,ResourceCode ="*")
-    public CJFile export(@CIParam(Name="reportcode") String reportCode
-            ,@CIParam(Name="export") String exportType
-            ,@CIParam(Name="param")String param);
+    public CJFile export(@CIParam(Name="param")String param);
+    
+    @CIOperation(Uri = "/download",Authentication = true,ResourceCode ="*")
+    public CJFile downlaod(@CIParam(Name="param")String param); 
     
     @CIOperation(Uri = "/checkSingIn",Authentication = true,ResourceCode ="*")
     public String checkSingIn();
