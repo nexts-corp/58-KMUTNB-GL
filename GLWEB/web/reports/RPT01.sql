@@ -1,3 +1,4 @@
+
 SELECT * FROM
   (
     SELECT ROW_NUMBER() OVER (ORDER BY maps.M_ACCOUNT_ID) AS id,
