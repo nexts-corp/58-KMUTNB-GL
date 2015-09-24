@@ -6,9 +6,12 @@
 package th.ac.kmutnb.gl.myreport.service.impl;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ public class ReportService extends CServiceBase implements IReportService {
     private final CDataContext dbcon;
 
     public ReportService() {
+        System.setProperty("DEBUG", "false");
         this.dbcon = this.getDataContext();
     }
 
@@ -274,6 +278,52 @@ public class ReportService extends CServiceBase implements IReportService {
     @Override
     public String checkSingIn() {
         return "ok";
+    }
+
+    @Override
+    public CJFile js() {
+//        String input ="/th/ac/kmutnb/gl/web/res/report.js";
+//        Class _ass=this.getClass();
+//        try (InputStream in =_ass.getResourceAsStream(input)) {
+//            ByteArrayOutputStream out = new ByteArrayOutputStream();
+//            byte[] b = new byte[4096];
+//            for (int n; (n = in.read(b)) != -1;) {
+//                out.write(b, 0, n);
+//            }
+//            out.close();
+//            String js = out.toString("UTF-8");
+//            js = js.replaceAll("(\r\n|\n)", "");
+//            
+//            CJFile filex = new CJFile(js, CJFile.CJFileType.JS, CJFile.CJFileSourceType.STRING);
+//            return filex;
+//        } catch (FileNotFoundException ex) {
+//            Logger.getLogger(ReportService.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (IOException ex) {
+//            Logger.getLogger(ReportService.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+        
+        CJFile filex = new CJFile("/th/ac/kmutnb/gl/web/res/report.js", CJFile.CJFileType.JS, CJFile.CJFileSourceType.RESOURCES);
+        return filex;
+
+    }
+
+    @Override
+    public CJFile index() {
+        CJFile filex = new CJFile("/th/ac/kmutnb/gl/web/res/index.html", CJFile.CJFileType.HTML, CJFile.CJFileSourceType.RESOURCES);
+        return filex;
+    }
+
+    @Override
+    public CJFile main() {
+        CJFile filex = new CJFile("/th/ac/kmutnb/gl/web/res/main.html", CJFile.CJFileType.HTML, CJFile.CJFileSourceType.RESOURCES);
+        return filex;
+    }
+
+    @Override
+    public CJFile login() {
+        CJFile filex = new CJFile("/th/ac/kmutnb/gl/web/res/login.html", CJFile.CJFileType.HTML, CJFile.CJFileSourceType.RESOURCES);
+        return filex;
     }
 
 }

@@ -10,10 +10,10 @@
         }
     ],
     "aaa":{
-        "authenForm":"/GLWEB/login.html",
+        "authenForm":"/GLWEB/api/gl/report/login",
         "authenAPI":"/GLWEB/api/gl/authen/signin",
         "logoutAPI":"/GLWEB/api/gl/authen/signout",
-        "welcomePage":"/GLWEB/main.html",
+        "welcomePage":"/GLWEB/api/gl/report/main",
         "sessionTimeOut":-1
     }
 }
