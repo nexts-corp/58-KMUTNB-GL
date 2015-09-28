@@ -18,7 +18,7 @@
                 };
                 
                 $.post("/GLWEB/api/gl/report/checkSingIn", {}, function () {
-                    window.location.href = "/GLWEB/main.html";
+                    window.location.href = "/GLWEB/api/gl/report/main";
                 }).fail(eror_401);
             });
         </script>
