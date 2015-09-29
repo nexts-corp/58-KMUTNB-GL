@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Template" language="groovy" pageWidth="1190" pageHeight="842" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="1150" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
-	<property name="ireport.zoom" value="1.5421731577181834"/>
-	<property name="ireport.x" value="294"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="1.6963904734900053"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="19"/>
 	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
 	<style name="FBold" fill="Solid" hAlign="Left" vAlign="Top" fontName="TH SarabunPSK" fontSize="14" isBold="true" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H"/>
 	<style name="Rpt" fontName="TH SarabunPSK" fontSize="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
@@ -437,6 +437,9 @@
 		<variableExpression><![CDATA[($V{RESULT_B}<0.0)?$V{RESULT_B}:0.0]]></variableExpression>
 		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
 	</variable>
+	<variable name="RV_UP_DOWN" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{SUM_RPD}-Math.abs($V{SUM_RPC})]]></variableExpression>
+	</variable>
 	<variable name="CURRENT_PAGE" class="java.lang.Integer" resetType="None" calculation="DistinctCount">
 		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
 		<initialValueExpression><![CDATA[new Integer(1)]]></initialValueExpression>
@@ -656,7 +659,6 @@
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
-			<printWhenExpression><![CDATA[($P{REPORT_MAX_COUNT}>0)]]></printWhenExpression>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="265" height="20" uuid="00495550-0f49-475b-bc77-bd3c6a2a4aac"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -743,9 +745,6 @@
 			</textField>
 		</band>
 	</detail>
-	<columnFooter>
-		<band splitType="Stretch"/>
-	</columnFooter>
 	<pageFooter>
 		<band height="32" splitType="Stretch">
 			<printWhenExpression><![CDATA[$P{REPORT_TYPE}!="EXCEL"]]></printWhenExpression>
@@ -808,9 +807,9 @@
 		</band>
 	</lastPageFooter>
 	<summary>
-		<band height="30" splitType="Stretch">
+		<band height="50" splitType="Stretch">
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-				<reportElement style="FBold" x="412" y="0" width="82" height="30" uuid="b019dae4-d06e-4eb6-a716-16cf5d4e7850"/>
+				<reportElement style="FBold" x="412" y="20" width="82" height="30" uuid="b019dae4-d06e-4eb6-a716-16cf5d4e7850"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<bottomPen lineWidth="3.0" lineStyle="Double"/>
@@ -821,7 +820,7 @@
 				<textFieldExpression><![CDATA[Math.abs($V{SUM_RTC})]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-				<reportElement style="FBold" x="330" y="0" width="82" height="30" uuid="42051920-0484-4291-bc3b-592484057010"/>
+				<reportElement style="FBold" x="330" y="20" width="82" height="30" uuid="42051920-0484-4291-bc3b-592484057010"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<bottomPen lineWidth="3.0" lineStyle="Double"/>
@@ -832,7 +831,7 @@
 				<textFieldExpression><![CDATA[$V{SUM_RTD}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-				<reportElement style="FBold" x="494" y="0" width="82" height="30" uuid="a752a510-768b-4875-b9c0-9eca8c5bc182"/>
+				<reportElement style="FBold" x="494" y="20" width="82" height="30" uuid="a752a510-768b-4875-b9c0-9eca8c5bc182"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<bottomPen lineWidth="3.0" lineStyle="Double"/>
@@ -843,7 +842,7 @@
 				<textFieldExpression><![CDATA[$V{SUM_RUD}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-				<reportElement style="FBold" x="576" y="0" width="82" height="30" uuid="de1f794e-9d99-4b31-a09a-6df89020d38b"/>
+				<reportElement style="FBold" x="576" y="20" width="82" height="30" uuid="de1f794e-9d99-4b31-a09a-6df89020d38b"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<bottomPen lineWidth="3.0" lineStyle="Double"/>
@@ -854,7 +853,7 @@
 				<textFieldExpression><![CDATA[Math.abs($V{SUM_RUC})]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-				<reportElement style="FBold" x="740" y="0" width="82" height="30" uuid="b7bc74df-1ee4-4ec7-b9c6-e8bf9463d156"/>
+				<reportElement style="FBold" x="740" y="20" width="82" height="30" uuid="b7bc74df-1ee4-4ec7-b9c6-e8bf9463d156"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<bottomPen lineWidth="3.0" lineStyle="Double"/>
@@ -865,7 +864,7 @@
 				<textFieldExpression><![CDATA[Math.abs($V{SUM_RAC})]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-				<reportElement style="FBold" x="658" y="0" width="82" height="30" uuid="e68939f3-87dd-4d84-9389-9376fec5eb19"/>
+				<reportElement style="FBold" x="658" y="20" width="82" height="30" uuid="e68939f3-87dd-4d84-9389-9376fec5eb19"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<bottomPen lineWidth="3.0" lineStyle="Double"/>
@@ -876,7 +875,7 @@
 				<textFieldExpression><![CDATA[$V{SUM_RAD}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-				<reportElement style="FBold" x="904" y="0" width="82" height="30" uuid="4b36e81c-f0ba-4782-ab6c-5ceb9f2e3277"/>
+				<reportElement style="FBold" x="904" y="20" width="82" height="30" uuid="4b36e81c-f0ba-4782-ab6c-5ceb9f2e3277"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<bottomPen lineWidth="3.0" lineStyle="Double"/>
@@ -884,10 +883,10 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[Math.abs($V{SUM_RPC})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($V{RV_UP_DOWN}>=0.0)?$V{RV_UP_DOWN}+Math.abs($V{SUM_RPC}):Math.abs($V{SUM_RPC})]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-				<reportElement style="FBold" x="822" y="0" width="82" height="30" uuid="ccecc23c-3f18-4cbc-ad49-43001e4e619b"/>
+				<reportElement style="FBold" x="822" y="20" width="82" height="30" uuid="ccecc23c-3f18-4cbc-ad49-43001e4e619b"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<bottomPen lineWidth="3.0" lineStyle="Double"/>
@@ -895,10 +894,10 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{SUM_RPD}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($V{RV_UP_DOWN}<0.0)?$V{RV_UP_DOWN}+$V{SUM_RPD}:$V{SUM_RPD}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-				<reportElement style="FBold" x="986" y="0" width="82" height="30" uuid="41c6c670-8f1c-4b7c-a8df-62469f9e233b"/>
+				<reportElement style="FBold" x="986" y="20" width="82" height="30" uuid="41c6c670-8f1c-4b7c-a8df-62469f9e233b"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<bottomPen lineWidth="3.0" lineStyle="Double"/>
@@ -909,7 +908,7 @@
 				<textFieldExpression><![CDATA[$V{SUM_RBD}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
-				<reportElement style="FBold" x="1068" y="0" width="82" height="30" uuid="043a4a39-e903-4427-b090-e5b7c55a38f1"/>
+				<reportElement style="FBold" x="1068" y="20" width="82" height="30" uuid="043a4a39-e903-4427-b090-e5b7c55a38f1"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<bottomPen lineWidth="3.0" lineStyle="Double"/>
@@ -918,6 +917,83 @@
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[Math.abs($V{SUM_RBC})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="265" height="20" uuid="abec4e08-b357-43b4-83aa-430622cee024"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{RV_UP_DOWN}<0.0)?"รายได้สูงกว่าค่าใช้จ่าย":"รายได้ต่ำกว่าค่าใช้จ่าย"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Default" x="330" y="0" width="82" height="20" uuid="252ca589-acd0-4cdf-a28e-c030fec85699"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[0.0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Default" x="412" y="0" width="82" height="20" uuid="378bc354-97fd-4a82-8075-0232d2cdaa0f"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[0.0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Default" x="494" y="0" width="82" height="20" uuid="016bec2a-b936-4bde-a783-0a8445001ed1"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[0.0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Default" x="576" y="0" width="82" height="20" uuid="0ff8a142-2f5a-45cf-a1b3-3183882bb59b"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[0.0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Default" x="658" y="0" width="82" height="20" uuid="54c5f145-990a-4c22-b83c-e6941c94465e"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[0.0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Default" x="740" y="0" width="82" height="20" uuid="15f897a7-bcd1-4808-b552-c210d740d3ce"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[0.0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Default" x="986" y="0" width="82" height="20" uuid="d018d8c0-1d44-4fe7-ba65-9550cb4298b4"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[0.0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Default" x="1068" y="0" width="82" height="20" uuid="b7ca9eea-bc15-4668-a724-a52f032971a6"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[0.0]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="##,##0.00" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="904" y="0" width="82" height="20" uuid="65f3365a-8bef-4e20-b7c1-03ac07ebb6eb"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{RV_UP_DOWN}>=0.0)?$V{RV_UP_DOWN}:"0.0"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="##,##0.00" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="822" y="0" width="82" height="20" uuid="f07ca903-ba49-447b-be82-12e76193bdc3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{RV_UP_DOWN}<0.0)?$V{RV_UP_DOWN}:"0.0"]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
