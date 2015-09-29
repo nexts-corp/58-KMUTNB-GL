@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Template" language="groovy" pageWidth="1190" pageHeight="842" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="1150" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
 	<property name="ireport.zoom" value="1.6963904734900053"/>
-	<property name="ireport.x" value="134"/>
+	<property name="ireport.x" value="1161"/>
 	<property name="ireport.y" value="19"/>
 	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
 	<style name="FBold" fill="Solid" hAlign="Left" vAlign="Top" fontName="TH SarabunPSK" fontSize="14" isBold="true" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H"/>
@@ -438,7 +438,7 @@
 		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
 	</variable>
 	<variable name="RV_UP_DOWN" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$V{SUM_RPD}-Math.abs($V{SUM_RPC})]]></variableExpression>
+		<variableExpression><![CDATA[Math.abs($V{SUM_RPD})-Math.abs($V{SUM_RPC})]]></variableExpression>
 	</variable>
 	<variable name="CURRENT_PAGE" class="java.lang.Integer" resetType="None" calculation="DistinctCount">
 		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
@@ -884,7 +884,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($V{RV_UP_DOWN}>=0.0)?$V{RV_UP_DOWN}+Math.abs($V{SUM_RPC}):Math.abs($V{SUM_RPC})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($V{RV_UP_DOWN}>=0.0)?Math.abs($V{SUM_RPC})+Math.abs($V{RV_UP_DOWN}):$V{SUM_RPC}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 				<reportElement style="FBold" x="822" y="20" width="82" height="30" uuid="ccecc23c-3f18-4cbc-ad49-43001e4e619b"/>
@@ -895,7 +895,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($V{RV_UP_DOWN}<0.0)?$V{RV_UP_DOWN}+$V{SUM_RPD}:$V{SUM_RPD}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($V{RV_UP_DOWN}<0.0)?Math.abs($V{SUM_RPD})+Math.abs($V{RV_UP_DOWN}):$V{SUM_RPD}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 				<reportElement style="FBold" x="986" y="20" width="82" height="30" uuid="41c6c670-8f1c-4b7c-a8df-62469f9e233b"/>
@@ -1001,22 +1001,22 @@
 				<text><![CDATA[0.0]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" pattern="##,##0.00" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="904" y="0" width="82" height="20" uuid="65f3365a-8bef-4e20-b7c1-03ac07ebb6eb">
+				<reportElement stretchType="RelativeToBandHeight" x="904" y="0" width="82" height="20" uuid="f07ca903-ba49-447b-be82-12e76193bdc3">
 					<printWhenExpression><![CDATA[$V{RV_UP_DOWN} != 0.0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($V{RV_UP_DOWN}>=0.0)?$V{RV_UP_DOWN}:"0.0"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($V{RV_UP_DOWN}>=0.0)?Math.abs($V{RV_UP_DOWN}):"0.0"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="##,##0.00" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="822" y="0" width="82" height="20" uuid="f07ca903-ba49-447b-be82-12e76193bdc3">
+				<reportElement stretchType="RelativeToBandHeight" x="822" y="0" width="82" height="20" uuid="65f3365a-8bef-4e20-b7c1-03ac07ebb6eb">
 					<printWhenExpression><![CDATA[$V{RV_UP_DOWN} != 0.0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($V{RV_UP_DOWN}<0.0)?$V{RV_UP_DOWN}:"0.0"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($V{RV_UP_DOWN}<0.0)?Math.abs($V{RV_UP_DOWN}):"0.0"]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
