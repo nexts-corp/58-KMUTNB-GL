@@ -92,7 +92,7 @@ public class ReportService extends CServiceBase implements IReportService {
     private String readSQL(String reportName, Object params, Boolean checkQueryAll) {
 
         String qa = "";
-        if (checkQueryAll && (reportName.equals("RPT01") || reportName.equals("RPT07"))) {
+        if (checkQueryAll && reportName.equals("RPT07")) {
             qa = "A";
         }
 
