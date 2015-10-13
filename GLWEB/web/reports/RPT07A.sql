@@ -61,7 +61,7 @@ SELECT * FROM
                       )
                   )
 
-                AND glh.GLHEADSTATUS != 'V'
+                AND gl.GLHEADSTATUS != 'V'
                 AND glh.GLHEADDATE <= TO_DATE('{{DATE_END}}', 'DD/MM/YYYY')
                 AND (gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
                 AND (gl.BUDGETGROUPID BETWEEN {{BUDGET_SORCE_START}} AND {{BUDGET_SORCE_END}} )
@@ -87,7 +87,7 @@ SELECT * FROM
                         ON glh.GLHEADID = gl.GLHEADID
                         WHERE gl.ACCOUNTID IN (3200002000,3200003000)
                         
-                        AND glh.GLHEADSTATUS != 'V'
+                        AND gl.GLHEADSTATUS != 'V'
                         AND glh.GLHEADDATE <= TO_DATE('{{DATE_END}}', 'DD/MM/YYYY')
 
                         AND (gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
@@ -117,7 +117,7 @@ SELECT * FROM
                             OR gl.ACCOUNTID LIKE '5%'
                           )
 
-                        AND glh.GLHEADSTATUS != 'V'
+                        AND gl.GLHEADSTATUS != 'V'
                         AND ( glh.GLHEADDATE < TO_DATE('{{DATE_FRIST}}', 'DD/MM/YYYY') )
 
                         AND (gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
@@ -144,7 +144,7 @@ SELECT * FROM
                     OR gl.ACCOUNTID LIKE '5%'
                   )
              
-                AND glh.GLHEADSTATUS != 'V'
+                AND gl.GLHEADSTATUS != 'V'
                 AND 
                   (
                     glh.GLHEADDATE >= TO_DATE('{{DATE_FRIST}}', 'DD/MM/YYYY')
@@ -191,7 +191,7 @@ SELECT * FROM
                       )
                   )
 
-                AND glh.GLHEADSTATUS != 'V'
+                AND gl.GLHEADSTATUS != 'V'
                 AND glh.DESCRIPTION2 LIKE '#99%'
                 AND ( glh.GLHEADDATE <= TO_DATE('{{DATE_END}}', 'DD/MM/YYYY') )
                 AND (gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
@@ -217,7 +217,7 @@ SELECT * FROM
                         ON glh.GLHEADID = gl.GLHEADID
                         WHERE gl.ACCOUNTID IN (3200002000,3200003000)
 
-                        AND glh.GLHEADSTATUS != 'V'
+                        AND gl.GLHEADSTATUS != 'V'
                         AND glh.DESCRIPTION2 LIKE '#99%'
 
                         AND glh.GLHEADDATE <= TO_DATE('{{DATE_END}}', 'DD/MM/YYYY')
@@ -248,7 +248,7 @@ SELECT * FROM
                             gl.ACCOUNTID LIKE '4%'
                             OR gl.ACCOUNTID LIKE '5%'
                           )
-                        AND glh.GLHEADSTATUS != 'V'
+                        AND gl.GLHEADSTATUS != 'V'
 
                         AND glh.DESCRIPTION2 LIKE '#99%'
                         AND ( glh.GLHEADDATE < TO_DATE('{{DATE_FRIST}}', 'DD/MM/YYYY') )
@@ -277,7 +277,7 @@ SELECT * FROM
                     OR gl.ACCOUNTID LIKE '5%'
                   )
              
-                AND glh.GLHEADSTATUS != 'V'
+                AND gl.GLHEADSTATUS != 'V'
                 AND glh.DESCRIPTION2 LIKE '#99%'
                 AND 
                   (
@@ -319,7 +319,7 @@ SELECT * FROM
                     OR GL.ACCOUNTID LIKE '4%'
                     OR GL.ACCOUNTID LIKE '5%'
                   )
-                AND glh.GLHEADSTATUS != 'V'
+                AND gl.GLHEADSTATUS != 'V'
                 AND ( glh.GLHEADDATE <= TO_DATE('{{DATE_END}}', 'DD/MM/YYYY') )
                 AND (gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
                 AND (gl.BUDGETGROUPID BETWEEN {{BUDGET_SORCE_START}} AND {{BUDGET_SORCE_END}} )

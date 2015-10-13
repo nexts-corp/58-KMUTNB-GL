@@ -108,7 +108,7 @@ FROM
             ON pmdn.PAYMENTID = dnche.PAYMENTID
 
 
-            WHERE glh.GLHEADSTATUS != 'V'
+            WHERE gl.GLHEADSTATUS != 'V'
             AND glh.GLHEADDATE >= TO_DATE('{{DATE_START}}', 'DD/MM/YYYY')
             AND glh.GLHEADDATE <= TO_DATE('{{DATE_END}}', 'DD/MM/YYYY')
             
@@ -176,7 +176,7 @@ FROM
                 ON gl.GLHEADID = glh.GLHEADID
                 WHERE
 
-                glh.GLHEADSTATUS != 'V'
+                gl.GLHEADSTATUS != 'V'
                 AND ( glh.GLHEADDATE >= TO_DATE('{{DATE_FRIST}}', 'DD/MM/YYYY')
                 AND glh.GLHEADDATE    < TO_DATE('{{DATE_START}}', 'DD/MM/YYYY') )
                 AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
@@ -204,7 +204,7 @@ FROM
                 OR gl.ACCOUNTID LIKE '2%'
                 OR ( gl.ACCOUNTID LIKE '3%'
                 AND gl.accountid NOT IN (3200002000,3200003000) ) )
-                AND glh.GLHEADSTATUS != 'V'
+                AND gl.GLHEADSTATUS != 'V'
                 AND ( glh.GLHEADDATE  < TO_DATE('{{DATE_FRIST}}', 'DD/MM/YYYY') )
                 AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
                 AND (gl.BUDGETGROUPID BETWEEN {{BUDGET_SORCE_START}} AND {{BUDGET_SORCE_END}} )
@@ -233,7 +233,7 @@ FROM
                     WHERE ( gl.ACCOUNTID IN (3200002000,3200003000)
                     OR gl.ACCOUNTID LIKE '4%'
                     OR gl.ACCOUNTID LIKE '5%' )
-                    AND glh.GLHEADSTATUS != 'V'
+                    AND gl.GLHEADSTATUS != 'V'
 
                     AND ( glh.GLHEADDATE  < TO_DATE('{{DATE_FRIST}}', 'DD/MM/YYYY') )
                     AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )

@@ -581,7 +581,7 @@ $(document).ready(function () {
         sendData.REFERNAME2 = signature[1].referName;
         sendData.MGRNAMETHAI2 = signature[1].mgrNameThai;
 
-      
+        console.log(JSON.stringify(sendData));
         var bytes = utf8.encode(JSON.stringify(sendData));
         var encoded = base64.encode(bytes);
 

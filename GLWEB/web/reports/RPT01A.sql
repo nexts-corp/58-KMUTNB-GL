@@ -46,7 +46,7 @@ SELECT * FROM
             LEFT JOIN MASTER3D.GLHEAD glh
             ON gl.GLHEADID = glh.GLHEADID
             WHERE gl.accountid NOT IN (3200002000,3200003000)
-            AND glh.GLHEADSTATUS != 'V'
+            AND gl.GLHEADSTATUS != 'V'
             AND
               (
                     glh.GLHEADDATE >= TO_DATE('{{DATE_START}}', 'DD/MM/YYYY')
@@ -80,7 +80,7 @@ SELECT * FROM
                       (
                         gl.ACCOUNTID IN (3200002000,3200003000)
                       )
-                    AND glh.GLHEADSTATUS != 'V'
+                    AND gl.GLHEADSTATUS != 'V'
                     AND 
                       (
                           glh.GLHEADDATE >= TO_DATE('{{DATE_START}}', 'DD/MM/YYYY')
@@ -130,7 +130,7 @@ SELECT * FROM
                       )
                   )
 
-                AND glh.GLHEADSTATUS != 'V'
+                AND gl.GLHEADSTATUS != 'V'
                 AND ( glh.GLHEADDATE < TO_DATE('{{DATE_FRIST}}', 'DD/MM/YYYY') )
 
                 AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
@@ -161,7 +161,7 @@ SELECT * FROM
                         OR gl.ACCOUNTID LIKE '4%'
                         OR gl.ACCOUNTID LIKE '5%'
                       )
-                    AND glh.GLHEADSTATUS != 'V'
+                    AND gl.GLHEADSTATUS != 'V'
                     AND ( glh.GLHEADDATE < TO_DATE('{{DATE_FRIST}}', 'DD/MM/YYYY') )
 
                     AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )

@@ -39,7 +39,7 @@ SELECT * FROM
               )
           )
         
-        AND glh.GLHEADSTATUS != 'V'
+        AND gl.GLHEADSTATUS != 'V'
 
         {{& QUERYALLSYSTEM_SQL}} 
         AND glh.GLHEADDATE <= TO_DATE('{{DATE_END}}', 'DD/MM/YYYY')
@@ -71,7 +71,7 @@ SELECT * FROM
                 OR GL.ACCOUNTID LIKE '4%'
                 OR GL.ACCOUNTID LIKE '5%'
               )
-            AND glh.GLHEADSTATUS != 'V'
+            AND gl.GLHEADSTATUS != 'V'
 
             {{& QUERYALLSYSTEM_SQL}} 
             AND glh.GLHEADDATE <= TO_DATE('{{DATE_END}}', 'DD/MM/YYYY') 

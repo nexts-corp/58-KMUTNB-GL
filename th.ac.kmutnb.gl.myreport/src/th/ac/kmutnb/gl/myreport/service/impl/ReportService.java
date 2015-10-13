@@ -137,7 +137,7 @@ public class ReportService extends CServiceBase implements IReportService {
 
                 String reportName = reportCode.toUpperCase();
 
-                if (psql.getQUERYALLSYSTEM() && (reportName.equals("RPT01") || reportName.equals("RPT07"))) {
+                if (psql.getQUERYALLSYSTEM() && reportName.equals("RPT07")) {
                     reportName = reportName + "A";
                     reportCode = reportCode + "A";
                 }
