@@ -39,8 +39,8 @@ SELECT * FROM
               )
           )
         
-        AND gl.GLHEADSTATUS != 'V'
-
+        AND glh.GLHEADSTATUS != 'V'
+				
         {{& QUERYALLSYSTEM_SQL}} 
         AND glh.GLHEADDATE <= TO_DATE('{{DATE_END}}', 'DD/MM/YYYY')
 
@@ -71,18 +71,19 @@ SELECT * FROM
                 OR GL.ACCOUNTID LIKE '4%'
                 OR GL.ACCOUNTID LIKE '5%'
               )
-            AND gl.GLHEADSTATUS != 'V'
+            AND glh.GLHEADSTATUS != 'V'
 
             {{& QUERYALLSYSTEM_SQL}} 
-            AND glh.GLHEADDATE <= TO_DATE('{{DATE_END}}', 'DD/MM/YYYY') 
+						AND glh.GLHEADDATE <= TO_DATE('{{DATE_END}}', 'DD/MM/YYYY')
 
-            AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
-            AND (gl.BUDGETGROUPID BETWEEN {{BUDGET_SORCE_START}} AND {{BUDGET_SORCE_END}} )
-            AND (gl.PLANID BETWEEN {{PLAN_SORCE_START}} AND {{PLAN_SORCE_END}} )
-            AND (gl.PROJECTID BETWEEN {{PROJECT_SORCE_START}} AND {{PROJECT_SORCE_END}} )
-            AND (gl.ACTIVITYID BETWEEN {{ACTIVITY_SORCE_START}} AND {{ACTIVITY_SORCE_END}} )
-            AND (gl.FUNDGROUPID BETWEEN {{FUND_SORCE_START}} AND {{FUND_SORCE_END}} )
-            {{& BUDGET_SQL}}
+						AND ( gl.DEPARTMENTID BETWEEN {{DEPARTMENT_SORCE_START}} AND {{DEPARTMENT_SORCE_END}} )
+						AND (gl.BUDGETGROUPID BETWEEN {{BUDGET_SORCE_START}} AND {{BUDGET_SORCE_END}} )
+						AND (gl.PLANID BETWEEN {{PLAN_SORCE_START}} AND {{PLAN_SORCE_END}} )
+						AND (gl.PROJECTID BETWEEN {{PROJECT_SORCE_START}} AND {{PROJECT_SORCE_END}} )
+						AND (gl.ACTIVITYID BETWEEN {{ACTIVITY_SORCE_START}} AND {{ACTIVITY_SORCE_END}} )
+						AND (gl.FUNDGROUPID BETWEEN {{FUND_SORCE_START}} AND {{FUND_SORCE_END}} )
+						{{& BUDGET_SQL}}
+						GROUP BY gl.ACCOUNTID
           )
       ) gl
   
@@ -103,6 +104,7 @@ SELECT * FROM
               )
             WHERE ACCOUNTID NOT LIKE '124%'
             AND ACCOUNTID NOT LIKE '125%'
+            AND ACCOUNTID NOT LIKE '127%'
             AND ACCOUNTID NOT LIKE '6%'
           )
         UNION ALL  
@@ -187,7 +189,7 @@ SELECT * FROM
           (
             SELECT
               CONCAT('|1000000000|1200000000|1253500000|',ACCOUNTID) AS M_ACCOUNT_ID,
-              CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|ครุภัณฑ์จากการบริจาครออรับรู้|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
+              CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|ครุภัณฑ์จากการบริจาครอรับรู้|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
               ACCOUNTID AS ACCOUNTID,
               ACCOUNTNAME AS ACCOUNTNAME
             FROM MASTER3D.ACCOUNT WHERE MASTERID >= 1253500000 
@@ -198,11 +200,27 @@ SELECT * FROM
           (
             SELECT 
               CONCAT('|1000000000|1200000000|1253599999|',ACCOUNTID) AS M_ACCOUNT_ID, 
-              CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|ค่าเสื่อมราคาสะสม - ครุภัณฑ์จากการบริจาครออรับรู้|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
+              CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|ค่าเสื่อมราคาสะสม - ครุภัณฑ์จากการบริจาครอรับรู้|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
               ACCOUNTID AS ACCOUNTID, ACCOUNTNAME AS ACCOUNTNAME 
             FROM MASTER3D.ACCOUNT WHERE MASTERID >= 1253500000
             AND MASTERID < 1255000000
             AND ACCOUNTNAME LIKE '%ค่าเสื่อม%' 
+          )
+        UNION ALL
+          (
+            SELECT 
+              CONCAT('|1000000000|1200000000|1270000000|',ACCOUNTID) AS M_ACCOUNT_ID, 
+              CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|โปรแกรมคอมพิวเตอร์ (ครุภัณฑ์)|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
+              ACCOUNTID AS ACCOUNTID, ACCOUNTNAME AS ACCOUNTNAME 
+            FROM MASTER3D.ACCOUNT WHERE ACCOUNTID = 1270201000
+          )
+        UNION ALL
+          (
+            SELECT 
+              CONCAT('|1000000000|1200000000|1279999999|',ACCOUNTID) AS M_ACCOUNT_ID, 
+              CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|ค่าตัดจำหน่ายสะสม - โปรแกรมคอมพิวเตอร์|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
+              ACCOUNTID AS ACCOUNTID, ACCOUNTNAME AS ACCOUNTNAME 
+            FROM MASTER3D.ACCOUNT WHERE ACCOUNTID = 1270202000
           )
       ) maps
     ON maps.ACCOUNTID = gl.ACCOUNTID
