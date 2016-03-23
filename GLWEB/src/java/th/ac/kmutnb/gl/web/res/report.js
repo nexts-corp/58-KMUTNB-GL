@@ -339,6 +339,7 @@ $(document).ready(function () {
 
     $(document).on("change",".cDate",function(){
         var chtfdate = checkdate($("#date_start").val())*checkdate($("#date_end").val());
+        //console.log(checkdate($("#date_start").val())+'-'+checkdate($("#date_end").val()));
         if(chtfdate){
             $(this).parent("div").removeClass("has-error"); 
         }else{
@@ -352,11 +353,17 @@ $(document).ready(function () {
         var validformat = /^\d{2}\/\d{2}\/\d{4}$/;
         var returnval = false;
         if (validformat.test(valdate)){
-            var dayfield = valdate.split("/")[0];
-            var monthfield = valdate.split("/")[1];
-            var yearfield = valdate.split("/")[2];
-            var dayobj = new Date(yearfield, monthfield - 1, dayfield);
-            if ((dayobj.getMonth() + 1 !== parseInt(monthfield)) || (dayobj.getDate() !== parseInt(dayfield)) || (dayobj.getFullYear() !== parseInt(yearfield))){}else{
+            
+            var dayfield = parseInt(valdate.split("/")[0]);
+            var monthfield = parseInt(valdate.split("/")[1]);
+            var yearfield = parseInt(valdate.split("/")[2])-543;
+            
+            var dayobj = new Date(yearfield,monthfield - 1,dayfield);
+            
+            console.log(dayfield+'/'+monthfield+'/'+yearfield);
+            console.log(dayobj);
+            
+            if ((dayobj.getMonth() + 1 !== monthfield) || (dayobj.getDate() !== dayfield) || (dayobj.getFullYear() !== yearfield)){}else{
                 returnval = true;
             }
         }

@@ -54,6 +54,8 @@ public class DateUtil {
 //            }
 //        }
         //System.out.println("255802=>" + Period2Date("255802"));
+        //System.out.println("29/02/2016=>" + Date2Thai("29/02/2016"));
+        //System.out.println("29/02/2559=>" + Date2Eng("29/02/2559"));
     }
 
     public static String FirstPeriod(String startDate) {
@@ -148,28 +150,29 @@ public class DateUtil {
 
         String[] aStartDate = date.split("/");
 
-        int sy = Integer.parseInt(aStartDate[2]);
+        int sy = Integer.parseInt(aStartDate[2]);//+543;
         int sm = Integer.parseInt(aStartDate[1]);
         int sd = Integer.parseInt(aStartDate[0]);
         scalendar.set(sy, sm - 1, sd);
 
-        return sdf.format(scalendar.getTime()) + (scalendar.get(Calendar.YEAR) + 543);
+        return sdf.format(scalendar.getTime())+ (scalendar.get(Calendar.YEAR) + 543);
 
     }
-
+//date thai to eng
     public static String Date2Eng(String date) {
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Bangkok"));
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Calendar scalendar = Calendar.getInstance();
 
         String[] aStartDate = date.split("/");
 
         int sy = Integer.parseInt(aStartDate[2]);
+        sy=sy-543;
         int sm = Integer.parseInt(aStartDate[1]);
         int sd = Integer.parseInt(aStartDate[0]);
         scalendar.set(sy, sm - 1, sd);
 
-        return sdf.format(scalendar.getTime()) + (scalendar.get(Calendar.YEAR) - 543);
+        return sdf.format(scalendar.getTime()) ;//+ (scalendar.get(Calendar.YEAR) - 543);
 
     }
 

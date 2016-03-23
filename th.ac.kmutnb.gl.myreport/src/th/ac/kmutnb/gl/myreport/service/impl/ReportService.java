@@ -123,6 +123,7 @@ public class ReportService extends CServiceBase implements IReportService {
             sparam = sparam.replaceAll(" ", "+");
             //sparam = URLDecoder.decode(sparam, "UTF-8");
             sparam = new String(Base64.decode(sparam), "UTF-8");
+            System.out.println(sparam);
             CJMessage json = new CJMessage();
             json.parse(sparam);
             BaseParameter psql = (BaseParameter) json.getValue(BaseParameter.class, "");
@@ -254,6 +255,8 @@ public class ReportService extends CServiceBase implements IReportService {
     private BaseParameter initialParam(BaseParameter paramJson) {
         paramJson.setDATE_START(DateUtil.Date2Eng(paramJson.getDATE_START()));
         paramJson.setDATE_END(DateUtil.Date2Eng(paramJson.getDATE_END()));
+        System.out.println("Date End ::: "+ paramJson.getDATE_END());
+        
         paramJson.setDATE_FRIST(DateUtil.FirstPeriod(paramJson.getDATE_START()));
         String DATE_Previous = DateUtil.DATE_Previous(paramJson.getDATE_END());
         paramJson.setDATE_PREVIOUS(DATE_Previous);
@@ -272,6 +275,9 @@ public class ReportService extends CServiceBase implements IReportService {
     private BaseParameter initialParam2(BaseParameter paramJson) {
         paramJson.setDATE_START(DateUtil.Date2Thai(paramJson.getDATE_START()));
         paramJson.setDATE_END(DateUtil.Date2Thai(paramJson.getDATE_END()));
+        
+        System.out.println("Date End ::: "+ paramJson.getDATE_END());
+        
         return paramJson;
     }
 

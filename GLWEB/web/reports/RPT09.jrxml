@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Template" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f33557b4-8855-4bf5-b73c-6a798e382634">
-	<property name="ireport.zoom" value="1.2100000000000335"/>
+	<property name="ireport.zoom" value="1.464100000000041"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="18"/>
 	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
 	<style name="FBold" fill="Solid" hAlign="Left" vAlign="Top" fontName="TH SarabunPSK" fontSize="14" isBold="true" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H"/>
 	<style name="Rpt" fontName="TH SarabunPSK" fontSize="10" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
@@ -2203,21 +2203,21 @@ FROM
 						<printWhenExpression><![CDATA[$F{HEADER2}!="ปรับกระทบกำไรสุทธิ"]]></printWhenExpression>
 					</reportElement>
 					<textElement textAlignment="Right" verticalAlignment="Middle"/>
-					<textFieldExpression><![CDATA[$F{BALANCE_PAST}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[($F{BALANCE_PAST} != null) ? $F{BALANCE_PAST} : "0.00"]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 					<reportElement x="295" y="0" width="90" height="20" uuid="30156526-1d3f-41e2-adc5-d7ccc9daafa5">
 						<printWhenExpression><![CDATA[$F{HEADER2}!="ปรับกระทบกำไรสุทธิ"]]></printWhenExpression>
 					</reportElement>
 					<textElement textAlignment="Right" verticalAlignment="Middle"/>
-					<textFieldExpression><![CDATA[$F{BALANCE_CURRENT}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[($F{BALANCE_CURRENT} != null) ? $F{BALANCE_CURRENT} : "0.00"]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
 					<reportElement x="475" y="0" width="80" height="20" uuid="eb82fce7-23bf-4650-aec9-ab29e7dcba0e">
 						<printWhenExpression><![CDATA[$F{HEADER2}!="ปรับกระทบกำไรสุทธิ"]]></printWhenExpression>
 					</reportElement>
 					<textElement textAlignment="Right" verticalAlignment="Middle"/>
-					<textFieldExpression><![CDATA[$F{BALANCE_CURRENT}-$F{BALANCE_PAST}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[($F{BALANCE_CURRENT} != null && $F{BALANCE_PAST} != null) ? ($F{BALANCE_CURRENT}-$F{BALANCE_PAST}) : ($F{BALANCE_CURRENT} == null && $F{BALANCE_PAST} == null) ? "0.00": ($F{BALANCE_CURRENT} == null) ? $F{BALANCE_PAST}:$F{BALANCE_CURRENT}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -2341,20 +2341,20 @@ FROM
 				<reportElement x="30" y="0" width="265" height="20" uuid="53106a6a-9783-4d6f-8c37-ab082d516368"/>
 				<textFieldExpression><![CDATA[$F{ACC_NAME}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
 				<reportElement x="295" y="0" width="90" height="20" uuid="066486a0-be65-4abe-b1dc-bca32e9c83d0"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{BALANCE_CURRENT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{BALANCE_CURRENT} != null) ? $F{BALANCE_CURRENT} : "0.00"]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
 				<reportElement x="385" y="0" width="90" height="20" uuid="93adeeb2-5acb-4bba-94e6-005571d9871b"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{BALANCE_PAST}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{BALANCE_PAST} != null) ? $F{BALANCE_PAST} : "0.00"]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="false">
 				<reportElement x="475" y="0" width="80" height="20" uuid="dbd1301d-f83d-4745-ac56-4b07de3b4cc6"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{BALANCE_CURRENT}-$F{BALANCE_PAST}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{BALANCE_CURRENT} != null && $F{BALANCE_PAST} != null) ? ($F{BALANCE_CURRENT}-$F{BALANCE_PAST}) : ($F{BALANCE_CURRENT} == null && $F{BALANCE_PAST} == null) ? "0.00": ($F{BALANCE_CURRENT} == null) ? $F{BALANCE_PAST}:$F{BALANCE_CURRENT}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
