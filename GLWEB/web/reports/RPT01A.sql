@@ -64,7 +64,7 @@ SELECT * FROM
 
             GROUP BY gl.ACCOUNTID
           
-            UNION
+            UNION ALL
           
             SELECT 
               3200003000 AS ACCOUNTID,DR,CR
@@ -111,7 +111,7 @@ SELECT * FROM
           FROM
             (
               
-              /*--------------------พันยอดทั้งระบบ--------------------*/
+              /*--------------------�?ั�?ยอดทั�?�?ระ�?�?--------------------*/
               
                 SELECT gl.ACCOUNTID,
                   SUM(DR) AS DR,
@@ -143,7 +143,7 @@ SELECT * FROM
 
               GROUP BY gl.ACCOUNTID
               
-              UNION
+              UNION ALL
               
               SELECT 
                 3200003000 AS ACCOUNTID,DR,CR

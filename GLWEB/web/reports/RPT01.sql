@@ -13,7 +13,7 @@ SELECT * FROM
       regexp_substr(maps.M_ACCOUNT_NAME,'[^|]+', 1, 5) M_ACCOUNT_NAME_5,
       regexp_substr(maps.M_ACCOUNT_ID,'[^|]+', 1, 6) M_ACCOUNT_ID_6,
       regexp_substr(maps.M_ACCOUNT_NAME,'[^|]+', 1, 6) M_ACCOUNT_NAME_6,
-      maps.ACCOUNTID   AS ACCOUNT_ID,
+      maps.ACCOUNTID   AS ACCOUNT_ID,f
       maps.ACCOUNTNAME AS ACCOUNT_NAME,
       /*maps.ACCOUNT_LEVEL,COALESCE(gl.DR_R, 0) AS DR_R,COALESCE(gl.CR_R, 0) AS CR_R,*/
   
@@ -64,7 +64,7 @@ SELECT * FROM
 
             GROUP BY gl.ACCOUNTID
           
-            UNION
+            UNION ALL
           
             SELECT 
               3200003000 AS ACCOUNTID,DR,CR
@@ -110,7 +110,7 @@ SELECT * FROM
           SELECT ACCOUNTID,SUM(DR) AS DR,SUM(CR) AS CR
           FROM
             (
-              /*--------------------พันยอดเฉพาะปี--------------------*/
+              /*--------------------�?ั�?ยอดเ�?�?าะ�?ี--------------------*/
             
                 SELECT gl.ACCOUNTID,
                   SUM(DR) AS DR,
@@ -139,7 +139,7 @@ SELECT * FROM
 
                 GROUP BY gl.ACCOUNTID
               
-              UNION
+              UNION ALL
               
               SELECT 
                 3200003000 AS ACCOUNTID,DR,CR
@@ -176,10 +176,10 @@ SELECT * FROM
             
             
             
-            UNION
+            UNION ALL
               
               
-              /*--------------------พันยอดทั้งระบบ--------------------*/
+              /*--------------------�?ั�?ยอดทั�?�?ระ�?�?--------------------*/
               
                 SELECT gl.ACCOUNTID,
                   SUM(DR) AS DR,
@@ -211,7 +211,7 @@ SELECT * FROM
 
               GROUP BY gl.ACCOUNTID
               
-              UNION
+              UNION ALL
               
               SELECT 
                 3200003000 AS ACCOUNTID,DR,CR

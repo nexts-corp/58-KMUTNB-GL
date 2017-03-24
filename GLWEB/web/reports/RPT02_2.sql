@@ -152,7 +152,7 @@ FROM
           000000                                AS GLHEADID,
           TO_DATE('{{DATE_START}}', 'DD/MM/YYYY') AS GLHEADDATE,
           ''                                    AS DOCNUMBER,
-          'ยอดยกมา'                             AS DESCRIPTION1,
+          'ยอดย�?มา'                             AS DESCRIPTION1,
           DEPARTMENTID,
           ''                                    AS REFDOC,
           ''                                    AS CHEQUEID,
@@ -167,7 +167,7 @@ FROM
               SUM(CR) AS CR
             FROM
               (
-              /*--------------------พันยอดเฉพาะปี--------------------*/
+              /*--------------------�?ั�?ยอดเ�?�?าะ�?ี--------------------*/
                 SELECT gl.ACCOUNTID,gl.DEPARTMENTID,
                   SUM(DR) AS DR,
                   SUM(CR) AS CR
@@ -191,9 +191,9 @@ FROM
                 GROUP BY gl.ACCOUNTID,gl.DEPARTMENTID
 
 
-                UNION
+                UNION ALL
 
-                /*--------------------พันยอดทั้งระบบ--------------------*/
+                /*--------------------�?ั�?ยอดทั�?�?ระ�?�?--------------------*/
                 SELECT gl.ACCOUNTID,gl.DEPARTMENTID,
                   SUM(DR) AS DR,
                   SUM(CR) AS CR
@@ -217,7 +217,7 @@ FROM
 
                 GROUP BY gl.ACCOUNTID,gl.DEPARTMENTID
 
-                UNION
+                UNION ALL
 
                 SELECT 3200003000 AS ACCOUNTID,
                   DEPARTMENTID,DR,CR
