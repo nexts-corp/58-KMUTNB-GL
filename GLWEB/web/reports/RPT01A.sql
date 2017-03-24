@@ -1,4 +1,4 @@
-SELECT * FROM
+﻿SELECT * FROM
   (
     SELECT ROW_NUMBER() OVER (ORDER BY maps.M_ACCOUNT_ID) AS id,
       regexp_substr(maps.M_ACCOUNT_ID,'[^|]+', 1, 1) M_ACCOUNT_ID_1,
@@ -111,7 +111,7 @@ SELECT * FROM
           FROM
             (
               
-              /*--------------------�?ั�?ยอดทั�?�?ระ�?�?--------------------*/
+              /*--------------------พันยอดทั้งระบบ--------------------*/
               
                 SELECT gl.ACCOUNTID,
                   SUM(DR) AS DR,
@@ -143,7 +143,7 @@ SELECT * FROM
 
               GROUP BY gl.ACCOUNTID
               
-              UNION ALL
+              UNION  ALL
               
               SELECT 
                 3200003000 AS ACCOUNTID,DR,CR

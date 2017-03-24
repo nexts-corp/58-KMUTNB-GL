@@ -1,4 +1,4 @@
-
+﻿
 SELECT ROW_NUMBER() OVER (ORDER BY ACCOUNTID,tx.DEPARTMENTID,GLHEADID) AS id,
   ACCOUNTID AS ACCOUNT_ID,
   ACCOUNTNAME AS ACCOUNT_NAME,
@@ -152,7 +152,7 @@ FROM
           000000                                AS GLHEADID,
           TO_DATE('{{DATE_START}}', 'DD/MM/YYYY') AS GLHEADDATE,
           ''                                    AS DOCNUMBER,
-          'ยอดย�?มา'                             AS DESCRIPTION1,
+          'ยอดยกมา'                             AS DESCRIPTION1,
           DEPARTMENTID,
           ''                                    AS REFDOC,
           ''                                    AS CHEQUEID,
@@ -167,7 +167,7 @@ FROM
               SUM(CR) AS CR
             FROM
               (
-              /*--------------------�?ั�?ยอดเ�?�?าะ�?ี--------------------*/
+              /*--------------------พันยอดเฉพาะปี--------------------*/
                 SELECT gl.ACCOUNTID,gl.DEPARTMENTID,
                   SUM(DR) AS DR,
                   SUM(CR) AS CR
@@ -193,7 +193,7 @@ FROM
 
                 UNION ALL
 
-                /*--------------------�?ั�?ยอดทั�?�?ระ�?�?--------------------*/
+                /*--------------------พันยอดทั้งระบบ--------------------*/
                 SELECT gl.ACCOUNTID,gl.DEPARTMENTID,
                   SUM(DR) AS DR,
                   SUM(CR) AS CR

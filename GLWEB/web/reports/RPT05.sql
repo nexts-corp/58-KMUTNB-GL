@@ -1,4 +1,4 @@
-SELECT * FROM
+﻿SELECT * FROM
   (
     SELECT ROW_NUMBER() OVER (ORDER BY maps.M_ACCOUNT_ID) AS id,
       regexp_substr(maps.M_ACCOUNT_ID,'[^|]+', 1, 1) M_ACCOUNT_ID_1,
@@ -110,7 +110,7 @@ SELECT * FROM
           (
             SELECT 
               CONCAT('|1000000000|1200000000|1240000000|1240100000|',ACCOUNTID) AS M_ACCOUNT_ID, 
-              CONCAT('|สิ�?ทรั�?ย�?|สิ�?ทรั�?ย�?�?ม�?หมุ�?เวีย�?|อา�?าร|อา�?าร�?ละสิ�?�?�?ลู�?สร�?า�?|',ACCOUNTNAME) AS M_ACCOUNT_NAME,ACCOUNTID AS ACCOUNTID, 
+              CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|อาคาร|อาคารและสิ่งปลูกสร้าง|',ACCOUNTNAME) AS M_ACCOUNT_NAME,ACCOUNTID AS ACCOUNTID, 
               ACCOUNTNAME AS ACCOUNTNAME
             FROM MASTER3D.ACCOUNT 
             WHERE MASTERID >= 1240100000
@@ -121,7 +121,7 @@ SELECT * FROM
           (
             SELECT 
               CONCAT('|1000000000|1200000000|1240000000|1240199999|',ACCOUNTID) AS M_ACCOUNT_ID, 
-              CONCAT('|สิ�?ทรั�?ย�?|สิ�?ทรั�?ย�?�?ม�?หมุ�?เวีย�?|อา�?าร|�?�?าเสื�?อมรา�?าสะสม - อา�?าร�?ละสิ�?�?�?ลู�?สร�?า�?|',ACCOUNTNAME) AS M_ACCOUNT_NAME, 
+              CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|อาคาร|ค่าเสื่อมราคาสะสม - อาคารและสิ่งปลูกสร้าง|',ACCOUNTNAME) AS M_ACCOUNT_NAME, 
               ACCOUNTID AS ACCOUNTID, ACCOUNTNAME AS ACCOUNTNAME 
             FROM MASTER3D.ACCOUNT
             WHERE MASTERID >= 1240100000
@@ -132,7 +132,7 @@ SELECT * FROM
           (
             SELECT 
               CONCAT('|1000000000|1200000000|1240000000|1240500000|',ACCOUNTID) AS M_ACCOUNT_ID, 
-              CONCAT('|สิ�?ทรั�?ย�?|สิ�?ทรั�?ย�?�?ม�?หมุ�?เวีย�?|อา�?าร|�?า�?ระหว�?า�?�?�?อสร�?า�?|',ACCOUNTNAME) AS M_ACCOUNT_NAME, 
+              CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|อาคาร|งานระหว่างก่อสร้าง|',ACCOUNTNAME) AS M_ACCOUNT_NAME, 
               ACCOUNTID AS ACCOUNTID, ACCOUNTNAME AS ACCOUNTNAME 
             FROM MASTER3D.ACCOUNT
             WHERE MASTERID = 1240500000
@@ -141,7 +141,7 @@ SELECT * FROM
           (
             SELECT 
               CONCAT('|1000000000|1200000000|1250100000|',ACCOUNTID) AS M_ACCOUNT_ID, 
-              CONCAT('|สิ�?ทรั�?ย�?|สิ�?ทรั�?ย�?�?ม�?หมุ�?เวีย�?|�?รุภัณฑ�?|',ACCOUNTNAME) AS M_ACCOUNT_NAME, 
+              CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|ครุภัณฑ์|',ACCOUNTNAME) AS M_ACCOUNT_NAME, 
               ACCOUNTID AS ACCOUNTID, ACCOUNTNAME AS ACCOUNTNAME
             FROM MASTER3D.ACCOUNT 
             WHERE MASTERID >= 1250100000
@@ -152,7 +152,7 @@ SELECT * FROM
           (
             SELECT 
               CONCAT('|1000000000|1200000000|1250199999|',ACCOUNTID) AS M_ACCOUNT_ID, 
-              CONCAT('|สิ�?ทรั�?ย�?|สิ�?ทรั�?ย�?�?ม�?หมุ�?เวีย�?|�?�?าเสื�?อมรา�?าสะสม - �?รุภัณฑ�?|',ACCOUNTNAME) AS M_ACCOUNT_NAME, 
+              CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|ค่าเสื่อมราคาสะสม - ครุภัณฑ์|',ACCOUNTNAME) AS M_ACCOUNT_NAME, 
               ACCOUNTID AS ACCOUNTID, ACCOUNTNAME AS ACCOUNTNAME 
             FROM MASTER3D.ACCOUNT 
             WHERE MASTERID >= 1250100000
@@ -163,53 +163,53 @@ SELECT * FROM
           (
             SELECT 
               CONCAT('|1000000000|1200000000|1251800000|',ACCOUNTID) AS M_ACCOUNT_ID,
-              CONCAT('|สิ�?ทรั�?ย�?|สิ�?ทรั�?ย�?�?ม�?หมุ�?เวีย�?|�?รุภัณฑ�?�?า�?�?าร�?ริ�?า�?|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
+              CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|ครุภัณฑ์จากการบริจาค|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
               ACCOUNTID AS ACCOUNTID,
               ACCOUNTNAME AS ACCOUNTNAME
             FROM MASTER3D.ACCOUNT
             WHERE MASTERID >= 1251800000
             AND MASTERID < 1253500000
-            AND ACCOUNTNAME NOT LIKE '%�?�?าเสื�?อม%'
+            AND ACCOUNTNAME NOT LIKE '%ค่าเสื่อม%'
           )
         UNION ALL
           (
             SELECT
               CONCAT('|1000000000|1200000000|1251899999|',ACCOUNTID) AS M_ACCOUNT_ID,
-              CONCAT('|สิ�?ทรั�?ย�?|สิ�?ทรั�?ย�?�?ม�?หมุ�?เวีย�?|�?�?าเสื�?อมรา�?าสะสม - �?รุภัณฑ�?�?า�?�?าร�?ริ�?า�?|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
+              CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|ค่าเสื่อมราคาสะสม - ครุภัณฑ์จากการบริจาค|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
               ACCOUNTID AS ACCOUNTID,
               ACCOUNTNAME AS ACCOUNTNAME
             FROM MASTER3D.ACCOUNT
             WHERE MASTERID >= 1251800000
             AND MASTERID < 1253500000
-            AND ACCOUNTNAME LIKE '%�?�?าเสื�?อม%'
+            AND ACCOUNTNAME LIKE '%ค่าเสื่อม%'
             
           )
         UNION ALL
           (
             SELECT
               CONCAT('|1000000000|1200000000|1253500000|',ACCOUNTID) AS M_ACCOUNT_ID,
-              CONCAT('|สิ�?ทรั�?ย�?|สิ�?ทรั�?ย�?�?ม�?หมุ�?เวีย�?|�?รุภัณฑ�?�?า�?�?าร�?ริ�?า�?รอรั�?รู�?|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
+              CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|ครุภัณฑ์จากการบริจาครอรับรู้|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
               ACCOUNTID AS ACCOUNTID,
               ACCOUNTNAME AS ACCOUNTNAME
             FROM MASTER3D.ACCOUNT WHERE MASTERID >= 1253500000 
             AND MASTERID < 1255000000
-            AND ACCOUNTNAME NOT LIKE '%�?�?าเสื�?อม%'
+            AND ACCOUNTNAME NOT LIKE '%ค่าเสื่อม%'
           )
         UNION ALL
           (
             SELECT 
               CONCAT('|1000000000|1200000000|1253599999|',ACCOUNTID) AS M_ACCOUNT_ID, 
-              CONCAT('|สิ�?ทรั�?ย�?|สิ�?ทรั�?ย�?�?ม�?หมุ�?เวีย�?|�?�?าเสื�?อมรา�?าสะสม - �?รุภัณฑ�?�?า�?�?าร�?ริ�?า�?รอรั�?รู�?|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
+              CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|ค่าเสื่อมราคาสะสม - ครุภัณฑ์จากการบริจาครอรับรู้|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
               ACCOUNTID AS ACCOUNTID, ACCOUNTNAME AS ACCOUNTNAME 
             FROM MASTER3D.ACCOUNT WHERE MASTERID >= 1253500000
             AND MASTERID < 1255000000
-            AND ACCOUNTNAME LIKE '%�?�?าเสื�?อม%' 
+            AND ACCOUNTNAME LIKE '%ค่าเสื่อม%' 
           )
         UNION ALL
           (
             SELECT 
               CONCAT('|1000000000|1200000000|1270000000|',ACCOUNTID) AS M_ACCOUNT_ID, 
-              CONCAT('|สิ�?ทรั�?ย�?|สิ�?ทรั�?ย�?�?ม�?หมุ�?เวีย�?|�?�?ร�?�?รม�?อม�?ิวเตอร�? (�?รุภัณฑ�?)|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
+              CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|โปรแกรมคอมพิวเตอร์ (ครุภัณฑ์)|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
               ACCOUNTID AS ACCOUNTID, ACCOUNTNAME AS ACCOUNTNAME 
             FROM MASTER3D.ACCOUNT WHERE ACCOUNTID = 1270201000
           )
@@ -217,7 +217,7 @@ SELECT * FROM
           (
             SELECT 
               CONCAT('|1000000000|1200000000|1279999999|',ACCOUNTID) AS M_ACCOUNT_ID, 
-              CONCAT('|สิ�?ทรั�?ย�?|สิ�?ทรั�?ย�?�?ม�?หมุ�?เวีย�?|�?�?าตัด�?ำห�?�?ายสะสม - �?�?ร�?�?รม�?อม�?ิวเตอร�?|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
+              CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|ค่าตัดจำหน่ายสะสม - โปรแกรมคอมพิวเตอร์|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
               ACCOUNTID AS ACCOUNTID, ACCOUNTNAME AS ACCOUNTNAME 
             FROM MASTER3D.ACCOUNT WHERE ACCOUNTID = 1270202000
           )
