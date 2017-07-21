@@ -1,4 +1,4 @@
-﻿SELECT * FROM
+SELECT * FROM
   (
     SELECT ROW_NUMBER() OVER (ORDER BY maps.M_ACCOUNT_ID) AS id,
       regexp_substr(maps.M_ACCOUNT_ID,'[^|]+', 1, 1) M_ACCOUNT_ID_1,
@@ -208,6 +208,14 @@
         UNION ALL
           (
             SELECT 
+              ('|1000000000|1200000000|' || ACCOUNTID || '|' || ACCOUNTID) AS M_ACCOUNT_ID, 
+              ('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|' || ACCOUNTNAME || '|' || ACCOUNTNAME) AS M_ACCOUNT_NAME,
+              ACCOUNTID AS ACCOUNTID, ACCOUNTNAME AS ACCOUNTNAME 
+            FROM MASTER3D.ACCOUNT WHERE MASTERID = 1270200000
+          )
+        /*UNION ALL
+          (
+            SELECT 
               CONCAT('|1000000000|1200000000|1270000000|',ACCOUNTID) AS M_ACCOUNT_ID, 
               CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|โปรแกรมคอมพิวเตอร์ (ครุภัณฑ์)|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
               ACCOUNTID AS ACCOUNTID, ACCOUNTNAME AS ACCOUNTNAME 
@@ -220,7 +228,7 @@
               CONCAT('|สินทรัพย์|สินทรัพย์ไม่หมุนเวียน|ค่าตัดจำหน่ายสะสม - โปรแกรมคอมพิวเตอร์|',ACCOUNTNAME) AS M_ACCOUNT_NAME,
               ACCOUNTID AS ACCOUNTID, ACCOUNTNAME AS ACCOUNTNAME 
             FROM MASTER3D.ACCOUNT WHERE ACCOUNTID = 1270202000
-          )
+          )*/
       ) maps
     ON maps.ACCOUNTID = gl.ACCOUNTID
     where maps.ACCOUNTNAME is not null
