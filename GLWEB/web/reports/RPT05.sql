@@ -223,6 +223,7 @@
           )
       ) maps
     ON maps.ACCOUNTID = gl.ACCOUNTID
+    where maps.ACCOUNTNAME is not null
     ORDER BY maps.ACCOUNTID
   
   ) 
